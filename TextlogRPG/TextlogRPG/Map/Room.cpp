@@ -1,9 +1,9 @@
 #include "../Map/Room.h"
 
 //처음 다른 방과 연결하는 함수
-void Room::connectRoom(Direction dir, Room* room)
+void Room::connectRoom(Direction dir, Room* other)
 {
-	connectedRooms[dir] = room;
+	connectedRooms[dir] = other;
 }
 
 Room* Room::getConnectedRoom(Direction dir)

@@ -6,6 +6,9 @@ using namespace std;
 
 void Player::PlayerMove(Direction dir)
 {
+	//플레이어가 이동할 방.
+	Room* targetRoom;
+
 	targetRoom = currentRoom->getConnectedRoom(dir);
 	if (targetRoom != nullptr)
 	{

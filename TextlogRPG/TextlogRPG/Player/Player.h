@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../Map/Room.h"
 
 
 class Player
@@ -7,8 +7,7 @@ class Player
 private :
 	//현재 플레이어가 있는 방.
 	class Room* currentRoom;
-	//플레이어가 이동할 방.
-	class Room* targetRoom;
+	
 
 public : 
 	//생성자(시작하는 방 정보 초기화)

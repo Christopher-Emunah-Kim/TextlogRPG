@@ -24,8 +24,9 @@ public:
 	//생성자
 	Room(int x, int y) : positionX(x), positionY(y) {}
 
+
 	//처음 다른 방과 연결하는 함수
-	void connectRoom(Direction dir, Room* room);
+	void connectRoom(Direction dir, Room* other);
 
 	//연결된 방이 있는지 확인하는 함수
 	Room* getConnectedRoom(Direction dir);

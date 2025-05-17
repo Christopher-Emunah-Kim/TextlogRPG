@@ -13,7 +13,7 @@ Map::Map()
 	//방 연결
 	for (int i = 0; i < SIZE; ++i)
 	{
-		for (int j = 0; j < SIZE; ++i)
+		for (int j = 0; j < SIZE; ++j)
 		{
 			if (i>0) //각 방의 북쪽 방향 연결
 			{
