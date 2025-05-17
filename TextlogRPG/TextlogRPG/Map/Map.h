@@ -1,5 +1,4 @@
 #pragma once
-#include "Room.h"
 
 
 
@@ -9,7 +8,7 @@ private :
 	//생성할 방 배열 사이즈
 	static const int SIZE = 4;
 	//방 배열
-	Room* rooms[SIZE][SIZE];
+	class Room* rooms[SIZE][SIZE];
 
 public :
 	//생성자(사이즈 기준으로 room 동적할당)

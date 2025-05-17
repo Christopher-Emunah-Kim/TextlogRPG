@@ -1,4 +1,4 @@
-#include "Room.h"
+#include "../Map/Room.h"
 
 //처음 다른 방과 연결하는 함수
 void Room::connectRoom(Direction dir, Room* room)
