@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -17,6 +17,17 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TextlogRPG\Map\Map.h" />
+    <ClInclude Include="TextlogRPG\Map\Room.h" />
+    <ClInclude Include="TextlogRPG\Player\Player.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TextlogRPG\Map\Map.cpp" />
+    <ClCompile Include="TextlogRPG\Map\Room.cpp" />
+    <ClCompile Include="TextlogRPG\Player\Player.cpp" />
+    <ClCompile Include="TextlogRPG\TextlogRPG.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -126,9 +137,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="TextlogRPG.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
