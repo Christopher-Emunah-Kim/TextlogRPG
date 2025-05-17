@@ -14,6 +14,7 @@ enum class MainMenu
 
 int main()
 {
+#pragma region SETUP
 	//플레이할 맵 생성
 	Map dungeon; 
 
@@ -24,6 +25,9 @@ int main()
 	int startY = rand() % 4;
 	Player player(dungeon.getRoom(startX, startY));
 
+#pragma endregion
+
+#pragma region LOBBY PAGE
 	// RPG 게임의 시작을 알리는 메시지 출력
 	Sleep(1500);
 	cout << "===========================================" << endl; Sleep(800);
@@ -111,6 +115,9 @@ int main()
 		}
 	}
 	
+#pragma endregion
+
+#pragma region INGAME PAGE
 	system("cls");
 	cout << "=========================================" << endl; Sleep(800);
 	cout << "\n\n[System] 당신은 낯선 방에서 눈을 떴습니다." << endl; Sleep(2000);
@@ -163,5 +170,12 @@ int main()
 		cout << "\n=========================================" << endl; Sleep(4000);
 
 	}
+
+
+
+
+
+
+#pragma endregion
     return 0;
 }
