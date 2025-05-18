@@ -34,7 +34,7 @@ Map::Map()
 		}
 	}
 
-	//처음엔 임의로 몇개 방 연결 끊기
+	//방 설계대로 연결 끊기
 	rooms[0][0]->connectRoom(Direction::East, nullptr);
 	rooms[0][1]->connectRoom(Direction::South, nullptr);
 	rooms[1][0]->connectRoom(Direction::South, nullptr);
