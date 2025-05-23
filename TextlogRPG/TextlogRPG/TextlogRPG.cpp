@@ -12,9 +12,16 @@ enum class MainMenu
 	ExitGame
 };
 
+
+
 int main()
 {
 	//클래스 사용하지않고 main에만 map, room, player 구현하기
+
+
+
+
+
 
 
 
