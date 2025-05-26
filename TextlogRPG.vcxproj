@@ -124,11 +124,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TextlogRPG\Item\Item.cpp" />
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp" />
     <ClCompile Include="TextlogRPG\GameMode\GameMode.cpp" />
     <ClCompile Include="TextlogRPG.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TextlogRPG\Item\Item.h" />
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h" />
     <ClInclude Include="TextlogRPG\GameMode\GameMode.h" />
   </ItemGroup>

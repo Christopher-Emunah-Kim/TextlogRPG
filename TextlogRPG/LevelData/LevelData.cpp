@@ -5,7 +5,6 @@ int16_t LevelData::statsPerLevel[100][4];
 
 LevelData::LevelData()
 {
-	//Initialize the experience and stats data
 	for (int8_t i = 0; i < 100; ++i)
 	{
 		if (i == 0)

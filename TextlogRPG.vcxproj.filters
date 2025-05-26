@@ -24,12 +24,18 @@
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TextlogRPG\Item\Item.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextlogRPG\GameMode\GameMode.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\Item\Item.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
