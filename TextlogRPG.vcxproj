@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/std:c++14 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,10 +124,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp" />
     <ClCompile Include="TextlogRPG\GameMode\GameMode.cpp" />
     <ClCompile Include="TextlogRPG.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TextlogRPG\LevelData\LevelData.h" />
     <ClInclude Include="TextlogRPG\GameMode\GameMode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

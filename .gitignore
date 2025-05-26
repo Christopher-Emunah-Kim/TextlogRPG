@@ -37,3 +37,11 @@
 *.db-wal
 *.db-shm
 *.opendb
+
+# Build output
+x64/
+*.ilk
+*.log
+*.tlog
+*.pdb
+*.idb
