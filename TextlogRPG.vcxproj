@@ -123,7 +123,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TextlogRPG\GameMode\GameMode.cpp" />
     <ClCompile Include="TextlogRPG.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TextlogRPG\GameMode\GameMode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
