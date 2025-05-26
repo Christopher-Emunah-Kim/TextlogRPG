@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "E:\\Projects\\TextlogRPG\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{5421275C-32CA-43C6-AAD3-9271B1BB38C5}|TextlogRPG.vcxproj|E:\\Projects\\TextlogRPG\\.editorconfig||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{5421275C-32CA-43C6-AAD3-9271B1BB38C5}|TextlogRPG.vcxproj|solutionrelative:.editorconfig||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{5421275C-32CA-43C6-AAD3-9271B1BB38C5}|TextlogRPG.vcxproj|E:\\Projects\\TextlogRPG\\TextlogRPG.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{5421275C-32CA-43C6-AAD3-9271B1BB38C5}|TextlogRPG.vcxproj|solutionrelative:TextlogRPG.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
@@ -19,6 +23,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": ".editorconfig",
+              "DocumentMoniker": "E:\\Projects\\TextlogRPG\\.editorconfig",
+              "RelativeDocumentMoniker": ".editorconfig",
+              "ToolTip": "E:\\Projects\\TextlogRPG\\.editorconfig",
+              "RelativeToolTip": ".editorconfig",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-05-26T09:29:01.126Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "TextlogRPG.cpp",
               "DocumentMoniker": "E:\\Projects\\TextlogRPG\\TextlogRPG.cpp",
               "RelativeDocumentMoniker": "TextlogRPG.cpp",
