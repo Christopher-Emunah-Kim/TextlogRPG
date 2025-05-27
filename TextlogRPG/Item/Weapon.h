@@ -14,7 +14,7 @@ public:
 	{	}
 
 	//overrided functions
-	virtual void getItemInfo(const string& itemName) const override;
+	virtual void getItemInfo() const override;
 	virtual void Use(Player* player) override;
 
 

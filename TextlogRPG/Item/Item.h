@@ -49,7 +49,7 @@ public:
 	virtual int32_t getItemCost() const { return itemCost; }
 
 	//Pure virtual functions
-	virtual void getItemInfo(const string& itemName) const = 0;
+	virtual void getItemInfo() const = 0;
 	virtual void Use(Player* player) = 0;
 
 	//Default Destructor
