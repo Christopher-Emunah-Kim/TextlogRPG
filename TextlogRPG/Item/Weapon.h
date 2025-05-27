@@ -4,7 +4,6 @@
 class Weapon : public Item
 {
 private:
-	//Parent Instance
 
 
 public:
@@ -19,6 +18,6 @@ public:
 
 
 	//Destructor
-	~Weapon() { cout << "Weapon Destructed"; };
+	~Weapon() { cout << "Weapon Destructed"; }
 };
 

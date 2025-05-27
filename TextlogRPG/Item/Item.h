@@ -53,6 +53,6 @@ public:
 	virtual void Use(Player* player) = 0;
 
 	//Default Destructor
-	virtual ~Item() = default;
+	virtual ~Item() = default; 
 };
 
