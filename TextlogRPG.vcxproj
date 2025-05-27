@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TextlogRPG\Character\BaseCharacter.cpp" />
+    <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
     <ClCompile Include="TextlogRPG\Character\Player.cpp" />
     <ClCompile Include="TextlogRPG\Item\Armor.cpp" />
     <ClCompile Include="TextlogRPG\Item\Item.cpp" />
@@ -137,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
+    <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
     <ClInclude Include="TextlogRPG\Character\Player.h" />
     <ClInclude Include="TextlogRPG\Item\Armor.h" />
     <ClInclude Include="TextlogRPG\Item\Item.h" />

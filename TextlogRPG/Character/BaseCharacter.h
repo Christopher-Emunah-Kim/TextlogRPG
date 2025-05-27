@@ -59,12 +59,6 @@ private:
 
 
 public:
-	//Default constructor
-	/*BaseCharacter()
-		: characterInfo{}, characterStats{} {
-		cout << "Basic Character is created" << endl;
-	}*/
-
 	//Parameterized constructor
 	BaseCharacter(const string& name = " ", int32_t health = 100, int32_t maxHealth= 100, int16_t level = 1, 
 						int16_t attack=10, int16_t defense=10, int16_t agility=10)
