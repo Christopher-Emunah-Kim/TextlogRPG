@@ -7,8 +7,8 @@ int main()
 	using namespace std;
 
 	//Game Start Settings
-	GameMode gameMode;
-	gameMode.SetGameState(EGameState::TITLE);
+	//GameMode gameMode;
+	//gameMode.SetGameState(EGameState::TITLE);
 
 
 

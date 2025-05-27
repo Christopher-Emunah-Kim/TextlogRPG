@@ -60,13 +60,14 @@ private:
 
 public:
 	//Default constructor
-	BaseCharacter()
+	/*BaseCharacter()
 		: characterInfo{}, characterStats{} {
 		cout << "Basic Character is created" << endl;
-	}
+	}*/
 
-	//User-defined constructor
-	BaseCharacter(const string& name, int32_t health, int32_t maxHealth, int16_t level, int16_t attack, int16_t defense, int16_t agility)
+	//Parameterized constructor
+	BaseCharacter(const string& name = " ", int32_t health = 100, int32_t maxHealth= 100, int16_t level = 1, 
+						int16_t attack=10, int16_t defense=10, int16_t agility=10)
 		: characterInfo{ name, health, maxHealth, level }, characterStats{ attack, defense, agility }
 	{
 		cout << "The " << characterInfo.charracterName << " is created! " << endl;
@@ -79,7 +80,7 @@ public:
 	virtual void SetCharacterStats(const FCharacterStats& stats) { characterStats = stats; }
 
 	//Pure virtual functions
-	virtual BaseCharacter& SetCharacter(const string& characterName) = 0;
+	virtual BaseCharacter& CreateCharacter(const string& characterName) = 0;
 	virtual void TakeDamage(int32_t damage) = 0;
 	virtual void Attack(BaseCharacter* target) = 0;
 

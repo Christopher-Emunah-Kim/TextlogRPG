@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "BaseCharacter.h"
 
-
-
 /*
 	[BaseCharacter]
 	0.0 class BaseCharacter <abstract>
@@ -32,29 +30,46 @@
 	0.2.2 void DropLoot(Player* player)
 */
 
+struct FPlayerData
+{
+	int32_t playerLevel = 1;
+	int32_t playerExperience = 0;
+	int32_t playerGoalExperience = 100; // Experience needed to level up
+	int32_t playerGold = 0;
+	class Weapon* weaponEquipped = nullptr;
+	class Armor* armorEquipped = nullptr;
+};
+
 
 class Player : public BaseCharacter
 {
 private:
-	int32_t playerExperience;
-	int32_t playerGold;
-	class Weapon* weaponEquipped;
-	class Armor* armorEquipped;
+	FPlayerData playerData;
 
 public:
-	//Constructor
-	Player(const string name = " ", int32_t health = 100, int32_t maxHealth = 100, int16_t level = 1, int16_t attack = 10, int16_t defense = 10, int16_t agility = 10)
-		: BaseCharacter("Player01"), playerExperience{0}, playerGold{0}
-	{
-		//Weapon, Armor Initialize
+	//Default Constructor
+	Player() : BaseCharacter(), playerData{} {
+		cout << "Player created with default constructor." << endl;
+	}
+
+	//Parameterized Constructor
+	Player(const string& name) : BaseCharacter(name), playerData{} {
+		cout << "The " << name << " is created! " << endl;
 	}
 
 	//override functions
-	virtual BaseCharacter& SetCharacter(const string& characterName) override;
-	virtual void Heal(int32_t amount) override;
+	virtual BaseCharacter& CreateCharacter(const string& characterName) override;
 	virtual void TakeDamage(int32_t damage) override;
+	virtual void Attack(BaseCharacter* target) override;
 
-	//Destructor
+	////Specific functions
+	//void EquipItem(class Item* item);
+	//void Heal(int32_t amount);
+	//void GainLoot(int32_t experience, int32_t gold, class Item* item);
+	//BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class
 
+
+	////Destructor
+	~Player();
 };
 
