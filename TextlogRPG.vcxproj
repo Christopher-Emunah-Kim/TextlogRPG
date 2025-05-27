@@ -126,8 +126,10 @@
   <ItemGroup>
     <ClCompile Include="TextlogRPG\Character\BaseCharacter.cpp" />
     <ClCompile Include="TextlogRPG\Character\Player.cpp" />
+    <ClCompile Include="TextlogRPG\Item\Armor.cpp" />
     <ClCompile Include="TextlogRPG\Item\Item.cpp" />
     <ClCompile Include="TextlogRPG\Item\ItemManager.cpp" />
+    <ClCompile Include="TextlogRPG\Item\MiscItem.cpp" />
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp" />
     <ClCompile Include="TextlogRPG\GameMode\GameMode.cpp" />
     <ClCompile Include="TextlogRPG.cpp" />
@@ -136,8 +138,10 @@
   <ItemGroup>
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\Player.h" />
+    <ClInclude Include="TextlogRPG\Item\Armor.h" />
     <ClInclude Include="TextlogRPG\Item\Item.h" />
     <ClInclude Include="TextlogRPG\Item\ItemManager.h" />
+    <ClInclude Include="TextlogRPG\Item\MiscItem.h" />
     <ClInclude Include="TextlogRPG\Item\Weapon.h" />
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h" />
     <ClInclude Include="TextlogRPG\GameMode\GameMode.h" />
