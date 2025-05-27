@@ -34,37 +34,54 @@
 
 using namespace std;
 
+struct FCharacterInfo
+{
+	string charracterName = "Unknown";
+	int32_t characterHealth = 100;
+	int32_t characterMaxHealth = 100;
+	int16_t characterLevel = 1;
+};
+
+struct FCharacterStats
+{
+	int16_t attack = 10;
+	int16_t defense = 10;
+	int16_t agility = 10;
+};
+
+
 class BaseCharacter abstract
 {
 private:
-	string characterName;
-	int32_t characterHealth;
-	int32_t chracterMaxHealth;
-	int16_t characterLevel;
-	int16_t characterstats[3]; // Attack, Defense, Agility
+	//fix the member variables to structs
+	FCharacterInfo characterInfo;
+	FCharacterStats characterStats;
+
 
 public:
-	//BaseCharacter constructor
-	BaseCharacter(const string name = " ", int32_t health = 100, int32_t maxHealth = 100, int16_t level = 1, int16_t attack = 10, int16_t defense = 10, int16_t agility = 10)
-		: characterName(name), characterHealth(health), chracterMaxHealth(maxHealth), characterLevel(level)
+	//Default constructor
+	BaseCharacter()
+		: characterInfo{}, characterStats{} {
+		cout << "Basic Character is created" << endl;
+	}
+
+	//User-defined constructor
+	BaseCharacter(const string& name, int32_t health, int32_t maxHealth, int16_t level, int16_t attack, int16_t defense, int16_t agility)
+		: characterInfo{ name, health, maxHealth, level }, characterStats{ attack, defense, agility }
 	{
-		characterstats[0] = attack; 
-		characterstats[1] = defense; 
-		characterstats[2] = agility; 
-		cout << "The " << characterName << " is created! " << endl;
+		cout << "The " << characterInfo.charracterName << " is created! " << endl;
 	}
 	
-	//Getters for character attributes
-	virtual int16_t GetLevel(BaseCharacter* character) const;
-	virtual int32_t GetHealth(BaseCharacter* character) const;
-	virtual int16_t GetAttack(BaseCharacter* character) const;
-	virtual int16_t GetDefense(BaseCharacter* character) const;
-	virtual int16_t GetAgility(BaseCharacter* character) const;
+	//GETTER, SETTER functions optimized by using structs
+	virtual FCharacterInfo GetCharacterInfo() const { return characterInfo; }
+	virtual FCharacterStats GetCharacterStats() const { return characterStats; }
+	virtual void SetCharacterInfo(const FCharacterInfo& info) { characterInfo = info; }
+	virtual void SetCharacterStats(const FCharacterStats& stats) { characterStats = stats; }
 
-	//puer virtual functions
+	//Pure virtual functions
 	virtual BaseCharacter& SetCharacter(const string& characterName) = 0;
-	virtual void Heal(int32_t amount) = 0;
 	virtual void TakeDamage(int32_t damage) = 0;
+	virtual void Attack(BaseCharacter* target) = 0;
 
 	//virtual destructor
 	virtual ~BaseCharacter() = default;
