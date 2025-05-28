@@ -147,6 +147,7 @@
     <ClInclude Include="TextlogRPG\Item\Weapon.h" />
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h" />
     <ClInclude Include="TextlogRPG\GameMode\GameMode.h" />
+    <ClInclude Include="TextlogRPG\Util\Common.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

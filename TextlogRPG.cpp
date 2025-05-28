@@ -1,10 +1,8 @@
-﻿#include <iostream>
-#include <windows.h>
-#include <cstdint>
-#include <string>
+﻿#include "TextlogRPG/Util/Common.h"
 #include "TextlogRPG/GameMode/GameMode.h"
 
 using namespace std;
+
 
 int main()
 {
