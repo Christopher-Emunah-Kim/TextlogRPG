@@ -85,7 +85,7 @@ void GameManager::RunProcessTitle()
 {
 	Sleep(2000);
 	cout << "\n===========================================\n" << endl;
-	cout << "[System] 환영합니다, 용사" << player->GetName() << "님!\n" << endl;
+	cout << "[System] 환영합니다, 용사 " << player->GetName() << " 님!\n" << endl;
 	cout << "이제 당신의 모험이 시작됩니다.\n" << endl;
 	cout << "===========================================\n" << endl;
 	Sleep(2000);

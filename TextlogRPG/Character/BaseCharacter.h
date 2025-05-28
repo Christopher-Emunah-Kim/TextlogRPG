@@ -16,8 +16,6 @@ struct FCharacterInfo
 
 };
 
-static constexpr size_t MAX_CHARACTERNAME_LENGTH = 32;
-
 class BaseCharacter abstract
 {
 protected:
@@ -26,11 +24,11 @@ protected:
 public:
 	
     //Default Constructor
-    BaseCharacter()
+	explicit BaseCharacter()
     : characterInfo{ FCharacterInfo{} } { }
 
 	//User-Defined Constructor
-	BaseCharacter(const FCharacterInfo& info) : characterInfo(info) {}
+	explicit BaseCharacter(const FCharacterInfo& info) : characterInfo(info) {}
 
 	//virtual destructor
 	virtual ~BaseCharacter() = default;

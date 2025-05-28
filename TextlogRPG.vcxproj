@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
+    <ClInclude Include="TextlogRPG\NPC\NonPlayerCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\Player.h" />
     <ClInclude Include="TextlogRPG\Core\GameManager.h" />
     <ClInclude Include="TextlogRPG\Dialog\Dialog.h" />
