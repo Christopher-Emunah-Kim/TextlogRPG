@@ -9,7 +9,6 @@ private:
     
     //Main Process of Game
     void InitializeGame();
-    void RunIntroSequence();
     void RunProcessTitle();
     void RunProcessVillage();
     void RunProcessHealer();
