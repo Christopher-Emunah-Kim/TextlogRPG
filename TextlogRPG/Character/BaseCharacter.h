@@ -9,12 +9,14 @@ using namespace std;
 struct FCharacterInfo
 {
 	CharacterStatus characterStats;
-	int32_t maxHealth;
-	int32_t health;
-	int16_t level;
-	string characterName;
+	int32_t maxHealth = 100;
+	int32_t health = 100;
+	int16_t level = 1;
+	string characterName = "UNKNOWN";
 
 };
+
+static constexpr size_t MAX_CHARACTERNAME_LENGTH = 32;
 
 class BaseCharacter abstract
 {
@@ -22,16 +24,20 @@ private:
 	FCharacterInfo characterInfo;
 
 public:
-	//constructor
-	BaseCharacter(const FCharacterInfo& info): characterInfo(info)
-	{ }
+	
+    //Default Constructor
+    BaseCharacter()
+    : characterInfo{ FCharacterInfo{} } { }
+
+	//User-Defined Constructor
+	BaseCharacter(const FCharacterInfo& info) : characterInfo(info) {}
+
 	//virtual destructor
 	virtual ~BaseCharacter() = default;
 
 	virtual FCharacterInfo GetCharacterInfo() const { return characterInfo; }
 
 	//Pure virtual functions
-	virtual BaseCharacter& CreateCharacter(const string& characterName) = 0;
 	virtual void TakeDamage(const BaseCharacter& target) = 0;
 	virtual void Attack(BaseCharacter* target) = 0;
 
@@ -40,6 +46,8 @@ public:
 	BaseCharacter(BaseCharacter&&) = default;
 	BaseCharacter& operator =(BaseCharacter&&) = default;
 };
+
+
 
 
 /*

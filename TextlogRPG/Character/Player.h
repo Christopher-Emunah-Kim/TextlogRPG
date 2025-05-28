@@ -20,14 +20,14 @@ private:
 
 public:
 	//Default Constructor
-	Player(FPlayerData& data) : BaseCharacter(GetCharacterInfo()), playerData(data) {}
+	Player(const FPlayerData& data, const FCharacterInfo& info) : BaseCharacter(info), playerData(data) {}
 
 	//override functions
-	virtual BaseCharacter& CreateCharacter(const string& characterName) override;
 	virtual void TakeDamage(const BaseCharacter& target) override;
 	virtual void Attack(BaseCharacter* target) override;
 
 	////Specific functions
+	static Player* CreateCharacter(const string& characterName);
 	void SetName(const string& name);
 	string GetName() const;
 	FPlayerData GetPlayerData() const;

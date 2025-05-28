@@ -9,8 +9,7 @@ int main()
 {
 	//Game Start Settings
 	GameMode gameMode(EGameState::TITLE);
-	FPlayerData playerData;
-	Player player(playerData);
+	Player* player = Player::CreateCharacter("WM");
 
 	GameManager gameManager(gameMode, player);
 	

@@ -17,8 +17,8 @@ private:
 	void RunProcessCombat();
     
 public:
-    GameManager(const GameMode& gm, const Player& player) 
-        : gameMode(GameMode(gm.GetGameState())), player(new Player(player)) { }
+    GameManager(const GameMode& gm, Player* player) 
+        : gameMode(GameMode(gm.GetGameState())), player(player) { }
 	~GameManager() { if (player) delete player; }
     
     void Run();

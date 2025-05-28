@@ -3,16 +3,16 @@
 #include "../Item/Armor.h"
 #include "../Item/MiscItem.h"
 
-BaseCharacter& Player::CreateCharacter(const string& characterName)
+Player* Player::CreateCharacter(const string& characterName)
 {
 	//TODO : 임시_이후 LevelData 연결
 	FCharacterInfo characterInfo = { CharacterStatus::NewStatus(10, 5, 3),100, 100, 1, characterName };
  
 	FPlayerData playerData;
 
-	Player* player = new Player(playerData);
+	Player* player = new Player(playerData, characterInfo);
 
-	return *player;
+	return player;
 }
 
 void Player::TakeDamage(const BaseCharacter& target)

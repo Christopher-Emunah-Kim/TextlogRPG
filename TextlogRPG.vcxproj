@@ -124,7 +124,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TextlogRPG\Character\BaseCharacter.cpp" />
     <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
     <ClCompile Include="TextlogRPG\Character\Player.cpp" />
     <ClCompile Include="TextlogRPG\Core\GameManager.cpp" />

@@ -30,9 +30,6 @@
     <ClCompile Include="TextlogRPG\Item\Weapon.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TextlogRPG\Character\BaseCharacter.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TextlogRPG\Character\Player.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
