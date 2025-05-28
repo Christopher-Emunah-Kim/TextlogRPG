@@ -1,15 +1,22 @@
 ﻿#include "CharacterStatus.h"
 
-CharacterStatus CharacterStatus::NewStatus(int16_t atk, int16_t def, int16_t agi)
+CharacterStatus CharacterStatus::NewStatus(int16_t atk, int16_t def, int16_t agi, int32_t maxHp)
 {
-	return CharacterStatus(atk, def, agi);
+	return CharacterStatus(atk, def, agi, maxHp);
 }
 
-CharacterStatus CharacterStatus::AddStatus(const CharacterStatus& other) const
+CharacterStatus CharacterStatus::NewStatus(const CharacterStatus& other) const
 {
 	return CharacterStatus(
 		this->attack + other.attack,
 		this->defense + other.defense,
-		this->agility + other.agility
+		this->agility + other.agility,
+		this->maxHealth + other.maxHealth	
 	);
 }
+
+int32_t CharacterStatus::GetDamage(const CharacterStatus& other) const
+{
+	return std::max<int32_t>(0, this->attack - other.defense);
+}
+
