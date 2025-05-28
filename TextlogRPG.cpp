@@ -16,6 +16,8 @@ int main()
 	gameManager.Run();
 
 
+
+	delete player;
 	return 0;
 
 }

@@ -32,7 +32,7 @@ void GameManager::InitializeGame()
 	cout << "===========================================" << endl;
 	Sleep(2000);
 	system("cls");
-	Sleep(1000);
+	Sleep(2000);
 	cout << "===========================================" << endl;
 	cout << "\n그래, 자네 말일세.. 이곳은 자네에게 가장 잘어울리는 새로운 세상일세.\n\n" << endl;
 	cout << "자, 이제 게임을 시작하지\n\n" << endl;
@@ -40,10 +40,10 @@ void GameManager::InitializeGame()
 	cout << "===========================================" << endl;
 	Sleep(2000);
 	system("cls");
-	Sleep(1000);
+	Sleep(2000);
 	cout << "\n===========================================\n" << endl;
-	cout << "[System] 이해할 수 없는 곳이다. \n "
-		<< "1. 게임을 시작한다. \n 2. 당장 도망친다. \n당신의 선택은 ? 선택지를 입력해주세요\n";
+	cout << "[System] 이해할 수 없는 곳이다. \n\n "
+		<< "1. 게임을 시작한다. \n\n 2. 당장 도망친다. \n\n당신의 선택은 ? 선택지를 입력해주세요\n";
 	cout << "\n===========================================\n" << endl;
 	char titleChoice;
 	cin >> titleChoice;
@@ -309,9 +309,11 @@ void GameManager::RunProcessDungeon()
 	system("cls");
 	switch (dungeonChoice)
 	{
-
 	case '1':
 	{
+		//TODO : 전투 로직
+		Sleep(2000);
+		system("cls");
 		gameMode.SetGameState(EGameState::BATTLE);
 	}
 	case '2':

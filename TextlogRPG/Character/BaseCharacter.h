@@ -20,7 +20,7 @@ static constexpr size_t MAX_CHARACTERNAME_LENGTH = 32;
 
 class BaseCharacter abstract
 {
-private:
+protected:
 	FCharacterInfo characterInfo;
 
 public:

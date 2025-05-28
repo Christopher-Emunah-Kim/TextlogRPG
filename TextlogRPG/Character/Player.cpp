@@ -43,12 +43,12 @@ void Player::Attack(BaseCharacter* target)
 
 void Player::SetName(const string& name)
 {
-
+	characterInfo.characterName = name;
 }
 
 string Player::GetName() const  
 {  
-    return GetCharacterInfo().characterName;  
+    return characterInfo.characterName;
 }
 
 FPlayerData Player::GetPlayerData() const
