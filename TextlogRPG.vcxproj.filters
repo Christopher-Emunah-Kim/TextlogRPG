@@ -48,6 +48,12 @@
     <ClCompile Include="TextlogRPG\Core\GameManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TextlogRPG\NPC\Healer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TextlogRPG\NPC\Merchant.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextlogRPG\Core\GameMode.h">
@@ -93,6 +99,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextlogRPG\NPC\NonPlayerCharacter.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\NPC\Healer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\NPC\Merchant.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

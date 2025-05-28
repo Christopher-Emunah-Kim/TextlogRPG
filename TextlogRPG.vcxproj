@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
+    <ClCompile Include="TextlogRPG\NPC\Merchant.cpp" />
     <ClCompile Include="TextlogRPG\Character\Player.cpp" />
     <ClCompile Include="TextlogRPG\Core\GameManager.cpp" />
     <ClCompile Include="TextlogRPG\Item\Armor.cpp" />
@@ -135,10 +136,13 @@
     <ClCompile Include="TextlogRPG\Core\GameMode.cpp" />
     <ClCompile Include="TextlogRPG.cpp" />
     <ClCompile Include="TextlogRPG\Item\Weapon.cpp" />
+    <ClCompile Include="TextlogRPG\NPC\Healer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
+    <ClInclude Include="TextlogRPG\NPC\Merchant.h" />
+    <ClInclude Include="TextlogRPG\NPC\Healer.h" />
     <ClInclude Include="TextlogRPG\NPC\NonPlayerCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\Player.h" />
     <ClInclude Include="TextlogRPG\Core\GameManager.h" />
