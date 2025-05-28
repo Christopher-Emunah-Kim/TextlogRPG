@@ -5,10 +5,11 @@
 struct FPlayerData
 {
 	int32_t playerExperience = 0;
-	int32_t playerGoalExperience = 100; // Experience needed to level up
+	int32_t playerMaxExperience = 100; // Experience needed to level up
 	int32_t playerGold = 0;
 	class Weapon* weaponEquipped = nullptr;
 	class Armor* armorEquipped = nullptr;
+	class MiscItem* miscOwned = nullptr;
 };
 
 
@@ -17,8 +18,6 @@ class Player : public BaseCharacter
 private:
 	FPlayerData playerData;
 
- 
-  
 public:
 	//Default Constructor
 	Player(FPlayerData& data) : BaseCharacter(GetCharacterInfo()), playerData(data) {}
@@ -29,9 +28,16 @@ public:
 	virtual void Attack(BaseCharacter* target) override;
 
 	////Specific functions
-	//void EquipItem(class Item* item);
-	//void Heal(int32_t amount);
-	//void GainLoot(int32_t experience, int32_t gold, class Item* item);
+	void SetName(const string& name);
+	string GetName() const;
+	FPlayerData GetPlayerData() const;
+	
+	void EquipItem(class Item* item);
+	void LoseItem(class Item* item);
+	void Heal(int32_t amount);
+	void UseGold(int32_t amount);
+	void EarnGold(int32_t amount);
+	void GainLoot(int32_t experience, int32_t gold, class Item* item);
 	//BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class
 
 

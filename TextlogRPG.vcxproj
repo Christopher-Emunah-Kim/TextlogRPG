@@ -127,12 +127,13 @@
     <ClCompile Include="TextlogRPG\Character\BaseCharacter.cpp" />
     <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
     <ClCompile Include="TextlogRPG\Character\Player.cpp" />
+    <ClCompile Include="TextlogRPG\Core\GameManager.cpp" />
     <ClCompile Include="TextlogRPG\Item\Armor.cpp" />
     <ClCompile Include="TextlogRPG\Item\Item.cpp" />
     <ClCompile Include="TextlogRPG\Item\ItemManager.cpp" />
     <ClCompile Include="TextlogRPG\Item\MiscItem.cpp" />
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp" />
-    <ClCompile Include="TextlogRPG\GameMode\GameMode.cpp" />
+    <ClCompile Include="TextlogRPG\Core\GameMode.cpp" />
     <ClCompile Include="TextlogRPG.cpp" />
     <ClCompile Include="TextlogRPG\Item\Weapon.cpp" />
   </ItemGroup>
@@ -140,13 +141,16 @@
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
     <ClInclude Include="TextlogRPG\Character\Player.h" />
+    <ClInclude Include="TextlogRPG\Core\GameManager.h" />
+    <ClInclude Include="TextlogRPG\Dialog\Dialog.h" />
+    <ClInclude Include="TextlogRPG\Dialog\Option.h" />
     <ClInclude Include="TextlogRPG\Item\Armor.h" />
     <ClInclude Include="TextlogRPG\Item\Item.h" />
     <ClInclude Include="TextlogRPG\Item\ItemManager.h" />
     <ClInclude Include="TextlogRPG\Item\MiscItem.h" />
     <ClInclude Include="TextlogRPG\Item\Weapon.h" />
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h" />
-    <ClInclude Include="TextlogRPG\GameMode\GameMode.h" />
+    <ClInclude Include="TextlogRPG\Core\GameMode.h" />
     <ClInclude Include="TextlogRPG\Util\Common.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

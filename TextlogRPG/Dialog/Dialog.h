@@ -11,8 +11,8 @@ private:
     vector<Option*> options;
 
 public:
-	Dialog(int32_t id, const string& content, vector<Option>&& options)
-		: dialogId(id), content(content), options(std::move(options)) {	}
+	Dialog(int32_t id, const string& content, vector<Option*>&& options)
+		: dialogId(id), content(content), options(move(options)) {	}
 	~Dialog() {
 		for (Option* opt : options) { delete opt; }
 		options.clear();
@@ -34,7 +34,7 @@ public:
 	}
 
 
-	static Dialog NewOption(int32_t id, string content, vector<Option>&& options = {})
+	static Dialog NewOption(int32_t id, string content, vector<Option*>&& options = {})
 	{
 		return Dialog(id, content, std::move(options));
 	}

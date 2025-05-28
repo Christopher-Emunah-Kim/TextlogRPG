@@ -9,6 +9,7 @@ using namespace std;
 struct FCharacterInfo
 {
 	CharacterStatus characterStats;
+	int32_t maxHealth;
 	int32_t health;
 	int16_t level;
 	string characterName;

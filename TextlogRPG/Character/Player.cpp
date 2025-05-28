@@ -6,7 +6,7 @@
 BaseCharacter& Player::CreateCharacter(const string& characterName)
 {
 	//TODO : 임시_이후 LevelData 연결
-	FCharacterInfo characterInfo = { CharacterStatus::NewStatus(10, 5, 3, 100), 100, 1, characterName };
+	FCharacterInfo characterInfo = { CharacterStatus::NewStatus(10, 5, 3),100, 100, 1, characterName };
  
 	FPlayerData playerData;
 
@@ -40,6 +40,52 @@ void Player::Attack(BaseCharacter* target)
 	//TODO : Player Attack Function
 	
 }
+
+void Player::SetName(const string& name)
+{
+
+}
+
+string Player::GetName() const  
+{  
+    return GetCharacterInfo().characterName;  
+}
+
+FPlayerData Player::GetPlayerData() const
+{
+	return playerData;
+}
+
+
+void Player::EquipItem(Item* item)
+{
+}
+
+void Player::LoseItem(Item* item)
+{
+}
+
+void Player::Heal(int32_t amount)
+{
+}
+
+void Player::UseGold(int32_t amount)
+{
+
+}
+
+void Player::EarnGold(int32_t amount)
+{
+}
+
+void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
+{
+}
+
+//BaseCharacter& Player::CharacterLevelUp()
+//{
+//	// TODO: 여기에 return 문을 삽입합니다.
+//}
 
 Player::~Player()
 {
