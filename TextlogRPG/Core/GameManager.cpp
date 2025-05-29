@@ -127,19 +127,30 @@ void GameManager::RunProcessVillage()
 	village->AddNPC(healer);
 	village->AddNPC(merchant);
 	
-	//TODO : 아이템 추가 및 상인에게 아이템 push
-	//TODO : 아이템 리스트 정보를 불러와 배열 push해주는 메서드 추가
+	//TODO : 아이템 리스트 정보를 csv에서 불러와 배열 push해주는 메서드 추가
+	//TODO : 반복되는기능 함수로 묶기
 	ItemManager& itemManager = ItemManager::GetInstance();
-	Weapon* sword = new Weapon();
-	sword->SetItem(EItemType::WEAPON, 80, 15, 0, 0, "철검");
-	Armor* armor = new Armor();
-	armor->SetItem(EItemType::ARMOR, 100, 0, 15, 2, "가죽갑옷");
 
-	itemManager.RegisterItem(sword);
-	itemManager.RegisterItem(armor);
+	Weapon* basicSword = new Weapon();
+	basicSword->SetItem(EItemType::WEAPON, 50, 10, 0, 0, "초보자의 검");
+	itemManager.RegisterItem(basicSword);
+	merchant->AddItemForSale(basicSword, 50);
 
-	merchant->AddItemForSale(sword, 80);
-	merchant->AddItemForSale(armor, 100);
+	Weapon* ironSword = new Weapon();
+	ironSword->SetItem(EItemType::WEAPON, 80, 15, 0, 0, "철검");
+	itemManager.RegisterItem(ironSword);
+	merchant->AddItemForSale(ironSword, 80);
+
+	Armor* basicArmor = new Armor();
+	basicArmor->SetItem(EItemType::ARMOR, 60, 0, 10, 0, "초보자의 갑옷");
+	itemManager.RegisterItem(basicArmor);
+	merchant->AddItemForSale(basicArmor, 60);
+
+	Armor* leatherArmor = new Armor();
+	leatherArmor->SetItem(EItemType::ARMOR, 100, 0, 15, 2, "가죽갑옷");
+	itemManager.RegisterItem(leatherArmor);
+	merchant->AddItemForSale(leatherArmor, 100);
+
 
 	//Choice in Village
 	currentAreaPtr->Enter(playerPtr);
