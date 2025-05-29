@@ -1,4 +1,7 @@
-﻿#include "../Util/Common.h"
+﻿#ifndef CHARACTER_STATUS_H
+#define CHARACTER_STATUS_H
+
+#include "../Util/Common.h"
 
 class CharacterStatus  
 {  
@@ -23,4 +26,24 @@ public:
 	CharacterStatus NewStatus(const CharacterStatus& other) const;  
 
 	int32_t GetDamage(const CharacterStatus& other) const;  
+
+	//Get Status Info
+	int16_t GetAttack() const { return attack; }
+	int16_t GetDefense() const { return defense; }
+	int16_t GetAgility() const { return agility; }
+
+	//operator = overloading
+	CharacterStatus& operator=(const CharacterStatus& other)
+	{
+		if (this != &other)
+		{
+			const_cast<int16_t&>(attack) = other.attack;
+			const_cast<int16_t&>(defense) = other.defense;
+			const_cast<int16_t&>(agility) = other.agility;
+		}
+		return *this;
+	}
 };
+
+
+#endif // CHARACTER_STATUS_H
