@@ -10,6 +10,7 @@ int main()
 	//Game Start Settings
 	GameMode gameMode(EGameState::TITLE);
 	Player* player = Player::CreateCharacter("WM");
+	
 
 	GameManager gameManager(gameMode, player);
 	

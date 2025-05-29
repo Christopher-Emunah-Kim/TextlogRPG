@@ -124,7 +124,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TextlogRPG\Area\Dungeon.cpp" />
+    <ClCompile Include="TextlogRPG\Area\Title.cpp" />
+    <ClCompile Include="TextlogRPG\Area\Village.cpp" />
     <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Monster.cpp" />
     <ClCompile Include="TextlogRPG\NPC\Merchant.cpp" />
     <ClCompile Include="TextlogRPG\Character\Player.cpp" />
     <ClCompile Include="TextlogRPG\Core\GameManager.cpp" />
@@ -139,8 +143,13 @@
     <ClCompile Include="TextlogRPG\NPC\Healer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TextlogRPG\Area\Area.h" />
+    <ClInclude Include="TextlogRPG\Area\Dungeon.h" />
+    <ClInclude Include="TextlogRPG\Area\Title.h" />
+    <ClInclude Include="TextlogRPG\Area\Village.h" />
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
+    <ClInclude Include="TextlogRPG\Character\Monster.h" />
     <ClInclude Include="TextlogRPG\NPC\Merchant.h" />
     <ClInclude Include="TextlogRPG\NPC\Healer.h" />
     <ClInclude Include="TextlogRPG\NPC\NonPlayerCharacter.h" />
