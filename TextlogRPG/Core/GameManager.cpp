@@ -24,6 +24,7 @@ void GameManager::Run() {
 
 void GameManager::InitializeGame() 
 {
+	//TODO : Dialog/Options 유틸 클래스 적용
 	//TITLE Dialogue
 	Sleep(1000);
 	cout << "===========================================" << endl;
@@ -151,75 +152,11 @@ void GameManager::RunProcessHealer()
 	
 	NonPlayerCharacter* healer = new Healer("앤더슨", healCost);
     
-	// TODO: 힐러 만나기 로직 구현    
 	healer->Interact(player);
 
 	delete healer; 
 
 	gameMode.SetGameState(EGameState::VILLAGE);
-	//cout << "\n===========================================\n" << endl;
-	//cout << "[System] 치유의 집에서 힐러를 만났습니다.\n" << endl;
-	//cout << "===========================================\n" << endl;
-	////TODO : 힐러 만나기 로직 구현
-	//Sleep(2000);
-	//system("cls");
-	//cout << "\n===========================================\n" << endl;
-	//cout << "당신이 바로 말로만 듣던 바로 그.. " << player->GetName() << " 용사님이군요!\n" << endl;
-	//cout << "안색이 좋지 않네요. 치유가 필요하신가요?\n" << endl;
-	//cout << "1. 네, 치유해주세요.(" << healCost << "골드)\n2.아니요, 괜찮습니다.\n" << endl;
-	//cout << "===========================================\n" << endl;
-	//char healerChoice;
-	//cin >> healerChoice;
-	//cin.ignore();
-	//Sleep(2000);
-	//system("cls");
-	//if (healerChoice == '1')
-	//{
-	//	cout << "\n===========================================\n" << endl;
-	//	cout << "[System] 치유를 시작합니다...\n" << endl;
-	//	cout << "===========================================\n" << endl;
-	//	Sleep(2000);
-	//	system("cls");
-	//	//TODO : 치유 로직 구현
-	//	if (player->GetPlayerData().playerGold >= healCost)
-	//	{
-	//		player->Heal(healAmount);
-	//		player->UseGold(healCost);
-	//		cout << "\n===========================================\n" << endl;
-	//		cout << "[System] 치유가 완료되었습니다. \n" << healAmount << "의 체력이 회복되었습니다.\n" << endl;
-	//		cout << "===========================================\n" << endl;
-	//	}
-	//	else
-	//	{
-	//		cout << "\n===========================================\n" << endl;
-	//		cout << "[System] 골드가 부족합니다...\n" << endl;
-	//		cout << "===========================================\n" << endl;
-	//	}
-	//	
-	//	Sleep(2000);
-	//	system("cls");
-	//	gameMode.SetGameState(EGameState::VILLAGE);
-	//}
-	//else if (healerChoice == '2')
-	//{
-	//	//TODO : 치유 거부 로직 구현
-	//	cout << "\n===========================================\n" << endl;
-	//	cout << "[System] 치유를 거부하셨습니다.\n" << endl;
-	//	cout << "===========================================\n" << endl;
-	//	Sleep(2000);
-	//	system("cls");
-	//	gameMode.SetGameState(EGameState::VILLAGE);
-	//}
-	//else
-	//{
-	//	//TODO : 잘못된 선택 처리 로직 구현
-	//	cout << "\n===========================================\n" << endl;
-	//	cout << "[System] 잘못된 선택입니다. 치유의 집을 떠나 길거리로 나갑니다.\n" << endl;
-	//	cout << "===========================================\n" << endl;
-	//	Sleep(2000);
-	//	gameMode.SetGameState(EGameState::VILLAGE);
-	//	system("cls");
-	//}
 }
 
 void GameManager::RunProcessMerchant()

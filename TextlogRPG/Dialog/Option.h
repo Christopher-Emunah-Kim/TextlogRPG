@@ -13,6 +13,7 @@ public:
 		: optionIdx(idx),nextDialogIdx(nextDialogIdx), text(text) { }
     
     string GetText() const { return text; }
+	int32_t GetIdx() const { return optionIdx; }
     int32_t GetNextDialogId() const { return nextDialogIdx; }
 
 };
