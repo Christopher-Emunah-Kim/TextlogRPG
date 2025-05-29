@@ -2,7 +2,7 @@
 
 void ItemManager::RegisterItem(Item* item)
 {
-	itemTable[item->getItemName()] = item;
+	itemTable[item->GetItemInfo().itemName] = item;
 }
 
 void ItemManager::ShowItemInfo(const string& name)
@@ -10,7 +10,7 @@ void ItemManager::ShowItemInfo(const string& name)
 	unordered_map<string, Item*>::iterator it = itemTable.find(name);
 	if (it != itemTable.end())
 	{
-		it->second->getItemInfo();
+		it->second->ShowItemInfo();
 	}
 	else
 	{
