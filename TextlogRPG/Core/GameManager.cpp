@@ -182,6 +182,7 @@ void GameManager::RunProcessVillage()
 			village->InteractWithNPC(playerPtr, healer);
 			gameMode.SetGameState(EGameState::VILLAGE);
 			delete healer;
+			healer = nullptr;
 			break;
 		}
 		case '2':
@@ -189,6 +190,7 @@ void GameManager::RunProcessVillage()
 			village->InteractWithNPC(playerPtr, merchant);
 			gameMode.SetGameState(EGameState::VILLAGE);
 			delete merchant;
+			merchant = nullptr;
 			break;
 		}
 		case '3':
@@ -282,14 +284,21 @@ void GameManager::RunProcessCombat()
 
 GameManager::~GameManager()
 {
-
-	if (playerPtr) delete playerPtr;
+	if (playerPtr) 
+	{
+		delete playerPtr;
+		playerPtr = nullptr; 
+	}
 
 	for (const pair<EGameState, Area*>& map : maps)
 	{
 		delete map.second; // Delete each Area object
+		maps[map.first] = nullptr; // Set pointer to nullptr after deletion
 	}
 	maps.clear();
-	cout << "[System] 게임 매니저가 종료되었습니다." << endl;
-
+	cout << "\n===========================================\n" << endl;
+	cout << "[System] 게임이 종료되었습니다." << endl;
+	cout << "\n===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
 }
