@@ -1,12 +1,11 @@
 ﻿#pragma once
 #include "BaseCharacter.h"
 #include "../Util/Common.h"
-#include "../Item/Item.h"
 #include "../Item/EItemType.h"
 #include <vector>
 
 using namespace std;
-class Item;
+
 
 struct FPlayerData
 {
@@ -23,7 +22,7 @@ class Player : public BaseCharacter
 {
 private:
 	FPlayerData playerData;
-	vector<Item*> inventory; 
+	vector<class Item*> inventory; 
 
 public:
 	//Default Constructor
@@ -43,11 +42,11 @@ public:
 	vector<Item*> GetInventoryItems(EItemType type) const;
 	void EquipItem(class Item* item);
 	void LoseItem(class Item* item);
-	void Heal(int32_t amount);
-	void UseGold(int32_t amount);
-	void EarnGold(int32_t amount);
+	void Heal(int32_t healAmount);
+	void UseGold(int32_t cost);
+	void EarnGold(int32_t earnGold);
 	void GainLoot(int32_t experience, int32_t gold, class Item* item);
-	//BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class
+	BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class
 
 
 	////Destructor
