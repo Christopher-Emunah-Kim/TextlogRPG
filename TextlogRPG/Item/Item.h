@@ -2,9 +2,10 @@
 #include <string>
 #include <cstdint>
 #include <iostream>
-#include "../Character/Player.h" 
+#include "EItemType.h"
 
 using namespace std;
+class Player;
 /*
 	3.0 class Item <abstract>
 	3.0.0 string itemName
@@ -19,13 +20,6 @@ using namespace std;
 	3.3 class MiscItem - Derived
 */
 
-enum class EItemType
-{
-	NONE,
-	WEAPON,
-	ARMOR,
-	MISC
-};
 
 struct FItemInfo
 {
@@ -58,7 +52,8 @@ public:
 		itemInfo.itemName = "NONE";
 	}
 
-	virtual FItemInfo& GetItemInfo() { return itemInfo; }
+	virtual FItemInfo GetItemInfo() const { return itemInfo; }
+
 	virtual Item& SetItem(EItemType type, int32_t cost, int16_t atk, int16_t def, int16_t agi, string name)
 	{
 		itemInfo.itemType = type;
@@ -76,4 +71,3 @@ public:
 	//Default Destructor
 	virtual ~Item() = default; 
 };
-
