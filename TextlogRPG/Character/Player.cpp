@@ -1,4 +1,5 @@
 ﻿#include "Player.h"
+#include "../Item/Item.h"
 #include "../Item/Weapon.h"
 #include "../Item/Armor.h"
 #include "../Item/MiscItem.h"
@@ -57,12 +58,38 @@ FPlayerData Player::GetPlayerData() const
 }
 
 
+void Player::AddToInventory(Item* item)
+{
+	inventory.push_back(item);
+}
+
+vector<Item*> Player::GetInventoryItems(EItemType type) const
+{
+	vector<Item*> itemListByType;
+
+	for (Item* item : inventory) 
+	{
+		if (item->GetItemInfo().itemType == type)
+		{
+			itemListByType.push_back(item);
+		}
+	}
+	return itemListByType;
+}
+
+
+
 void Player::EquipItem(Item* item)
 {
 }
 
 void Player::LoseItem(Item* item)
 {
+	vector<Item*>::iterator it = find(inventory.begin(), inventory.end(), item);
+	if (it != inventory.end()) 
+	{
+		inventory.erase(it);
+	}
 }
 
 void Player::Heal(int32_t amount)
@@ -85,7 +112,9 @@ void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
 //BaseCharacter& Player::CharacterLevelUp()
 //{
 //	// TODO: 여기에 return 문을 삽입합니다.
+//	return;
 //}
+
 
 Player::~Player()
 {

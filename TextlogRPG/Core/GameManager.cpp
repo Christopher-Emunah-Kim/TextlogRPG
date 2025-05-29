@@ -186,7 +186,6 @@ void GameManager::RunProcessHealer(Healer* healer)
 	healer->Interact(playerPtr);
 
 	delete healer;
-
 	gameMode.SetGameState(EGameState::VILLAGE);
 }
 
