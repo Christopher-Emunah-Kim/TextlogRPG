@@ -1,19 +1,19 @@
 ﻿#pragma once
 #include "../Core/GameMode.h"
-#include "../Character/Player.h"
-#include "../Area/Area.h"
+#include <unordered_map>
+
+class Player;
+class Area;
 
 class GameManager 
 {
 private:
     GameMode gameMode;
     Player* playerPtr;
-	Area* currentAreaPtr;
+	unordered_map<EGameState, class Area*> maps;
     
 public:
-	GameManager(const GameMode& gm, Player* player)
-		: gameMode(GameMode(gm.GetGameState())), playerPtr(player), currentAreaPtr(nullptr)
-	{	}
+	GameManager(const GameMode& gm, Player* player);
         
 	~GameManager();
 
@@ -21,8 +21,6 @@ public:
 	void InitializeGame();
 	void RunProcessTitle();
 	void RunProcessVillage();
-	void RunProcessHealer(class Healer* healer);
-	void RunProcessMerchant(class Merchant* merchant);
 	void RunProcessDungeon();
 	void RunProcessCombat();
 	

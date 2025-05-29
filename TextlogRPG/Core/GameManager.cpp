@@ -18,6 +18,18 @@
 #include "../Area/Dungeon.h"
 
 
+
+
+GameManager::GameManager(const GameMode& gm, Player* player)
+	: gameMode(GameMode(gm.GetGameState())), playerPtr(player)
+{
+	maps.insert(make_pair(EGameState::TITLE, new Title()));
+	maps.insert(make_pair(EGameState::VILLAGE, new Village()));
+	maps.insert(make_pair(EGameState::DUNGEON, new Dungeon()));
+}
+
+
+
 void GameManager::Run() 
 {
     InitializeGame();
@@ -99,8 +111,7 @@ void GameManager::InitializeGame()
 
 void GameManager::RunProcessTitle() 
 {
-	currentAreaPtr = new Title();
-	currentAreaPtr->Enter(playerPtr);
+	maps[EGameState::TITLE]->Enter(playerPtr);
 
 	char menuChoice;
 	cin >> menuChoice;
@@ -118,10 +129,10 @@ void GameManager::RunProcessTitle()
 
 void GameManager::RunProcessVillage()
 {
-	Village* village = new Village();
-	currentAreaPtr = village;
+	
+	Village* village = static_cast<Village*>(maps[EGameState::VILLAGE]);
 
-	Healer* healer = new Healer("앤더슨", 10);
+	Healer* healer = new Healer("앤더슨", 15);
     Merchant* merchant = new Merchant("토니");
 	
 	village->AddNPC(healer);
@@ -153,29 +164,31 @@ void GameManager::RunProcessVillage()
 
 
 	//Choice in Village
-	currentAreaPtr->Enter(playerPtr);
+	maps[EGameState::VILLAGE]->Enter(playerPtr);
 
-	Sleep(2000);
-	system("cls");
 
 	//TODO : 힐러를 만나 체력을 회복하기
 	//TODO : 상인을 만나 아이템을 구매하기
 	char villageChoice;
 	cin >> villageChoice;
 	cin.ignore(1024, '\n');
-	Sleep(1000);
+
+	Sleep(2000);
+	system("cls");
 	switch (villageChoice)
 	{
 		case '1':
 		{
 			village->InteractWithNPC(playerPtr, healer);
-			RunProcessHealer(healer);
+			gameMode.SetGameState(EGameState::VILLAGE);
+			delete healer;
 			break;
 		}
 		case '2':
 		{
 			village->InteractWithNPC(playerPtr, merchant);
-			RunProcessMerchant(merchant);
+			gameMode.SetGameState(EGameState::VILLAGE);
+			delete merchant;
 			break;
 		}
 		case '3':
@@ -188,31 +201,9 @@ void GameManager::RunProcessVillage()
 	system("cls");
 }
 
-void GameManager::RunProcessHealer(Healer* healer)
-{
-	//TODO : 힐링 가격 데이터레이블 만들기
-	int32_t healCost = healer->GetHealCost();
-	int32_t healAmount = playerPtr->GetCharacterInfo().maxHealth - playerPtr->GetCharacterInfo().health;
-
-	healer->Interact(playerPtr);
-
-	delete healer;
-	gameMode.SetGameState(EGameState::VILLAGE);
-}
-
-void GameManager::RunProcessMerchant(Merchant* merchant)
-{
-	merchant->Interact(playerPtr);
-
-	delete merchant;
-
-	gameMode.SetGameState(EGameState::VILLAGE);
-}
-
 void GameManager::RunProcessDungeon()
 {
-	currentAreaPtr = new Dungeon();
-	currentAreaPtr->Enter(playerPtr);
+	maps[EGameState::DUNGEON]->Enter(playerPtr);
 
 	char dungeonChoice;
 	cin >> dungeonChoice;
@@ -293,6 +284,12 @@ GameManager::~GameManager()
 {
 
 	if (playerPtr) delete playerPtr;
-	if (currentAreaPtr) delete currentAreaPtr;
+
+	for (const pair<EGameState, Area*>& map : maps)
+	{
+		delete map.second; // Delete each Area object
+	}
+	maps.clear();
+	cout << "[System] 게임 매니저가 종료되었습니다." << endl;
 
 }

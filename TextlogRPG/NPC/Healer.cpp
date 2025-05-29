@@ -8,7 +8,7 @@ void Healer::HealPlayer(Player* player, int32_t cost)
 		player->Heal(healAmount);
 		player->UseGold(cost);
 		cout << "\n===========================================\n" << endl;
-		cout << "[System] 힐러 " << npcInfo.npcName << "가 치유를 시작합니다." << endl;
+		cout << "[System] 힐러 " << npcInfo.npcName << "이(가) 치유를 시작합니다.\n" << endl;
 		cout << "===========================================\n" << endl;
 		Sleep(2000);
 		system("cls");
@@ -31,8 +31,9 @@ void Healer::HealPlayer(Player* player, int32_t cost)
 
 void Healer::Interact(Player* player)
 {
+	Sleep(2000);
 	cout << "\n===========================================\n" << endl;
-	cout << "[System] 치유의 집에서 힐러 " << npcInfo.npcName << "를 만났습니다.\n" << endl;
+	cout << "[System] 치유의 집에서 힐러 " << npcInfo.npcName << "를(을) 만났습니다.\n" << endl;
 	cout << "===========================================\n" << endl;
 	//TODO : 힐러 만나기 로직 구현
 	Sleep(2000);
@@ -44,7 +45,7 @@ void Healer::Interact(Player* player)
 	cout << "===========================================\n" << endl;
 	char healerChoice;
 	cin >> healerChoice;
-	cin.ignore();
+	cin.ignore(1024, '\n');
 	Sleep(2000);
 	system("cls");
 	if (healerChoice == '1')

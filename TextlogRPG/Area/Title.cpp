@@ -3,20 +3,17 @@
 
 void Title::Enter(Player* player)
 {
-	Sleep(2000);
 	cout << "\n===========================================\n" << endl;
 	cout << "[System] 환영합니다, 용사 " << player->GetName() << " 님!\n" << endl;
 	cout << "이제 당신의 모험이 시작됩니다.\n" << endl;
 	cout << "===========================================\n" << endl;
 	Sleep(2000);
 	system("cls");
-	Sleep(2000);
 	cout << "\n===========================================\n" << endl;
 	cout << "[System] 타이틀을 출력중입니다....\n" << endl;
 	cout << "===========================================\n" << endl;
 	Sleep(2000);
 	system("cls");
-	Sleep(2000);
 	cout << "\n===========================================\n" << endl;
 	cout << "[System] 타이틀 화면입니다.\n" << endl;
 	cout << "1. 마을로 가기\n2. 던전에 가기\n3. 게임을 떠나기\n" << endl;
