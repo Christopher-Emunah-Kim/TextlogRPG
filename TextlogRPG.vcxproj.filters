@@ -24,9 +24,6 @@
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TextlogRPG\Item\Item.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TextlogRPG\Item\Weapon.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>

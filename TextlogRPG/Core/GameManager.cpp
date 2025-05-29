@@ -1,19 +1,21 @@
 ﻿#include "GameManager.h"
+
 #include "../Dialog/Dialog.h"
 #include "../Dialog/Option.h"
+
 #include "../Character/Player.h"
 #include "../NPC/Healer.h"
+#include "../NPC/Merchant.h"
+
+#include "../Item/Weapon.h"
+#include "../Item/Armor.h"
+#include "../Item/MiscItem.h"
+#include "../Item/ItemManager.h"
+
 #include "../Area/Area.h"
 #include "../Area/Title.h"
-
-
-GameManager::GameManager(const GameMode& gm, Player* player)
-	: gameMode(GameMode(gm.GetGameState())), player(player), currentArea(nullptr)
-{
-	
-}
-
-
+#include "../Area/Village.h"
+#include "../Area/Dungeon.h"
 
 
 void GameManager::Run() 
@@ -27,8 +29,6 @@ void GameManager::Run()
 		{
             case EGameState::TITLE: RunProcessTitle(); break;
             case EGameState::VILLAGE: RunProcessVillage(); break;
-            case EGameState::HEALER: RunProcessHealer(); break;
-            case EGameState::MERCHANT: RunProcessMerchant(); break;
             case EGameState::DUNGEON: RunProcessDungeon(); break;
             default: gameMode.SetGameState(EGameState::GAME_OVER); break;
         }
@@ -91,7 +91,7 @@ void GameManager::InitializeGame()
 	{
 		inputName = inputName.substr(0, 20);
 	}
-	player->SetName(inputName);
+	playerPtr->SetName(inputName);
 	Sleep(2000);
 	gameMode.SetGameState(EGameState::TITLE);
 }
@@ -99,8 +99,8 @@ void GameManager::InitializeGame()
 
 void GameManager::RunProcessTitle() 
 {
-	currentArea = new Title();
-	currentArea->Enter(player);
+	currentAreaPtr = new Title();
+	currentAreaPtr->Enter(playerPtr);
 
 	char menuChoice;
 	cin >> menuChoice;
@@ -118,135 +118,88 @@ void GameManager::RunProcessTitle()
 
 void GameManager::RunProcessVillage()
 {
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 마을로 이동합니다..." << endl;
-	cout << "\n===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	//힐러를 만나 체력을 회복하기
-	//상인을 만나 아이템을 구매하기
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 마을에 도착했습니다.\n" << endl;
-	cout << "1. 힐러 만나기\n2. 상인 만나기\n3. 마을 나가기\n" << endl;
-	cout << "===========================================\n" << endl;
+	Village* village = new Village();
+	currentAreaPtr = village;
+
+	Healer* healer = new Healer("앤더슨", 10);
+    Merchant* merchant = new Merchant("토니");
+	
+	village->AddNPC(healer);
+	village->AddNPC(merchant);
+	
+	//TODO : 아이템 추가 및 상인에게 아이템 push
+	//TODO : 아이템 리스트 정보를 불러와 배열 push해주는 메서드 추가
+	ItemManager& itemManager = ItemManager::GetInstance();
+	Weapon* sword = new Weapon();
+	sword->SetItem(EItemType::WEAPON, 80, 15, 0, 0, "철검");
+	Armor* armor = new Armor();
+	armor->SetItem(EItemType::ARMOR, 100, 0, 15, 2, "가죽갑옷");
+
+	itemManager.RegisterItem(sword);
+	itemManager.RegisterItem(armor);
+
+	merchant->AddItemForSale(sword, 80);
+	merchant->AddItemForSale(armor, 100);
+
+	currentAreaPtr->Enter(playerPtr);
+
+	//TODO : 힐러를 만나 체력을 회복하기
+	//TODO : 상인을 만나 아이템을 구매하기
 	char villageChoice;
 	cin >> villageChoice;
 	cin.ignore(1024, '\n');
 	Sleep(1000);
 	switch (villageChoice)
 	{
-		case '1': gameMode.SetGameState(EGameState::HEALER); break;
-		case '2': gameMode.SetGameState(EGameState::MERCHANT); break;
-		case '3': gameMode.SetGameState(EGameState::TITLE); break;
-		default: cout << "[System] 잘못된 입력입니다.\n"; break;
+		case '1':
+		{
+			village->InteractWithNPC(playerPtr, healer);
+			RunProcessHealer(healer);
+			break;
+		}
+		case '2':
+		{
+			village->InteractWithNPC(playerPtr, merchant);
+			RunProcessMerchant(merchant);
+			break;
+		}
+		case '3':
+		{
+			gameMode.SetGameState(EGameState::TITLE); break;
+		}
+		default: 
+			cout << "[System] 잘못된 입력입니다.\n"; break;
 	}
 	system("cls");
 }
 
-void GameManager::RunProcessHealer()
+void GameManager::RunProcessHealer(Healer* healer)
 {
 	//TODO : 힐링 가격 데이터레이블 만들기
-	int32_t healCost = 10;
-	int32_t healAmount = player->GetCharacterInfo().maxHealth - player->GetCharacterInfo().health;
-	
-	NonPlayerCharacter* healer = new Healer("앤더슨", healCost);
-    
-	healer->Interact(player);
+	int32_t healCost = healer->GetHealCost();
+	int32_t healAmount = playerPtr->GetCharacterInfo().maxHealth - playerPtr->GetCharacterInfo().health;
 
-	delete healer; 
+	healer->Interact(playerPtr);
+
+	delete healer;
 
 	gameMode.SetGameState(EGameState::VILLAGE);
 }
 
-void GameManager::RunProcessMerchant()
+void GameManager::RunProcessMerchant(Merchant* merchant)
 {
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 상인을 만나 아이템을 구매합니다.\n" << endl;
-	cout << "===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	cout << "\n===========================================\n" << endl;
-	cout << "자네인가? 요즘 호구라 불리는 그 " << player->GetName() << "라는 용사가?\n" << endl;
-	cout << "크흠흠.. 아니 됐네. 그래서 내게 뭘 원하나?\n" << endl;
-	cout << "1. 무기를 구매한다.\n2. 방어구를 구매한다..\n3. 잡템을 판매한다.\n4. 마을로 돌아간다." << endl;
-	cout << "\n===========================================\n" << endl;
-	char merchantChoice;
-	cin >> merchantChoice;
-	cin.ignore(1024, '\n');
-	system("cls");
-	Sleep(1000);
-	//TODO : 아이템 구매/판매 로직 구현
-	//TODO : 아이템 레이블 정보 불러오기 구현
-	int32_t itemPrice = 100;
-	string itemName = "UNKNOWN";
+	merchant->Interact(playerPtr);
 
-	switch (merchantChoice) {
-	case '1':
-		//무기 구매
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] "<< itemName <<"을 " << itemPrice<<" 골드에 구매했습니다.\n";
-		cout << "===========================================\n" << endl;
+	delete merchant;
 
-		player->UseGold(itemPrice);
-		//player->EquipItem(new Weapon);
-		Sleep(2000);
-		system("cls");
-		break;
-	case '2':
-		//방어구 구매
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] " << itemName << "을 " << itemPrice << " 골드에 구매했습니다.\n";
-		cout << "===========================================\n" << endl;
-		player->UseGold(itemPrice);
-		// player->EquipItem(new Armor);
-		Sleep(2000);
-		system("cls");
-		break;
-	case '3':
-		//잡템 판매
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] " << itemName << "을 " << itemPrice << " 골드에 판매했습니다.\n";
-		cout << "===========================================\n" << endl;
-		player->EarnGold(5);
-		//player -> LoseItem(new MiscItem);
-		Sleep(2000);
-		system("cls");
-		break;
-	case '4':
-		//마을로 돌아가기
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] 상점을 떠나 길거리로 나갑니다.\n" << endl;
-		cout << "===========================================\n" << endl;
-		Sleep(2000);
-		system("cls");
-		break;
-	default:
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] 잘못된 선택입니다. 상점을 떠나 길거리로 나갑니다.\n" << endl;
-		cout << "===========================================\n" << endl;
-		break;
-	}
 	gameMode.SetGameState(EGameState::VILLAGE);
 }
 
 void GameManager::RunProcessDungeon()
 {
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 던전 탐험을 시작합니다.\n" << endl;
-	cout << "===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	cout << "\n===========================================\n" << endl;
-	cout << "[system] 기억하십시오. 심연을 들여다볼수록,\n 당신 또한 심연에 물들 것입니다.\n" << endl;
-	cout << "===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	//TODO : 던전 탐험 로직 구현
-	//탐색진행 or 마을로 돌아가기
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 던전의 입구에 도착했습니다.\n도전하시겠습니까?\n" << endl;
-	cout << "1. 인생은 모험이지!\n2. 아니 지금은 아닌것 같아.(마을로 돌아간다)\n" << endl;
-	cout << "===========================================\n" << endl;
+	currentAreaPtr = new Dungeon();
+	currentAreaPtr->Enter(playerPtr);
+
 	char dungeonChoice;
 	cin >> dungeonChoice;
 	cin.ignore(1024, '\n');
@@ -325,6 +278,7 @@ void GameManager::RunProcessCombat()
 GameManager::~GameManager()
 {
 
-	if (player) delete player;
+	if (playerPtr) delete playerPtr;
+	if (currentAreaPtr) delete currentAreaPtr;
 
 }

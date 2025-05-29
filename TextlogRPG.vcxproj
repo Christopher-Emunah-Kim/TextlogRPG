@@ -133,7 +133,6 @@
     <ClCompile Include="TextlogRPG\Character\Player.cpp" />
     <ClCompile Include="TextlogRPG\Core\GameManager.cpp" />
     <ClCompile Include="TextlogRPG\Item\Armor.cpp" />
-    <ClCompile Include="TextlogRPG\Item\Item.cpp" />
     <ClCompile Include="TextlogRPG\Item\ItemManager.cpp" />
     <ClCompile Include="TextlogRPG\Item\MiscItem.cpp" />
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp" />

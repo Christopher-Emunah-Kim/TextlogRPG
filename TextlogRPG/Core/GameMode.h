@@ -8,8 +8,6 @@ enum class EGameState
 	TITLE,
 	VILLAGE,
 	DUNGEON,
-	HEALER,
-	MERCHANT,
 	BATTLE,
 	GAME_OVER
 };

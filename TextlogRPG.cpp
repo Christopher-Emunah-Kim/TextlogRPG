@@ -11,12 +11,9 @@ int main()
 	GameMode gameMode(EGameState::TITLE);
 	Player* player = Player::CreateCharacter("WM");
 	
-
 	GameManager gameManager(gameMode, player);
 	
 	gameManager.Run();
-
-
 
 	delete player;
 	return 0;
