@@ -45,6 +45,9 @@
 
 [Area]
 2.0 class Area <abstract>
+
+2.3 class Title - Derived
+
 2.1 class Village - Derived
 2.1.0 vector<NonPlayerCharacter*> npcCharacters
 2.1.1 void AddNPC(NonPlayerCharacter* npc)
