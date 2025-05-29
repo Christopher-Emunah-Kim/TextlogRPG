@@ -1,11 +1,13 @@
 ﻿#include "GameManager.h"
 
-#include "../Dialog/Dialog.h"
-#include "../Dialog/Option.h"
+#include "../Util/Dialog.h"
+#include "../Util/Option.h"
 
 #include "../Character/Player.h"
+#include "../Character/Monster.h"
 #include "../NPC/Healer.h"
 #include "../NPC/Merchant.h"
+
 
 #include "../Item/Weapon.h"
 #include "../Item/Armor.h"
@@ -207,6 +209,25 @@ void GameManager::RunProcessDungeon()
 {
 	maps[EGameState::DUNGEON]->Enter(playerPtr);
 
+	//필요한 몹을 생성
+	//TODO : 몬스터 생성 로직 구현
+    Dungeon* dungeon = static_cast<Dungeon*>(maps[EGameState::DUNGEON]);	
+	//Monster(const string& name, int32_t health, int32_t attack, int32_t defense, int32_t agility, short level, int32_t exp, int32_t gold);
+	Monster* goblin = new Monster("고블린", 10, 5, 3, 5, 1, 20, 10);
+	Monster* slime = new Monster("슬라임", 8, 4, 2, 1, 2, 15, 5);
+	Monster* orc = new Monster("오크", 15, 8, 5, 10, 3, 30, 20);
+	Monster* skeleton = new Monster("스켈레톤", 12, 6, 4, 8, 4, 25, 15);
+	Monster* dragon = new Monster("드래곤", 25, 12, 8, 15, 5, 50, 30);
+
+	//던전에 추가
+	dungeon->AddMonster(goblin);
+	dungeon->AddMonster(slime);
+	dungeon->AddMonster(orc);
+	dungeon->AddMonster(skeleton);
+	dungeon->AddMonster(dragon);
+
+	vector<Monster*>& monsters = dungeon->GetMonsterList();
+
 	char dungeonChoice;
 	cin >> dungeonChoice;
 	cin.ignore(1024, '\n');
@@ -214,72 +235,90 @@ void GameManager::RunProcessDungeon()
 	system("cls");
 	switch (dungeonChoice)
 	{
-	case '1':
-	{
-		//TODO : 전투 로직
-		Sleep(2000);
-		system("cls");
-		gameMode.SetGameState(EGameState::BATTLE);
+		case '1':
+		{
+			//dungeon의 몬스터 리스트 중 랜덤 하나를 골라
+			if (monsters.empty())
+			{
+				cout << "\n===========================================\n" << endl;
+				cout << "[System] 던전에는 더 이상 몬스터가 없습니다.\n" << endl;
+				cout << "===========================================\n" << endl;
+				Sleep(2000);
+				system("cls");
+				gameMode.SetGameState(EGameState::VILLAGE);
+				return;
+			}
+			int randomIndex = rand() % monsters.size();
+			Monster* randomMonster = monsters[randomIndex];
+			dungeon->EncounterMonster(playerPtr, randomMonster);
+			Sleep(2000);
+			system("cls");
+			gameMode.SetGameState(EGameState::DUNGEON);
+		}
+		case '2':
+		{
+			cout << "\n===========================================\n" << endl;
+			cout << "[System] 무모한 도전이 반드시 정답은 아닙니다.\n" << endl;
+			cout << "[System] 마을로 복귀합니다.\n" << endl;
+			cout << "===========================================\n" << endl;
+			Sleep(2000);
+			system("cls");
+			gameMode.SetGameState(EGameState::VILLAGE);
+			break;
+		}
 	}
-	case '2':
-	{
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] 무모한 도전이 반드시 정답은 아닙니다.\n" << endl;
-		cout << "[System] 마을로 복귀합니다.\n" << endl;
-		cout << "===========================================\n" << endl;
-		Sleep(2000);
-		system("cls");
-		gameMode.SetGameState(EGameState::VILLAGE);
-		break;
-	}
-	}
+	delete goblin;
+	delete slime;
+	delete orc;
+	delete skeleton;
+	delete dragon;
 }
-
-void GameManager::RunProcessCombat()
-{
-	string monsterName;
-
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 당신은 심연에 잠겨듭니다..\n" << endl;
-	cout << "===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	//TODO : 몬스터 정보 출력 로직
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 몬스터" << monsterName<< "이 당신의 앞에 등장했습니다.\n" << endl;
-	//몬스터 정보 출력
-	cout << "===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 전투를 시작합니다.\n" << endl;
-	cout << "===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	//TODO : 전투 로직 구현
-	bool isVictory = true;
-	if (!isVictory)
-	{
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] 처절한 싸움 끝에, 당신은 승리하였습니다.\n" << endl;
-		cout << "===========================================\n" << endl;
-		Sleep(2000);
-		system("cls");
-		//TODO : 전리품, 골드, 경험치 획득 로직 구현
-		//player->GainLoot();
-		gameMode.SetGameState(EGameState::DUNGEON);
-	}
-	else
-	{
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] 패배. 여신의 품으로 돌아갑니다...\n" << endl;
-		cout << "===========================================\n" << endl;
-		Sleep(2000);
-		system("cls");
-		gameMode.SetGameState(EGameState::VILLAGE);
-		//패배시 마을로 돌아가는 로직 구현
-	}
-}
+//
+//void GameManager::RunProcessCombat()
+//{
+//	string monsterName;
+//
+//	cout << "\n===========================================\n" << endl;
+//	cout << "[System] 당신은 심연에 잠겨듭니다..\n" << endl;
+//	cout << "===========================================\n" << endl;
+//	Sleep(2000);
+//	system("cls");
+//	//TODO : 몬스터 정보 출력 로직
+//	cout << "\n===========================================\n" << endl;
+//	cout << "[System] 몬스터" << monsterName<< "이 당신의 앞에 등장했습니다.\n" << endl;
+//	//몬스터 정보 출력
+//	cout << "===========================================\n" << endl;
+//	Sleep(2000);
+//	system("cls");
+//	cout << "\n===========================================\n" << endl;
+//	cout << "[System] 전투를 시작합니다.\n" << endl;
+//	cout << "===========================================\n" << endl;
+//	Sleep(2000);
+//	system("cls");
+//	//TODO : 전투 로직 구현
+//	bool isVictory = true;
+//	if (!isVictory)
+//	{
+//		cout << "\n===========================================\n" << endl;
+//		cout << "[System] 처절한 싸움 끝에, 당신은 승리하였습니다.\n" << endl;
+//		cout << "===========================================\n" << endl;
+//		Sleep(2000);
+//		system("cls");
+//		//TODO : 전리품, 골드, 경험치 획득 로직 구현
+//		//player->GainLoot();
+//		gameMode.SetGameState(EGameState::DUNGEON);
+//	}
+//	else
+//	{
+//		cout << "\n===========================================\n" << endl;
+//		cout << "[System] 패배. 여신의 품으로 돌아갑니다...\n" << endl;
+//		cout << "===========================================\n" << endl;
+//		Sleep(2000);
+//		system("cls");
+//		gameMode.SetGameState(EGameState::VILLAGE);
+//		//패배시 마을로 돌아가는 로직 구현
+//	}
+//}
 
 
 GameManager::~GameManager()
