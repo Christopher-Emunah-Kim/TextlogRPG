@@ -12,8 +12,8 @@ public:
 	{	}
 
 	//overrided function
-	virtual void ShowItemInfo() const override;
-	virtual void Use(Player* player) override;
+	void ShowItemInfo() const override;
+	void Use(Player* player) override;
 
 	//Destructor
 	~Armor() { cout << "Armor Destructed"; }

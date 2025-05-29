@@ -13,8 +13,8 @@ public:
 	{ }
 
 	//overrided functions
-	virtual void ShowItemInfo() const override;
-	virtual void Use(Player* player) override;
+	void ShowItemInfo() const override;
+	void Use(Player* player) override;
 
 	//Destructor
 	~MiscItem() { cout << "Misc Destructed"; }

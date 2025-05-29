@@ -2,7 +2,7 @@
 
 void Armor::ShowItemInfo() const
 {
-	
+	cout << "아이템명: " << GetItemInfo().itemName << "( ATK : " << GetItemInfo().attack << ", DEF : " << GetItemInfo().defense << ", AGI : " << GetItemInfo().agility << " )\n";
 }
 
 
