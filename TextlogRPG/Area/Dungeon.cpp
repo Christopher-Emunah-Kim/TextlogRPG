@@ -1,4 +1,6 @@
 ﻿#include "Dungeon.h"
+#include "../Character/Player.h"
+#include "../Character/Monster.h"
 
 void Dungeon::Enter(Player* player)
 {
@@ -33,10 +35,52 @@ vector<Monster*>& Dungeon::GetMonsterList()
 	return monsters;
 }
 
-void Dungeon::EncounterMonster(Player* player, Monster* monster) {
-	if (monster) 
+void Dungeon::EncounterMonster(Player* player, Monster* monster)
+{
+	cout << "\n===========================================\n" << endl;
+	cout << "[System] " << monster->GetCharacterInfo().characterName << "과(와) 조우했습니다!\n" << endl;
+	cout << "===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
+	//TODO : 전투 로직 _ 둘의 Agility를 비교하여 먼저 공격하는 캐릭터 결정
+	BaseCharacter* player1;
+	BaseCharacter* player2;
+	if (player->GetCharacterInfo().characterStats.GetAgility() >= monster->GetCharacterInfo().characterStats.GetAgility()) 
 	{
-		// TODO : 전투 시스템 호출
-		// 예: monster->Attack(player);
+		player1 = player;
+		player2 = monster;
 	}
+	else {
+		player1 = monster;
+		player2 = player;
+	}
+	player1->Attack(player2);
+	
+	//둘 중에 하나가 쓰러질때까지 반복 //TODO 스읍 이거 전투로직 이상한데 나중에 다시보자.
+	while (player1->GetCharacterInfo().health > 0 && player2->GetCharacterInfo().health > 0) 
+	{
+		player2->Attack(player1);
+
+		if (player1->GetCharacterInfo().health > 0 && player2->GetCharacterInfo().health > 0) 
+		{
+			player1->Attack(player2);
+		}
+	}
+	//던전 시작으로 돌아가는 로직
+	cout << "\n===========================================\n" << endl;
+	if (player->GetCharacterInfo().health <= 0)
+	{
+		cout << "[System] " << player->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n" << endl;
+		cout << "[System] 게임 오버입니다. 마을로 돌아갑니다.\n" << endl;
+	}
+	else
+	{
+		cout << "[System] " << monster->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n" << endl;
+		cout << "[System] 승리하였습니다! 전리품을 획득합니다.\n" << endl;
+	}
+	cout << "===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
+	Enter(player);
+
 }
