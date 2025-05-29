@@ -1,4 +1,7 @@
 ﻿#include "Weapon.h"
+#include "../Character/Player.h" 
+
+
 
 void Weapon::ShowItemInfo() const
 {
@@ -9,5 +12,15 @@ void Weapon::ShowItemInfo() const
 
 void Weapon::Use(Player* player)
 {
-	//TODO : 무기 사용 로직 구현
+	if (player == nullptr) return;
+	CharacterStatus status = CharacterStatus::NewStatus(
+		GetItemInfo().attack,
+		GetItemInfo().defense,
+		GetItemInfo().agility
+	);
+	player->GetCharacterInfo().characterStats = status.NewStatus(status);
+
+	cout << "\n===========================================\n" << endl;
+	cout << "[System] " << GetItemInfo().itemName << "을(를) 장착했습니다." << endl;
+	cout << "\n===========================================\n" << endl;
 }

@@ -1,4 +1,6 @@
 ﻿#include "Armor.h"
+#include "../Character/Player.h" 
+
 
 void Armor::ShowItemInfo() const
 {
@@ -8,5 +10,15 @@ void Armor::ShowItemInfo() const
 
 void Armor::Use(Player* player)
 {
-	//TODO : 방어구 사용 로직 구현
+	if (player == nullptr) return;
+	CharacterStatus status = CharacterStatus::NewStatus(
+		GetItemInfo().attack,
+		GetItemInfo().defense,
+		GetItemInfo().agility
+	);
+	player->GetCharacterInfo().characterStats = status.NewStatus(status);
+	cout << "\n===========================================\n" << endl;
+	cout << "[System] " << GetItemInfo().itemName << "을(를) 장착했습니다." << endl;
+	cout << "\n===========================================\n" << endl;
+
 }

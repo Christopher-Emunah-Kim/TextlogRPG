@@ -1,8 +1,7 @@
 ﻿#pragma once
-#include <string>
-#include <cstdint>
-#include <iostream>
+#include "../Util/Common.h"
 #include "EItemType.h"
+#include "../Character/CharacterStatus.h"
 
 using namespace std;
 class Player;
@@ -10,12 +9,12 @@ class Player;
 
 struct FItemInfo
 {
-	EItemType itemType; 
-	int32_t itemCost;
-	int16_t attack;
-	int16_t defense;
-	int16_t agility;
-	string itemName;
+	EItemType itemType = EItemType::NONE; 
+	int32_t itemCost = 0;              
+	int16_t attack = 0;                  
+	int16_t defense = 0;               
+	int16_t agility = 0;            
+	string itemName = "UNKNOWN";
 
 };
 
