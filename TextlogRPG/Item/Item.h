@@ -21,35 +21,56 @@ using namespace std;
 
 enum class EItemType
 {
+	NONE,
 	WEAPON,
 	ARMOR,
 	MISC
+};
+
+struct FItemInfo
+{
+	EItemType itemType; 
+	int32_t itemCost;
+	int16_t attack;
+	int16_t defense;
+	int16_t agility;
+	string itemName;
+
 };
 
 
 class Item abstract
 {
 private:
-	const string itemName;
-	const int16_t itemStats[3]; // Attack, Defense, Agility
-	const EItemType itemType;
-	const int32_t itemCost;
+	FItemInfo itemInfo;
 
 public:
 	//Constructor
-	Item(const string& name = "Defulat", int16_t attack = 1, int16_t defense = 1, int16_t agility = 1, EItemType type = EItemType::MISC, int32_t cost = 1)
-		: itemName(name), itemStats{ attack, defense, agility }, itemType(type), itemCost(cost) {	}
+	Item() {	}
 
-	//Getters
-	virtual string getItemName() const { return itemName; }
-	virtual int16_t getAttack() const { return itemStats[0]; }
-	virtual int16_t getDefense() const { return itemStats[1]; }
-	virtual int16_t getAgility() const { return itemStats[2]; }
-	virtual EItemType getItemType() const { return itemType; }
-	virtual int32_t getItemCost() const { return itemCost; }
+	Item(FItemInfo itemInfo)
+		: itemInfo(itemInfo) {
+		itemInfo.itemType = EItemType::NONE;
+		itemInfo.itemCost = 10;
+		itemInfo.attack = 1;
+		itemInfo.defense = 1;
+		itemInfo.agility = 1;
+		itemInfo.itemName = "NONE";
+	}
 
-	//Pure virtual functions
-	virtual void getItemInfo() const = 0;
+	virtual FItemInfo& GetItemInfo() { return itemInfo; }
+	virtual Item& SetItem(EItemType type, int32_t cost, int16_t atk, int16_t def, int16_t agi, string name)
+	{
+		itemInfo.itemType = type;
+		itemInfo.itemCost = cost;
+		itemInfo.attack = atk;
+		itemInfo.defense = def;
+		itemInfo.agility = agi;
+		itemInfo.itemName = name;
+		return *this;
+	}
+
+	virtual void ShowItemInfo() const = 0;
 	virtual void Use(Player* player) = 0;
 
 	//Default Destructor

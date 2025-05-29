@@ -1,10 +1,8 @@
 ﻿#include "MiscItem.h"
 
-void MiscItem::getItemInfo() const
+void MiscItem::ShowItemInfo() const
 {
-	cout << "===== 전리품 정보 =====" << endl;
-	cout << "이름: " << getItemName() << endl;
-	cout << "가격: " << getItemCost() << endl;
+	
 }
 
 void MiscItem::Use(Player* player)

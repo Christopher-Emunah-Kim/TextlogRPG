@@ -1,12 +1,8 @@
 ﻿#include "Armor.h"
 
-void Armor::getItemInfo() const
+void Armor::ShowItemInfo() const
 {
-	cout << "===== 방어구 정보 =====" << endl;
-	cout << "이름: " << getItemName() << endl;
-	cout << "방어력: " << getDefense() << endl;
-	cout << "민첩성: " << getAgility() << endl;
-	cout << "가격: " << getItemCost() << endl;
+	
 }
 
 

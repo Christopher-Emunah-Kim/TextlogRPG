@@ -1,11 +1,8 @@
 ﻿#include "Weapon.h"
 
-void Weapon::getItemInfo() const
+void Weapon::ShowItemInfo() const
 {
-	cout << "===== 무기 정보 =====" << endl;
-	cout << "이름: " << getItemName() << endl;
-	cout << "공격력: " << getAttack() << endl;
-	cout << "가격: " << getItemCost() << endl;
+	
 }
 
 void Weapon::Use(Player* player)
