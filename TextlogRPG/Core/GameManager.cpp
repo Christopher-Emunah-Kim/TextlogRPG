@@ -141,7 +141,11 @@ void GameManager::RunProcessVillage()
 	merchant->AddItemForSale(sword, 80);
 	merchant->AddItemForSale(armor, 100);
 
+	//Choice in Village
 	currentAreaPtr->Enter(playerPtr);
+
+	Sleep(2000);
+	system("cls");
 
 	//TODO : 힐러를 만나 체력을 회복하기
 	//TODO : 상인을 만나 아이템을 구매하기
