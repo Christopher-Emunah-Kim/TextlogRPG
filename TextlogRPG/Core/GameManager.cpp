@@ -3,10 +3,23 @@
 #include "../Dialog/Option.h"
 #include "../Character/Player.h"
 #include "../NPC/Healer.h"
+#include "../Area/Area.h"
+#include "../Area/Title.h"
 
-void GameManager::Run() {
+
+GameManager::GameManager(const GameMode& gm, Player* player)
+	: gameMode(GameMode(gm.GetGameState())), player(player), currentArea(nullptr)
+{
+	
+}
+
+
+
+
+void GameManager::Run() 
+{
     InitializeGame();
-	// 플레이어 생성, 초기 상태 설정 등
+
 	//TODO : 레벨 데이터 초기값 끌어오기
     while (gameMode.GetGameState() != EGameState::GAME_OVER) 
 	{
@@ -25,7 +38,7 @@ void GameManager::Run() {
 void GameManager::InitializeGame() 
 {
 	//TODO : Dialog/Options 유틸 클래스 적용
-	//TITLE Dialogue
+	//First Dialogue
 	Sleep(1000);
 	cout << "===========================================" << endl;
 	cout << "\n안녕하신가 용사여.\n\n" << endl;
@@ -79,30 +92,16 @@ void GameManager::InitializeGame()
 		inputName = inputName.substr(0, 20);
 	}
 	player->SetName(inputName);
+	Sleep(2000);
 	gameMode.SetGameState(EGameState::TITLE);
 }
 
 
 void GameManager::RunProcessTitle() 
 {
-	Sleep(2000);
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 환영합니다, 용사 " << player->GetName() << " 님!\n" << endl;
-	cout << "이제 당신의 모험이 시작됩니다.\n" << endl;
-	cout << "===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	Sleep(2000);
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 타이틀을 출력중입니다....\n" << endl;
-	cout << "===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	Sleep(2000);
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] 타이틀 화면입니다.\n" << endl;
-	cout << "1. 마을로 가기\n2. 던전에 가기\n3. 게임을 떠나기\n" << endl;
-	cout << "===========================================\n" << endl;
+	currentArea = new Title();
+	currentArea->Enter(player);
+
 	char menuChoice;
 	cin >> menuChoice;
 	cin.ignore(1024, '\n');
@@ -320,4 +319,12 @@ void GameManager::RunProcessCombat()
 		gameMode.SetGameState(EGameState::VILLAGE);
 		//패배시 마을로 돌아가는 로직 구현
 	}
+}
+
+
+GameManager::~GameManager()
+{
+
+	if (player) delete player;
+
 }
