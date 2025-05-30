@@ -28,8 +28,8 @@ void Player::TakeDamage(const BaseCharacter& target)
 	info.health -= damage;
 	if (info.health <= 0)
 	{
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] 당신은 여신의 곁으로 돌아갑니다.... " << endl;
+		cout << "\n===========================================\n";
+		cout << "[System] 당신은 여신의 곁으로 돌아갑니다.... ";
 		cout << "\n===========================================\n" << endl;
 		//TODO : 게임오버로직 추가
 		//gameMode.SetGameState(EGameState::GAME_OVER);
@@ -37,9 +37,9 @@ void Player::TakeDamage(const BaseCharacter& target)
 	}
 	else
 	{
-		cout << "\n===========================================\n" << endl;
+		cout << "\n===========================================\n";
 		cout << "[System] " << target.GetCharacterInfo().characterName << "에게\n" 
-				<< damage << "의 데미지를 입혔습니다. 현재 체력: " << info.health << endl;
+				<< damage << "의 데미지를 입혔습니다. 현재 체력: " << info.health;
 		cout << "\n===========================================\n" << endl;
 	}
 }
@@ -129,8 +129,8 @@ void Player::EquipItem(Item* item)
 				LoseItem(playerData.miscOwned);
 			}
 			playerData.miscOwned = dynamic_cast<MiscItem*>(item);
-			cout << "\n===========================================\n" << endl;
-			cout << "[System] " << item->GetItemInfo().itemName << "을(를) 얻었습니다." << endl;
+			cout << "\n===========================================\n";
+			cout << "[System] " << item->GetItemInfo().itemName << "을(를) 얻었습니다.";
 			cout << "\n===========================================\n" << endl;
 		}
 			break;
@@ -195,11 +195,14 @@ void Player::UseGold(int32_t cost)
 		{
 			playerData.playerGold = 0; 
 		}
+		cout << "\n===========================================\n";
+		cout << "[System] "<< cost << "를 사용했습니다. 현재 골드: " << playerData.playerGold;
+		cout << "\n===========================================\n" << endl;
 	}
 	else
 	{
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] 골드가 부족합니다. 현재 골드: " << playerData.playerGold << endl;
+		cout << "\n===========================================\n";
+		cout << "[System] 골드가 부족합니다. 현재 골드: " << playerData.playerGold;
 		cout << "\n===========================================\n" << endl;
 	}
 }
@@ -209,8 +212,8 @@ void Player::EarnGold(int32_t earnGold)
 	if (earnGold <= 0) return;
 
 	playerData.playerGold += earnGold;
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] " << earnGold << " 골드를 획득했습니다. 현재 골드: " << playerData.playerGold << endl;
+	cout << "\n===========================================\n";
+	cout << "[System] " << earnGold << " 골드를 획득했습니다. 현재 골드: " << playerData.playerGold;
 	cout << "\n===========================================\n" << endl;
 }
 
@@ -220,12 +223,12 @@ void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
 
 	playerData.playerExperience += experience;
 	playerData.playerGold += gold;
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] " << experience << " 경험치와 " << gold << " 골드를 획득했습니다." << endl;
+	cout << "\n===========================================\n";
+	cout << "[System] " << experience << " 경험치와 " << gold << " 골드를 획득했습니다.";
 	if (item != nullptr)
 	{
 		AddToInventory(item);
-		cout << "[System] 아이템 " << item->GetItemInfo().itemName << "을(를) 획득했습니다." << endl;
+		cout << "[System] 아이템 " << item->GetItemInfo().itemName << "을(를) 획득했습니다.";
 	}
 	cout << "\n===========================================\n" << endl;
 	//TODO : 레벨업 로직 구현
@@ -253,14 +256,14 @@ BaseCharacter& Player::CharacterLevelUp()
 		levelData.agilityPerLevel
 	);
 
+	cout << "\n===========================================\n";
+	cout << "[System] 레벨업!\n";
+	cout << "현재 레벨 : " << info.level;
+	cout << "\n체력: " << info.health << "/" << info.maxHealth;
+	cout << "\n공격력: " << info.characterStats.GetAttack();
+	cout << "\n방어력: " << info.characterStats.GetDefense();
+	cout << "\n민첩성: " << info.characterStats.GetAgility();
 	cout << "\n===========================================\n" << endl;
-	cout << "[System] 레벨업!" << endl;
-	cout << "현재 레벨 : " << info.level << endl;
-	cout << "체력: " << info.health << "/" << info.maxHealth << endl;
-	cout << "공격력: " << info.characterStats.GetAttack() << endl;
-	cout << "방어력: " << info.characterStats.GetDefense() << endl;
-	cout << "민첩성: " << info.characterStats.GetAgility() << endl;
-	cout << "===========================================\n" << endl;
 	return *this; 
 }
 

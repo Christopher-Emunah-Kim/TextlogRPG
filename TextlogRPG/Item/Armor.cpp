@@ -17,8 +17,8 @@ void Armor::Use(Player* player)
 		GetItemInfo().agility
 	);
 	player->GetCharacterInfo().characterStats = status.NewStatus(status);
-	cout << "\n===========================================\n" << endl;
-	cout << "[System] " << GetItemInfo().itemName << "을(를) 장착했습니다." << endl;
+	cout << "\n===========================================\n";
+	cout << "[System] " << GetItemInfo().itemName << "을(를) 장착했습니다.";
 	cout << "\n===========================================\n" << endl;
 
 }
