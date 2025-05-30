@@ -57,6 +57,8 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 			cin >> battleChoice;
 			if (battleChoice == 1)
 			{
+				Sleep(2000);
+				system("cls");
 				player->Attack(monster);
 			}
 			else if (battleChoice == 2)
@@ -89,8 +91,7 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 
 		// 턴 교대
 		isPlayerTurn = !isPlayerTurn;
-		Sleep(1500);
-		system("cls");
+		
 	}
 
 	// 결과 출력

@@ -17,6 +17,6 @@ public:
 
 
 	//Destructor
-	~Weapon() { cout << "Weapon Destructed"; }
+	~Weapon() { }
 };
 

@@ -16,6 +16,6 @@ public:
 	void Use(Player* player) override;
 
 	//Destructor
-	~Armor() { cout << "Armor Destructed"; }
+	~Armor() { }
 };
 

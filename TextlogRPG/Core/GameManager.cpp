@@ -81,7 +81,7 @@ void GameManager::InitializeGame()
 	else
 	{
 		cout << "\n===========================================\n";
-		cout << "[System] 잘못된 선택입니다. 게임을 시작합니다.";
+		cout << "\n[System] 잘못된 선택입니다. 게임을 시작합니다.\n";
 		cout << "\n===========================================\n";
 		Sleep(2000);
 	}
@@ -274,9 +274,9 @@ void GameManager::RunProcessDungeon()
 void GameManager::GameOverProcess()
 {
 	cout << "\n===========================================\n";
-	cout << "[System] 게임이 종료되었습니다.";
-	cout << "[System] 다시 시작하려면 게임을 재실행해주세요.\n";
-	cout << "===========================================\n" << endl;
+	cout << "\n[System] 게임이 종료되었습니다.\n";
+	cout << "\n[System] 다시 시작하려면 게임을 재실행해주세요.\n";
+	cout << "\n===========================================\n" << endl;
 	Sleep(2000);
 	system("cls");
 	gameMode.SetGameState(EGameState::GAME_OVER);

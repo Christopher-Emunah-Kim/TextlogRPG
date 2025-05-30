@@ -44,7 +44,7 @@ void Monster::TakeDamage(const BaseCharacter& target)
 	{
 		cout << "\n===========================================\n" << endl;
 		cout << "[System] " << info.characterName << "이(가) 쓰러졌습니다." << endl;
-		cout << "[System] " << target.GetCharacterInfo().characterName << "은(는) 경험치와 아이템을 획득합니다." << endl;
+		cout << "[System] 용사 " << target.GetCharacterInfo().characterName << "가(이) 경험치와 아이템을 획득합니다." << endl;
 		cout << "\n===========================================\n" << endl;
 		info.health = 0; 
 		Sleep(2000);
@@ -53,7 +53,7 @@ void Monster::TakeDamage(const BaseCharacter& target)
 		const Player* playerTarget = dynamic_cast<const Player*>(&target);
 		if (playerTarget)
 		{
-			// TODO : dropItems중에 랜덤	드랍
+			// TODO : dropItems중에 랜덤드랍
 			Item* randomDropItem = dropItems[rand() % dropItems.size()];
 			const_cast<Player*>(playerTarget)->GainLoot(dropExperience, dropGold, randomDropItem);
 		};
@@ -63,7 +63,7 @@ void Monster::TakeDamage(const BaseCharacter& target)
 	else
 	{
 		cout << "\n===========================================\n" << endl;
-		cout << "[System] 당신은 "<< damage << "의 데미지를 입었습니다.\n현재 체력: " << info.health << endl;
+		cout << "[System] "<< info.characterName <<"은(는) "<< damage << "의 데미지를 입었습니다.\n현재 체력: " << info.health << endl;
 		cout << "\n===========================================\n" << endl;
 		Sleep(2000);
 		system("cls");
@@ -75,11 +75,14 @@ void Monster::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
+	cout << "\n===========================================\n";
+	cout << "\n[System] " << GetCharacterInfo().characterName << "가(이) 당신을 공격합니다.\n";
+	cout << "\n===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
+
 	target->TakeDamage(*this);
-	/*if (target != nullptr)
-	{
-		target->Attack(this);
-	}*/
+	
 }
 
 Monster::~Monster()

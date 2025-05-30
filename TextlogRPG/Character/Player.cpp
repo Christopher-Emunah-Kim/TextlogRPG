@@ -41,7 +41,7 @@ void Player::TakeDamage(const BaseCharacter& target)
 	else
 	{
 		cout << "\n===========================================\n";
-		cout << "[System] " << target.GetCharacterInfo().characterName << "에게\n" 
+		cout << "[System] " << target.GetCharacterInfo().characterName << "에게" 
 				<< damage << "의 데미지를 입었습니다. 현재 체력: " << info.health;
 		cout << "\n===========================================\n" << endl;
 		Sleep(2000);
@@ -53,6 +53,10 @@ void Player::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
+	cout << "\n===========================================\n";
+	cout << "\n[System] " << target->GetCharacterInfo().characterName <<"을(를) 공격합니다.\n";
+	cout << "\n===========================================\n" << endl;
+
 	target->TakeDamage(*this);
 	
 }
@@ -239,6 +243,9 @@ void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
 
 	Sleep(2000);
 	system("cls");
+
+	ShowPlayerStatus(this);
+
 	//TODO : 레벨업 로직 구현
 	if (playerData.playerExperience >= playerData.playerMaxExperience)
 	{

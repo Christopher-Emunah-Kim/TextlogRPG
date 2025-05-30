@@ -17,6 +17,6 @@ public:
 	void Use(Player* player) override;
 
 	//Destructor
-	~MiscItem() { cout << "Misc Destructed"; }
+	~MiscItem() { }
 };
 

@@ -10,7 +10,7 @@ using namespace std;
 struct FPlayerData
 {
 	int32_t playerExperience = 0;
-	int32_t playerMaxExperience = 100; // Experience needed to level up
+	int32_t playerMaxExperience = 10; // Experience needed to level up
 	int32_t playerGold = 10000;
 	class Weapon* weaponEquipped = nullptr;
 	class Armor* armorEquipped = nullptr;

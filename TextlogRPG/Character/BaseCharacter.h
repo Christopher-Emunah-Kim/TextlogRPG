@@ -2,9 +2,7 @@
 #include "../Util/Common.h"
 #include "CharacterStatus.h"
 
-
 using namespace std;
-
 
 struct FCharacterInfo
 {
