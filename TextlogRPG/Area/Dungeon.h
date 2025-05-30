@@ -18,6 +18,6 @@ public:
 
 	vector<Monster*>& GetMonsterList();
 
-    void EncounterMonster(Player* player, Monster* monster);
+    bool EncounterMonster(Player* player, Monster* monster);
 
 };

@@ -47,7 +47,8 @@ void Monster::TakeDamage(const BaseCharacter& target)
 		cout << "[System] " << target.GetCharacterInfo().characterName << "은(는) 경험치와 아이템을 획득합니다." << endl;
 		cout << "\n===========================================\n" << endl;
 		info.health = 0; 
-
+		Sleep(2000);
+		system("cls");
 		// 몬스터가 쓰러졌을 때 플레이어에게 경험치와 아이템 드랍
 		const Player* playerTarget = dynamic_cast<const Player*>(&target);
 		if (playerTarget)
@@ -56,13 +57,16 @@ void Monster::TakeDamage(const BaseCharacter& target)
 			Item* randomDropItem = dropItems[rand() % dropItems.size()];
 			const_cast<Player*>(playerTarget)->GainLoot(dropExperience, dropGold, randomDropItem);
 		};
+		Sleep(2000);
+		system("cls");
 	}
 	else
 	{
 		cout << "\n===========================================\n" << endl;
-		cout << "[System] " << target.GetCharacterInfo().characterName << "에게\n"
-			<< damage << "의 데미지를 입혔습니다. 현재 체력: " << info.health << endl;
+		cout << "[System] 당신은 "<< damage << "의 데미지를 입었습니다.\n현재 체력: " << info.health << endl;
 		cout << "\n===========================================\n" << endl;
+		Sleep(2000);
+		system("cls");
 	}
 	
 }

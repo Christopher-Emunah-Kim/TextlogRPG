@@ -35,7 +35,7 @@ vector<Monster*>& Dungeon::GetMonsterList()
 	return monsters;
 }
 
-void Dungeon::EncounterMonster(Player* player, Monster* monster)
+bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 {
 	cout << "\n===========================================\n";
 	cout << "\n[System] " << monster->GetCharacterInfo().characterName << "과(와) 조우했습니다!\n";
@@ -68,6 +68,8 @@ void Dungeon::EncounterMonster(Player* player, Monster* monster)
 					cout << "\n[System] 당신은 도망에 성공했습니다!\n";
 					cout << "\n===========================================\n" << endl;
 					isBattleOver = true;
+					Sleep(2000);
+					system("cls");
 					break;
 				}
 				else
@@ -75,6 +77,8 @@ void Dungeon::EncounterMonster(Player* player, Monster* monster)
 					cout << "\n===========================================\n";
 					cout << "\n[System] 도망에 실패했습니다!\n";
 					cout << "\n===========================================\n" << endl;
+					Sleep(2000);
+					system("cls");
 				}
 			}
 		}
@@ -94,16 +98,26 @@ void Dungeon::EncounterMonster(Player* player, Monster* monster)
 	{
 		if (player->GetCharacterInfo().health <= 0)
 		{
+			cout << "\n===========================================\n";
 			cout << "\n[System] " << player->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
 			cout << "\n[System] 게임 오버입니다. 마을로 돌아갑니다.\n";
+			cout << "\n===========================================\n" << endl;
+			Sleep(2000);
+			system("cls");
+			return false;
 		}
 		else if (monster->GetCharacterInfo().health <= 0)
 		{
+			cout << "\n===========================================\n";
 			cout << "\n[System] " << monster->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
 			cout << "\n[System] 승리하였습니다! 전리품을 획득합니다.\n";
+			cout << "\n===========================================\n" << endl;
+			Sleep(2000);
+			system("cls");
 		}
 	}
 	Sleep(2000);
 	system("cls");
-	Enter(player);
+	return true;
+	//Enter(player);
 }
