@@ -72,10 +72,10 @@ void Monster::Attack(BaseCharacter* target)
 	if (target == nullptr) return;
 	
 	target->TakeDamage(*this);
-	if (target != nullptr)
+	/*if (target != nullptr)
 	{
 		target->Attack(this);
-	}
+	}*/
 }
 
 Monster::~Monster()

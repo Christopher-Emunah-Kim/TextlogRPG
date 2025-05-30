@@ -1,4 +1,5 @@
 ﻿#include "Player.h"
+#include "../Character/CharacterStatus.h"
 #include "../Item/Item.h"
 #include "../Item/Weapon.h"
 #include "../Item/Armor.h"
@@ -23,7 +24,7 @@ void Player::TakeDamage(const BaseCharacter& target)
 	//플레이어의 TakeDamage함수 내에서 몬스터와 플레이어의 데미지 계산 및 출력메시지 대부분 처리
 	//몬스터의 TekeDamage함수는 최소한으로 유지
 	int32_t damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
-	damage <= 0 ? damage = 0 : damage;
+	damage > 0? damage : 1; //무한루프 막기위해 최소데미지 1보장.
 	FCharacterInfo& info = characterInfo;
 	info.health -= damage;
 	if (info.health <= 0)
@@ -50,10 +51,10 @@ void Player::Attack(BaseCharacter* target)
 	
 	target->TakeDamage(*this);
 	
-	if (target != nullptr)
-	{
-		target->Attack(this); // 반격
-	}
+	//if (target != nullptr)
+	//{
+	//	target->Attack(this); // 반격
+	//}
 }
 
 void Player::SetName(const string& name)

@@ -43,44 +43,67 @@ void Dungeon::EncounterMonster(Player* player, Monster* monster)
 	Sleep(2000);
 	system("cls");
 	//TODO : 전투 로직 _ 둘의 Agility를 비교하여 먼저 공격하는 캐릭터 결정
-	BaseCharacter* player1;
-	BaseCharacter* player2;
-	if (player->GetCharacterInfo().characterStats.GetAgility() >= monster->GetCharacterInfo().characterStats.GetAgility()) 
-	{
-		player1 = player;
-		player2 = monster;
-	}
-	else {
-		player1 = monster;
-		player2 = player;
-	}
-	player1->Attack(player2);
-	
-	//둘 중에 하나가 쓰러질때까지 반복 //TODO 스읍 이거 전투로직 이상한데 나중에 다시보자.
-	while (player1->GetCharacterInfo().health > 0 && player2->GetCharacterInfo().health > 0) 
-	{
-		player2->Attack(player1);
+	bool isPlayerTurn = player->GetCharacterInfo().characterStats.GetAgility() >= monster->GetCharacterInfo().characterStats.GetAgility();
+	bool isBattleOver = false;
 
-		if (player1->GetCharacterInfo().health > 0 && player2->GetCharacterInfo().health > 0) 
+	while (player->GetCharacterInfo().health > 0 && monster->GetCharacterInfo().health > 0 && !isBattleOver)
+	{
+		if (isPlayerTurn)
 		{
-			player1->Attack(player2);
+			cout << "\n===========================================\n";
+			cout << "\n1. " << monster->GetCharacterInfo().characterName << "를(을) 공격한다!! \n2. 이대로는 위험하다. 도망가자..\n당신의 선택은??: \n";
+			cout << "\n===========================================\n" << endl;
+			int battleChoice;
+			cin >> battleChoice;
+			if (battleChoice == 1)
+			{
+				player->Attack(monster);
+			}
+			else if (battleChoice == 2)
+			{
+				// 도망 확률 계산 (예: 50% 확률)
+				if (rand() % 2 == 0)
+				{
+					cout << "\n===========================================\n";
+					cout << "\n[System] 당신은 도망에 성공했습니다!\n";
+					cout << "\n===========================================\n" << endl;
+					isBattleOver = true;
+					break;
+				}
+				else
+				{
+					cout << "\n===========================================\n";
+					cout << "\n[System] 도망에 실패했습니다!\n";
+					cout << "\n===========================================\n" << endl;
+				}
+			}
+		}
+		else
+		{
+			monster->Attack(player);
+		}
+
+		// 턴 교대
+		isPlayerTurn = !isPlayerTurn;
+		Sleep(1500);
+		system("cls");
+	}
+
+	// 결과 출력
+	if (!isBattleOver)
+	{
+		if (player->GetCharacterInfo().health <= 0)
+		{
+			cout << "\n[System] " << player->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
+			cout << "\n[System] 게임 오버입니다. 마을로 돌아갑니다.\n";
+		}
+		else if (monster->GetCharacterInfo().health <= 0)
+		{
+			cout << "\n[System] " << monster->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
+			cout << "\n[System] 승리하였습니다! 전리품을 획득합니다.\n";
 		}
 	}
-	//던전 시작으로 돌아가는 로직
-	cout << "\n===========================================\n";
-	if (player->GetCharacterInfo().health <= 0)
-	{
-		cout << "\n[System] " << player->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n" ;
-		cout << "\n[System] 게임 오버입니다. 마을로 돌아갑니다.\n";
-	}
-	else
-	{
-		cout << "\n[System] " << monster->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
-		cout << "\n[System] 승리하였습니다! 전리품을 획득합니다.\n";
-	}
-	cout << "===========================================\n" << endl;
 	Sleep(2000);
 	system("cls");
 	Enter(player);
-
 }
