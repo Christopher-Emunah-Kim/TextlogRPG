@@ -16,6 +16,7 @@ CharacterStatus CharacterStatus::NewStatus(const CharacterStatus& other) const
 
 int32_t CharacterStatus::GetDamage(const CharacterStatus& other) const
 {
-	return std::max<int32_t>(0, this->attack - other.defense);
+	int32_t damage = other.GetAttack() - this->GetDefense();
+	return damage > 0 ? damage : 1;
 }
 
