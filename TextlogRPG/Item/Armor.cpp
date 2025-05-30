@@ -21,4 +21,8 @@ void Armor::Use(Player* player)
 	cout << "[System] " << GetItemInfo().itemName << "을(를) 장착했습니다.";
 	cout << "\n===========================================\n" << endl;
 
+	Sleep(2000);
+	system("cls");
+
+	player->ShowPlayerStatus(player);
 }

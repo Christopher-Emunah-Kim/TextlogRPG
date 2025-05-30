@@ -22,7 +22,7 @@ public:
 	void RunProcessTitle();
 	void RunProcessVillage();
 	void RunProcessDungeon();
-	//void RunProcessCombat();
+	void GameOverProcess();
 	
     void Run();
 };

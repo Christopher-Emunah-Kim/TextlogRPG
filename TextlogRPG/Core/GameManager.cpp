@@ -17,23 +17,19 @@
 #include "../Area/Dungeon.h"
 
 
-
-
 GameManager::GameManager(const GameMode& gm, Player* player)
 	: gameMode(GameMode(gm.GetGameState())), playerPtr(player)
 {
+	//manage dynamic memory allocation for maps
 	maps.insert(make_pair(EGameState::TITLE, new Title()));
 	maps.insert(make_pair(EGameState::VILLAGE, new Village()));
 	maps.insert(make_pair(EGameState::DUNGEON, new Dungeon()));
 }
 
-
-
 void GameManager::Run() 
 {
     InitializeGame();
 
-	//TODO : 레벨 데이터 초기값 끌어오기
     while (gameMode.GetGameState() != EGameState::GAME_OVER) 
 	{
         switch (gameMode.GetGameState()) 
@@ -48,8 +44,7 @@ void GameManager::Run()
 
 void GameManager::InitializeGame() 
 {
-	//TODO : Dialog/Options 유틸 클래스 적용
-	//First Dialogue
+	//TODO : adapting Dialog/Options class
 	Sleep(1000);
 	cout << "\n===========================================\n";
 	cout << "\n안녕하신가 용사여.\n\n";
@@ -79,7 +74,7 @@ void GameManager::InitializeGame()
 	if (titleChoice == '1')
 	{
 		cout << "\n===========================================\n";
-		cout << "\n[System] 도망치려 했지만, 이미 늦었다.\n게임을 시작할 수 밖에.\n";
+		cout << "\n[System] 도망치려 했지만, 이미 늦었다.\n\n게임을 시작할 수 밖에.\n";
 		cout << "\n===========================================\n" << endl;
 		Sleep(2000);
 	}
@@ -165,9 +160,6 @@ void GameManager::RunProcessVillage()
 	//Choice in Village
 	maps[EGameState::VILLAGE]->Enter(playerPtr);
 
-
-	//TODO : 힐러를 만나 체력을 회복하기
-	//TODO : 상인을 만나 아이템을 구매하기
 	char villageChoice;
 	cin >> villageChoice;
 	cin.ignore(1024, '\n');
@@ -206,8 +198,8 @@ void GameManager::RunProcessDungeon()
 {
 	maps[EGameState::DUNGEON]->Enter(playerPtr);
 
-	//필요한 몹을 생성
-	//TODO : 몬스터 생성 로직 구현
+	//generate monsters in the dungeon
+	//TODO : develop a MonsterFactory class to create monsters
     Dungeon* dungeon = static_cast<Dungeon*>(maps[EGameState::DUNGEON]);	
 	//Monster(const string& name, int32_t health, int32_t attack, int32_t defense, int32_t agility, short level, int32_t exp, int32_t gold);
 	Monster* goblin = new Monster("고블린", 10, 5, 3, 5, 1, 20, 10);
@@ -216,7 +208,7 @@ void GameManager::RunProcessDungeon()
 	Monster* skeleton = new Monster("스켈레톤", 12, 6, 4, 8, 4, 25, 15);
 	Monster* dragon = new Monster("드래곤", 25, 12, 8, 15, 5, 50, 30);
 
-	//던전에 추가
+	//Add monsters to the dungeon
 	dungeon->AddMonster(goblin);
 	dungeon->AddMonster(slime);
 	dungeon->AddMonster(orc);
@@ -234,7 +226,7 @@ void GameManager::RunProcessDungeon()
 	{
 		case '1':
 		{
-			//dungeon의 몬스터 리스트 중 랜덤 하나를 골라
+			//Check if there are any monsters left in the dungeon
 			if (monsters.empty())
 			{
 				cout << "\n===========================================\n";
@@ -245,11 +237,19 @@ void GameManager::RunProcessDungeon()
 				gameMode.SetGameState(EGameState::VILLAGE);
 				return;
 			}
+			//Generate a random index 
+			srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
 			int randomIndex = rand() % monsters.size();
 			Monster* randomMonster = monsters[randomIndex];
-			dungeon->EncounterMonster(playerPtr, randomMonster);
+			//Start Battle with the random monster
+			bool isPlayerAlive = dungeon->EncounterMonster(playerPtr, randomMonster);
 			Sleep(2000);
 			system("cls");
+			if (!isPlayerAlive)
+			{
+				GameOverProcess();
+				return;
+			}
 			gameMode.SetGameState(EGameState::DUNGEON);
 		}
 		case '2':
@@ -270,52 +270,17 @@ void GameManager::RunProcessDungeon()
 	delete skeleton;
 	delete dragon;
 }
-//
-//void GameManager::RunProcessCombat()
-//{
-//	string monsterName;
-//
-//	cout << "\n===========================================\n" << endl;
-//	cout << "[System] 당신은 심연에 잠겨듭니다..\n" << endl;
-//	cout << "===========================================\n" << endl;
-//	Sleep(2000);
-//	system("cls");
-//	//TODO : 몬스터 정보 출력 로직
-//	cout << "\n===========================================\n" << endl;
-//	cout << "[System] 몬스터" << monsterName<< "이 당신의 앞에 등장했습니다.\n" << endl;
-//	//몬스터 정보 출력
-//	cout << "===========================================\n" << endl;
-//	Sleep(2000);
-//	system("cls");
-//	cout << "\n===========================================\n" << endl;
-//	cout << "[System] 전투를 시작합니다.\n" << endl;
-//	cout << "===========================================\n" << endl;
-//	Sleep(2000);
-//	system("cls");
-//	//TODO : 전투 로직 구현
-//	bool isVictory = true;
-//	if (!isVictory)
-//	{
-//		cout << "\n===========================================\n" << endl;
-//		cout << "[System] 처절한 싸움 끝에, 당신은 승리하였습니다.\n" << endl;
-//		cout << "===========================================\n" << endl;
-//		Sleep(2000);
-//		system("cls");
-//		//TODO : 전리품, 골드, 경험치 획득 로직 구현
-//		//player->GainLoot();
-//		gameMode.SetGameState(EGameState::DUNGEON);
-//	}
-//	else
-//	{
-//		cout << "\n===========================================\n" << endl;
-//		cout << "[System] 패배. 여신의 품으로 돌아갑니다...\n" << endl;
-//		cout << "===========================================\n" << endl;
-//		Sleep(2000);
-//		system("cls");
-//		gameMode.SetGameState(EGameState::VILLAGE);
-//		//패배시 마을로 돌아가는 로직 구현
-//	}
-//}
+
+void GameManager::GameOverProcess()
+{
+	cout << "\n===========================================\n";
+	cout << "[System] 게임이 종료되었습니다.";
+	cout << "[System] 다시 시작하려면 게임을 재실행해주세요.\n";
+	cout << "===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
+	gameMode.SetGameState(EGameState::GAME_OVER);
+}
 
 
 GameManager::~GameManager()
@@ -332,9 +297,7 @@ GameManager::~GameManager()
 		maps[map.first] = nullptr; // Set pointer to nullptr after deletion
 	}
 	maps.clear();
-	cout << "\n===========================================\n";
-	cout << "[System] 게임이 종료되었습니다.";
-	cout << "\n===========================================\n" << endl;
+	
 	Sleep(2000);
 	system("cls");
 }

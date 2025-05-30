@@ -47,7 +47,7 @@ public:
 	void EarnGold(int32_t earnGold);
 	void GainLoot(int32_t experience, int32_t gold, class Item* item);
 	BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class
-
+	void ShowPlayerStatus(Player* player);
 
 	////Destructor
 	~Player();
