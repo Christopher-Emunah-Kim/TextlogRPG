@@ -42,9 +42,10 @@ void Monster::TakeDamage(const BaseCharacter& target)
 	info.health -= damage;
 	if (info.health <= 0)
 	{
+		system("cls");
 		cout << "\n===========================================\n" << endl;
 		cout << "[System] " << info.characterName << "이(가) 쓰러졌습니다." << endl;
-		cout << "[System] 용사 " << target.GetCharacterInfo().characterName << "가(이) 경험치와 아이템을 획득합니다." << endl;
+		//cout << "[System] 용사 " << target.GetCharacterInfo().characterName << "가(이) 경험치와 아이템을 획득합니다." << endl;
 		cout << "\n===========================================\n" << endl;
 		info.health = 0; 
 		Sleep(2000);

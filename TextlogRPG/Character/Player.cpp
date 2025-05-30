@@ -233,11 +233,11 @@ void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
 	playerData.playerExperience += experience;
 	playerData.playerGold += gold;
 	cout << "\n===========================================\n";
-	cout << "\n[System] " << experience << " 경험치와 " << gold << " 골드를 획득했습니다.";
+	cout << "\n[System] " << experience << " 경험치와 " << gold << " 골드를 획득했습니다.\n";
 	if (item != nullptr)
 	{
 		AddToInventory(item);
-		cout << "[System] 아이템 " << item->GetItemInfo().itemName << "을(를) 획득했습니다.\n";
+		cout << "\n[System] 아이템 " << item->GetItemInfo().itemName << "을(를) 획득했습니다.\n";
 	}
 	cout << "\n===========================================\n" << endl;
 
@@ -289,13 +289,13 @@ void Player::ShowPlayerStatus(Player* player)
 {
 	//플레이어 현재 상태 보여주는 함수
 	FCharacterInfo& info = player->characterInfo;
-	cout << "\n===========================================\n\n";
+	cout << "\n===========================================\n";
 	cout << "\n[System] "<< player->GetName() << "용사의 스탯창!\n";
-	cout << "\n현재 레벨 : " << info.level;
-	cout << "\n체력: " << info.health << "/" << info.maxHealth;
-	cout << "\n공격력: " << info.characterStats.GetAttack();
-	cout << "\n방어력: " << info.characterStats.GetDefense();
-	cout << "\n민첩성: " << info.characterStats.GetAgility();
+	cout << "\n현재 레벨 : " << info.level << "\n";
+	cout << "\n체력: " << info.health << "/" << info.maxHealth << "\n";
+	cout << "\n공격력: " << info.characterStats.GetAttack() << "\n";
+	cout << "\n방어력: " << info.characterStats.GetDefense() << "\n";
+	cout << "\n민첩성: " << info.characterStats.GetAgility() << "\n";
 	cout << "\n\n===========================================\n" << endl;
 
 	Sleep(4000);

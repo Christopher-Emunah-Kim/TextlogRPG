@@ -56,6 +56,7 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 			int battleChoice;
 			cin >> battleChoice;
 			if (battleChoice == 1)
+
 			{
 				Sleep(2000);
 				system("cls");
