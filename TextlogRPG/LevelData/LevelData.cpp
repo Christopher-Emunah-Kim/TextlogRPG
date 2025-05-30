@@ -1,4 +1,5 @@
 ﻿#include "../../TextlogRPG/LevelData/LevelData.h"
+#include <iostream>
 
 using namespace std;
 

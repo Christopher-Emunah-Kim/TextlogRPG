@@ -1,8 +1,5 @@
 ﻿#include "GameManager.h"
 
-#include "../Util/Dialog.h"
-#include "../Util/Option.h"
-
 #include "../Character/Player.h"
 #include "../Character/Monster.h"
 #include "../NPC/Healer.h"

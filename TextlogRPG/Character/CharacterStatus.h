@@ -1,6 +1,4 @@
-﻿#ifndef CHARACTER_STATUS_H
-#define CHARACTER_STATUS_H
-
+﻿#pragma once
 #include "../Util/Common.h"
 
 class CharacterStatus  
@@ -45,5 +43,3 @@ public:
 	}
 };
 
-
-#endif // CHARACTER_STATUS_H

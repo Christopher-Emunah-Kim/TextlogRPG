@@ -1,7 +1,5 @@
 ﻿#pragma once  
 #include <cstdint>
-#include <iostream>
-#include <vector>
 
 using namespace std;
 
