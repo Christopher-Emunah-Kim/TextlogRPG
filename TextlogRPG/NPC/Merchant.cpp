@@ -1,49 +1,106 @@
 ﻿#include "Merchant.h"
 #include "../Item/Item.h"
+#include "../Item/ItemManager.h"
 
-void Merchant::AddItemForSale(Item* item, int32_t price) {
-    //items.push_back(item);
-    itemLists[item] = price;
+void Merchant::AddItemForSale(const string& itemName, int32_t price)
+{
+    itemLists[itemName] = price;
 }
 
-void Merchant::SellItem(Player* player, Item* item) 
+void Merchant::SellItem(Player* player, const string& itemName)
 {
-    map<Item*, int32_t>::iterator it = itemLists.find(item);
-
-    if (it != itemLists.end() && player->GetPlayerData().playerGold >= it->second) 
+	map<string, int32_t>::iterator it = itemLists.find(itemName);
+	if (it == itemLists.end())
 	{
+		cout << "\n===========================================\n";
+		cout << "\n[Error] 판매하지 않는 아이템입니다.\n";
+		cout << "\n===========================================\n" << endl;
 		Sleep(2000);
 		system("cls");
-        player->UseGold(it->second);
-        player->EquipItem(item);
+		return;
+	}
 
-		cout << "\n===========================================\n";
-		cout << "[System] " << item->GetItemInfo().itemName << "을(를)" << item->GetItemInfo().itemCost << " 골드에 구매했습니다\n";
-		cout << "===========================================\n" << endl;
-        
-    } else 
+	int32_t itemPrice = it->second;
+	if (player->GetPlayerData().playerGold < itemPrice)
 	{
 		cout << "\n===========================================\n";
-        cout << "[System] 골드가 부족하거나 판매하지 않는 아이템입니다.\n";
-		cout << "===========================================\n" << endl;
-    }
+		cout << "\n[System] 골드가 부족합니다. 아이템을 구매할 수 없습니다.\n";
+		cout << "\n===========================================\n" << endl;
+		Sleep(2000);
+		system("cls");
+		return;
+	}
+
+	Item* item = ItemManager::GetInstance().CreateItem(itemName);
+	if (item == nullptr)
+	{
+		cout << "\n===========================================\n";
+		cout << "\n[Error] 아이템을 생성할 수 없습니다. 아이템 이름을 확인하세요.\n";
+		cout << "\n===========================================\n" << endl;
+		Sleep(2000);
+		system("cls");
+		return;
+	}
+
+	player->UseGold(itemPrice);
+	player->EquipItem(item); 
+	player->AddToInventory(item); 
+	cout << "\n===========================================\n";
+	cout << "\n[System] " << item->GetItemInfo().itemName << "을(를) " << itemPrice << " 골드에 구매했습니다.\n";
+	cout << "\n===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
+	
 }
 
-void Merchant::BuyItem(Player* player, Item* item) 
+void Merchant::BuyItem(Player* player, const string& itemName)
 {
-    int32_t price = item->GetItemInfo().itemCost / 2; 
-    player->EarnGold(price);
-    player->LoseItem(item);
+	//find item in player's inventory
+	vector<Item*> miscItems = player->GetInventoryItems(EItemType::MISC);
+	Item* sellItem = nullptr;
+	for (Item* item : miscItems)
+	{
+		if (item->GetItemInfo().itemName == itemName)
+		{
+			sellItem = item;
+			break;
+		}
+	}
+	if (sellItem == nullptr)
+	{
+		cout << "\n===========================================\n";
+		cout << "\n[Error] 판매할 아이템이 없습니다. 아이템 이름을 확인하세요.\n";
+		cout << "\n===========================================\n" << endl;
+		Sleep(2000);
+		system("cls");
+		return;
+	}
+	int32_t sellPrice = sellItem->GetItemInfo().itemCost / 2; // sell price is half of the original cost
 
+	if (sellPrice <= 0)
+	{
+		cout << "\n===========================================\n";
+		cout << "\n[Error] 판매할 수 없는 아이템입니다. 아이템 가격이 0 이하입니다.\n";
+		cout << "\n===========================================\n" << endl;
+		Sleep(2000);
+		system("cls");
+		return;
+	}
+
+	player->EarnGold(sellPrice); // Add gold to player's inventory
+	player->LoseItem(sellItem); // Remove item from player's inventory
 	cout << "\n===========================================\n";
-    cout << "[System] " << item->GetItemInfo().itemName << "을(를) " << price << "골드에 판매했습니다\n";
-	cout << "===========================================\n";
+	cout << "\n[System] " << sellItem->GetItemInfo().itemName << "을(를) " << sellPrice << " 골드에 판매했습니다.\n";
+	cout << "\n===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
+
 }
 
 void Merchant::Interact(Player* player) 
 {
 	cout << "\n===========================================\n";
-    cout << "\n[System] 상인 " << npcInfo.npcName << "을(를) 만났습니다.\n";
+    cout << "\n[System] 상점에 들어갑니다.\n\n상인 " << npcInfo.npcName << "을(를) 만났습니다.\n";
 	cout << "\n===========================================\n" << endl;
 	Sleep(2000);
 	system("cls");
@@ -59,12 +116,12 @@ void Merchant::Interact(Player* player)
 	Sleep(1000);
 	//TODO : 아이템 구매/판매 로직 구현
 	//TODO : 아이템 레이블 정보 불러오기 구현
-	int32_t itemPrice = 100;
-	string itemName = "UNKNOWN";
+	//int32_t itemPrice = 100;
+	//string itemName = "UNKNOWN";
 
-	vector<Item*> availableWeapons;
-	vector<Item*> availableArmors;
-	vector<Item*> miscItems;
+	vector<string> availableWeapons;
+	vector<string> availableArmors;
+	vector<string> miscItems;
 	int weaponChoice;
 	int armorChoice;
 
@@ -72,18 +129,20 @@ void Merchant::Interact(Player* player)
 	{
 	case '1':
 	{
-		//무기 구매
-		for (const pair<Item*, int32_t> pair : itemLists)
+		//Selling Weapons
+		for (const pair<string, int32_t>& pair : itemLists)
 		{
-			if (pair.first->GetItemInfo().itemType == EItemType::WEAPON)
+			Item* item = ItemManager::GetInstance().GetItem(pair.first);
+			if (item && item->GetItemInfo().itemType == EItemType::WEAPON)
+			{
 				availableWeapons.push_back(pair.first);
+			}
 		}
-
 		if (availableWeapons.empty())
 		{
 			cout << "\n===========================================\n";
 			cout << "[System] 현재 판매 중인 무기가 없습니다.\n";
-			cout << "===========================================\n" << endl;
+			cout << "\n===========================================\n" << endl;
 			Sleep(2000);
 			system("cls");
 			break;
@@ -94,17 +153,18 @@ void Merchant::Interact(Player* player)
 
 		for (size_t i = 0; i < availableWeapons.size(); ++i)
 		{
-			cout << (i + 1) << ". ";
-			availableWeapons[i]->ShowItemInfo();
-			cout << "-> 가격: " << itemLists[availableWeapons[i]] << " 골드\n\n";
+			Item* item = ItemManager::GetInstance().GetItem(availableWeapons[i]);
+			if (item) {
+				cout << (i + 1) << ". ";
+				item->ShowItemInfo();
+				cout << "-> 가격: " << itemLists[availableWeapons[i]] << " 골드\n\n";
+			}
 		}
 		cout << (availableWeapons.size() + 1) << ". 뒤로 가기\n";
-
 		cout << "\n===========================================\n" << endl;
 
 		cin >> weaponChoice;
 		cin.ignore(1024, '\n');
-
 		if (weaponChoice > 0 && weaponChoice <= static_cast<int>(availableWeapons.size()))
 		{
 			SellItem(player, availableWeapons[weaponChoice - 1]);
@@ -113,23 +173,24 @@ void Merchant::Interact(Player* player)
 		{
 			Sleep(2000);
 			system("cls");
-            Merchant::Interact(player);
+			Merchant::Interact(player);
 		}
-
-
 		Sleep(2000);
 		system("cls");
+
 	}
 	break;
 	case '2':
 	{
-		//방어구 구매
-		for (const pair<Item*, int32_t> pair : itemLists)
+		//Selling Armors
+		for (const pair<string, int32_t>& pair : itemLists)
 		{
-			if (pair.first->GetItemInfo().itemType == EItemType::ARMOR)
+			Item* item = ItemManager::GetInstance().GetItem(pair.first);
+			if (item && item->GetItemInfo().itemType == EItemType::ARMOR)
+			{
 				availableArmors.push_back(pair.first);
+			}
 		}
-
 		if (availableArmors.empty())
 		{
 			cout << "\n===========================================\n";
@@ -145,17 +206,18 @@ void Merchant::Interact(Player* player)
 
 		for (size_t i = 0; i < availableArmors.size(); ++i)
 		{
-			cout << (i + 1) << ". ";
-			availableArmors[i]->ShowItemInfo();
-			cout << "-> 가격: " << itemLists[availableArmors[i]] << " 골드\n\n";
+			Item* item = ItemManager::GetInstance().GetItem(availableArmors[i]);
+			if (item) {
+				cout << (i + 1) << ". ";
+				item->ShowItemInfo();
+				cout << "-> 가격: " << itemLists[availableArmors[i]] << " 골드\n\n";
+			}
 		}
 		cout << (availableArmors.size() + 1) << ". 뒤로 가기\n";
-
 		cout << "\n===========================================\n" << endl;
 
 		cin >> armorChoice;
 		cin.ignore(1024, '\n');
-
 		if (armorChoice > 0 && armorChoice <= static_cast<int>(availableArmors.size()))
 		{
 			SellItem(player, availableArmors[armorChoice - 1]);
@@ -166,15 +228,15 @@ void Merchant::Interact(Player* player)
 			system("cls");
 			Merchant::Interact(player);
 		}
-
 		Sleep(2000);
 		system("cls");
+
 	}
 	break;
 	case '3':
 	{
-		//잡템 판매
-		miscItems = player->GetInventoryItems(EItemType::MISC);
+		//Buying Misc Items
+		vector<Item*> miscItems = player->GetInventoryItems(EItemType::MISC);
 		if (miscItems.empty()) {
 			cout << "\n===========================================\n";
 			cout << "\n[System] 판매할 잡템이 없습니다. 던전에서 몬스터를 처치하고 오세요.\n";
@@ -190,9 +252,7 @@ void Merchant::Interact(Player* player)
 		for (size_t i = 0; i < miscItems.size(); ++i) {
 			cout << (i + 1) << ". ";
 			miscItems[i]->ShowItemInfo();
-
 			int sellPrice = miscItems[i]->GetItemInfo().itemCost / 2;
-
 			cout << " -> 판매 가격: " << sellPrice << " 골드\n\n";
 		}
 		cout << (miscItems.size() + 1) << ". 뒤로 가기\n";
@@ -201,12 +261,11 @@ void Merchant::Interact(Player* player)
 		int miscChoice;
 		cin >> miscChoice;
 		cin.ignore(1024, '\n');
-
 		if (miscChoice > 0 && miscChoice <= static_cast<int>(miscItems.size()))
 		{
-			BuyItem(player, miscItems[miscChoice - 1]);
+			BuyItem(player, miscItems[miscChoice - 1]->GetItemInfo().itemName);
 		}
-		else if(miscChoice == static_cast<int>(miscItems.size() + 1))
+		else if (miscChoice == static_cast<int>(miscItems.size() + 1))
 		{
 			Sleep(2000);
 			system("cls");
@@ -214,6 +273,7 @@ void Merchant::Interact(Player* player)
 		}
 		Sleep(2000);
 		system("cls");
+
 	}
 	break;
 	case '4':

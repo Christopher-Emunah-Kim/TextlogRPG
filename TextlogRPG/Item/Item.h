@@ -51,6 +51,8 @@ public:
 		return *this;
 	}
 
+	virtual string GetItemName() const { return itemInfo.itemName; }
+
 	//Pure virtual functions
 	virtual Item* CloneItem() const = 0;
 	virtual void ShowItemInfo() const = 0;
