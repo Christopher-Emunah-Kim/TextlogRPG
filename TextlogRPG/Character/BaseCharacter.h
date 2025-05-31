@@ -34,7 +34,7 @@ public:
 	virtual FCharacterInfo GetCharacterInfo() const { return characterInfo; }
 
 	//Pure virtual functions
-	virtual void TakeDamage(const BaseCharacter& target) = 0;
+	virtual void TakeDamage(BaseCharacter& target) = 0;
 	virtual void Attack(BaseCharacter* target) = 0;
 
 	BaseCharacter(const BaseCharacter&) = default;

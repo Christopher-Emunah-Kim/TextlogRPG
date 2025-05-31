@@ -32,7 +32,7 @@ public:
 	Player(const FPlayerData& data, const FCharacterInfo& info) : BaseCharacter(info), playerData(data) {}
 
 	//Override functions
-	virtual void TakeDamage(const BaseCharacter& target) override;
+	virtual void TakeDamage(BaseCharacter& target) override;
 	virtual void Attack(BaseCharacter* target) override;
 
 	

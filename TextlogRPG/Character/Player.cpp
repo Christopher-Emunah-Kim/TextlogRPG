@@ -19,7 +19,7 @@ Player* Player::CreateCharacter(const string& characterName)
 	return player;
 }
 
-void Player::TakeDamage(const BaseCharacter& target)
+void Player::TakeDamage(BaseCharacter& target)
 {
 	//플레이어의 TakeDamage함수 내에서 몬스터와 플레이어의 데미지 계산 및 출력메시지 대부분 처리
 	//몬스터의 TekeDamage함수는 최소한으로 유지
@@ -322,7 +322,7 @@ BaseCharacter& Player::CharacterLevelUp()
 		levelData.agilityPerLevel
 	);
 
-	UpdateFinalStatus()
+	UpdateFinalStatus();
 
 	cout << "\n===========================================\n";
 	cout << "\n[System] 레벨업!\n";

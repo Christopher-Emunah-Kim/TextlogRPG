@@ -15,7 +15,7 @@ Monster::Monster(const string& name, int32_t health, int16_t attack, int16_t def
 
 
 
-void Monster::TakeDamage(const BaseCharacter& target)
+void Monster::TakeDamage(BaseCharacter& target)
 {
 	int32_t damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
 	damage <= 0 ? damage = 0 : damage;
@@ -31,7 +31,7 @@ void Monster::TakeDamage(const BaseCharacter& target)
 		Sleep(2000);
 		system("cls");
 		// 몬스터가 쓰러졌을 때 플레이어에게 경험치와 아이템 드랍
-		const Player* playerTarget = static_cast<const Player*>(&target);
+		Player* playerTarget = static_cast<Player*>(&target);
 		if (playerTarget != nullptr && !dropItemList.empty())
 		{
 			// TODO : dropItems중에 랜덤드랍
