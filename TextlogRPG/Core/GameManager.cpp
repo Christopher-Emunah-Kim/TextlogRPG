@@ -24,6 +24,17 @@ GameManager::GameManager(const GameMode& gm, Player* player)
 	maps.insert(make_pair(EGameState::TITLE, new Title()));
 	maps.insert(make_pair(EGameState::VILLAGE, new Village()));
 	maps.insert(make_pair(EGameState::DUNGEON, new Dungeon()));
+	
+	ItemManager::GetInstance().InitializeItems();
+
+	if (playerPtr == nullptr)
+	{
+		playerPtr = Player::CreateCharacter("DefaultPlayer");
+	}
+	else
+	{
+		playerPtr->SetName("DefaultPlayer");
+	}
 }
 
 void GameManager::Run() 
@@ -245,12 +256,13 @@ void GameManager::RunProcessDungeon()
 			bool isPlayerAlive = dungeon->EncounterMonster(playerPtr, randomMonster);
 			Sleep(2000);
 			system("cls");
-			if (!isPlayerAlive)
+			if (isPlayerAlive == false)
 			{
 				GameOverProcess();
 				return;
 			}
 			gameMode.SetGameState(EGameState::DUNGEON);
+			break;
 		}
 		case '2':
 		{
@@ -273,6 +285,7 @@ void GameManager::RunProcessDungeon()
 
 void GameManager::GameOverProcess()
 {
+	//TODO : 던전에서 죽었을때 마을로 돌아가는것이 아니라 종료되는문제 해결
 	cout << "\n===========================================\n";
 	cout << "\n[System] 게임이 종료되었습니다.\n";
 	cout << "\n[System] 다시 시작하려면 게임을 재실행해주세요.\n";

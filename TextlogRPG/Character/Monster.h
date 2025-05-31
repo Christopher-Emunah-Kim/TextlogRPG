@@ -8,7 +8,8 @@ class Monster : public BaseCharacter
 private:
 	int32_t dropExperience;
 	int32_t dropGold;
-	vector<Item*> dropItems; // weapon, armor, misc items
+	//vector<Item*> dropItems; // weapon, armor, misc items
+	vector<string> dropItemList;
 public:
 	
 	// User-Defined Constructor for Monster creation

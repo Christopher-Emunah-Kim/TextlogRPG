@@ -51,6 +51,8 @@ public:
 		return *this;
 	}
 
+	//Pure virtual functions
+	virtual Item* CloneItem() const = 0;
 	virtual void ShowItemInfo() const = 0;
 	virtual void Use(Player* player) = 0;
 

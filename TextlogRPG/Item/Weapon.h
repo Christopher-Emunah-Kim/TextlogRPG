@@ -12,6 +12,10 @@ public:
 		: Item() 	{	}
 
 	//overrided functions
+	Weapon* CloneItem() const override
+	{
+		return new Weapon(*this);
+	}
 	void ShowItemInfo() const override;
 	void Use(Player* player) override;
 

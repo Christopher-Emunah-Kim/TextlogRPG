@@ -18,11 +18,17 @@ private:
 	ItemManager(const ItemManager&) = delete;
 
 public:
+	void InitializeItems();
+
 	//Register Item
 	void RegisterItem(Item* item);
 
+	Item* CreateItem(const string& name);
+
 	//Show item info by name
 	void ShowItemInfo(const string& name);
+
+	vector<string> GetItemList() const;
 
 	//Get Item by name
 	Item* GetItem(const string& name);
