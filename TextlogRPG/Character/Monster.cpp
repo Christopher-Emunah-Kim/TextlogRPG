@@ -24,23 +24,56 @@ void Monster::TakeDamage(const BaseCharacter& target)
 	if (info.health <= 0)
 	{
 		system("cls");
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] " << info.characterName << "이(가) 쓰러졌습니다." << endl;
-		//cout << "[System] 용사 " << target.GetCharacterInfo().characterName << "가(이) 경험치와 아이템을 획득합니다." << endl;
+		cout << "\n===========================================\n";
+		cout << "\n[System] " << info.characterName << "이(가) 쓰러졌습니다.\n";
 		cout << "\n===========================================\n" << endl;
 		info.health = 0; 
 		Sleep(2000);
 		system("cls");
 		// 몬스터가 쓰러졌을 때 플레이어에게 경험치와 아이템 드랍
-		const Player* playerTarget = dynamic_cast<const Player*>(&target);
-		if (playerTarget && !dropItemList.empty())
+		const Player* playerTarget = static_cast<const Player*>(&target);
+		if (playerTarget != nullptr && !dropItemList.empty())
 		{
 			// TODO : dropItems중에 랜덤드랍
 			srand(static_cast<unsigned int>(time(NULL)));
 			size_t randomIndex = rand() % dropItemList.size();
 			string randomItemName = dropItemList[randomIndex];
-			Item* randomDropItem = ItemManager::GetInstance().GetItem(randomItemName);
-			if (randomDropItem) {
+			Item* randomDropItem = ItemManager::GetInstance().CreateItem(randomItemName);
+
+			if (randomDropItem)
+			{
+				cout << "\n===========================================\n";
+				cout << "\n[System] 전리품을 획득했습니다!!!\n";
+				randomDropItem->ShowItemInfo();
+				cout << "\n[System] 이 아이템을 장착하시겠습니까?\n";
+				cout << "\n-> 1. 새로운 장비를 장착한다.  2. 기존의 장비를 사용한다.\n";
+				cout << "\n===========================================\n" << endl;
+				char equipChoice;
+				cin >> equipChoice;
+				cin.ignore(1024, '\n');
+
+				if (equipChoice == '1')
+				{
+					playerTarget->EquipItem(randomDropItem);
+					playerTarget->AddToInventory(randomDropItem);
+				}
+				else if (equipChoice == '2')
+				{
+					playerTarget->AddToInventory(randomDropItem);
+					cout << "\n===========================================\n";
+					cout << "\n[System] 아이템을 인벤토리에 보관했습니다\n";
+					cout << "\n===========================================\n" << endl;
+				}
+				else
+				{
+					cout << "\n===========================================\n";
+					cout << "[System] 잘못된 입력입니다. 아이템을 획득하지 못했습니다." << endl;
+					cout << "\n===========================================\n" << endl;
+					return;
+				}
+			
+				Sleep(2000);
+				system("cls");
 				const_cast<Player*>(playerTarget)->GainLoot(dropExperience, dropGold, randomDropItem);
 			}
 			else {

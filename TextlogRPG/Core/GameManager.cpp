@@ -230,10 +230,13 @@ void GameManager::RunProcessDungeon()
 				gameMode.SetGameState(EGameState::VILLAGE);
 				return;
 			}
+
+
 			//Generate a random index 
 			srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
 			int randomIndex = rand() % monsters.size();
 			Monster* randomMonster = monsters[randomIndex];
+
 			//Start Battle with the random monster
 			bool isPlayerAlive = dungeon->EncounterMonster(playerPtr, randomMonster);
 			Sleep(2000);

@@ -102,7 +102,46 @@ void Player::EquipItem(Item* item)
 {
 	if (item == nullptr) return;
 
-	switch (item->GetItemInfo().itemType)
+	// remove status of former equipment(Weapon)
+	if (item->GetItemInfo().itemType == EItemType::WEAPON && playerData.weaponEquipped != nullptr) {
+		equipmentStatus = CharacterStatus::NewStatus(
+			equipmentStatus.GetAttack() - playerData.weaponEquipped->GetItemInfo().attack,
+			equipmentStatus.GetDefense() - playerData.weaponEquipped->GetItemInfo().defense,
+			equipmentStatus.GetAgility() - playerData.weaponEquipped->GetItemInfo().agility
+		);
+	}
+	// remove status of former equipment(Armor)
+	if (item->GetItemInfo().itemType == EItemType::ARMOR && playerData.armorEquipped != nullptr) {
+		equipmentStatus = CharacterStatus::NewStatus(
+			equipmentStatus.GetAttack() - playerData.armorEquipped->GetItemInfo().attack,
+			equipmentStatus.GetDefense() - playerData.armorEquipped->GetItemInfo().defense,
+			equipmentStatus.GetAgility() - playerData.armorEquipped->GetItemInfo().agility
+		);
+	}
+
+	// update new equipment
+	if (item->GetItemInfo().itemType == EItemType::WEAPON) {
+		playerData.weaponEquipped = dynamic_cast<Weapon*>(item);
+	}
+	if (item->GetItemInfo().itemType == EItemType::ARMOR) {
+		playerData.armorEquipped = dynamic_cast<Armor*>(item);
+	}
+
+	// update status of new equipment
+	equipmentStatus = CharacterStatus::NewStatus(
+		equipmentStatus.GetAttack() + item->GetItemInfo().attack,
+		equipmentStatus.GetDefense() + item->GetItemInfo().defense,
+		equipmentStatus.GetAgility() + item->GetItemInfo().agility
+	);
+
+	UpdateFinalStatus(); // update status
+
+	// update and display the result of the equipment change
+	item->Use(this);
+
+
+
+	/*switch (item->GetItemInfo().itemType)
 	{
 		case EItemType::WEAPON:
 		{
@@ -139,7 +178,7 @@ void Player::EquipItem(Item* item)
 			cout << "\n===========================================\n" << endl;
 		}
 			break;
-	}
+	}*/
 }
 
 void Player::LoseItem(Item* item)
@@ -233,6 +272,7 @@ void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
 	playerData.playerExperience += experience;
 	playerData.playerGold += gold;
 	cout << "\n===========================================\n";
+	cout << "\n[System] 최종 전투 결과입니다!!\n";
 	cout << "\n[System] " << experience << " 경험치와 " << gold << " 골드를 획득했습니다.\n";
 	if (item != nullptr)
 	{
@@ -253,9 +293,20 @@ void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
 	}
 }
 
+void Player::UpdateFinalStatus()
+{
+	characterInfo.characterStats = CharacterStatus::NewStatus(
+		baseStatus.GetAttack() + equipmentStatus.GetAttack(),
+		baseStatus.GetDefense() + equipmentStatus.GetDefense(),
+		baseStatus.GetAgility() + equipmentStatus.GetAgility()
+	);
+}
+
 BaseCharacter& Player::CharacterLevelUp()
 {
-	//LevelData 클래스의 FLevelData 구조체 어레이를 사용하여 레벨업 시 캐릭터의 상태를 업데이트합니다.
+	//TODO : 레벨업할때 장비스탯 제대로 반영안되는것같은데 해결 필요.
+
+	//LevelData 클래스의 FLevelData 구조체 어레이를 사용하여 레벨업 시 캐릭터의 상태를 업데이트
 	FCharacterInfo& info = characterInfo;
 	info.level++;
 	LevelData levelDataInstance;
@@ -270,6 +321,8 @@ BaseCharacter& Player::CharacterLevelUp()
 		levelData.defensePerLevel,
 		levelData.agilityPerLevel
 	);
+
+	UpdateFinalStatus()
 
 	cout << "\n===========================================\n";
 	cout << "\n[System] 레벨업!\n";
