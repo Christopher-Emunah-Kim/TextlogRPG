@@ -80,8 +80,6 @@ void Monster::TakeDamage(BaseCharacter& target)
 				cout << "[System] 아이템 드랍에 실패했습니다." << endl;
 			}
 
-			/*Item* randomDropItem = dropItems[rand() % dropItems.size()];
-			const_cast<Player*>(playerTarget)->GainLoot(dropExperience, dropGold, randomDropItem);*/
 		};
 		Sleep(2000);
 		system("cls");

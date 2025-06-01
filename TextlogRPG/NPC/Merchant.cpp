@@ -114,10 +114,8 @@ void Merchant::Interact(Player* player)
 	cin.ignore(1024, '\n');
 	system("cls");
 	Sleep(1000);
-	//TODO : 아이템 구매/판매 로직 구현
+
 	//TODO : 아이템 레이블 정보 불러오기 구현
-	//int32_t itemPrice = 100;
-	//string itemName = "UNKNOWN";
 
 	vector<string> availableWeapons;
 	vector<string> availableArmors;

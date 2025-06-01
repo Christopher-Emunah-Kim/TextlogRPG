@@ -121,10 +121,10 @@ void Player::EquipItem(Item* item)
 
 	// update new equipment
 	if (item->GetItemInfo().itemType == EItemType::WEAPON) {
-		playerData.weaponEquipped = dynamic_cast<Weapon*>(item);
+		playerData.weaponEquipped = static_cast<Weapon*>(item);
 	}
 	if (item->GetItemInfo().itemType == EItemType::ARMOR) {
-		playerData.armorEquipped = dynamic_cast<Armor*>(item);
+		playerData.armorEquipped = static_cast<Armor*>(item);
 	}
 
 	// update status of new equipment
@@ -139,46 +139,6 @@ void Player::EquipItem(Item* item)
 	// update and display the result of the equipment change
 	item->Use(this);
 
-
-
-	/*switch (item->GetItemInfo().itemType)
-	{
-		case EItemType::WEAPON:
-		{
-			if (playerData.weaponEquipped != nullptr)
-			{
-				LoseItem(playerData.weaponEquipped);
-			}
-			playerData.weaponEquipped = dynamic_cast<Weapon*>(item);
-
-			item->Use(this);
-		}
-			break;
-		case EItemType::ARMOR:
-		{
-			if (playerData.armorEquipped != nullptr)
-			{
-				LoseItem(playerData.armorEquipped);
-			}
-			playerData.armorEquipped = dynamic_cast<Armor*>(item);
-
-			item->Use(this);
-
-		}
-			break;
-		case EItemType::MISC:
-		{
-			if (playerData.miscOwned != nullptr)
-			{
-				LoseItem(playerData.miscOwned);
-			}
-			playerData.miscOwned = dynamic_cast<MiscItem*>(item);
-			cout << "\n===========================================\n";
-			cout << "[System] " << item->GetItemInfo().itemName << "을(를) 얻었습니다.";
-			cout << "\n===========================================\n" << endl;
-		}
-			break;
-	}*/
 }
 
 void Player::LoseItem(Item* item)
@@ -239,19 +199,6 @@ void Player::UseGold(int32_t cost)
 		{
 			playerData.playerGold = 0; 
 		}
-		/*cout << "\n===========================================\n";
-		cout << "\n[System] "<< cost << "를 사용했습니다. 현재 골드: " << playerData.playerGold << "\n";
-		cout << "\n===========================================\n" << endl;
-		Sleep(2000);
-		system("cls");*/
-	}
-	else
-	{
-		/*cout << "\n===========================================\n";
-		cout << "\n[System] 골드가 부족합니다. 현재 골드: " << playerData.playerGold;
-		cout << "\n===========================================\n" << endl;
-		Sleep(2000);
-		system("cls");*/
 	}
 }
 

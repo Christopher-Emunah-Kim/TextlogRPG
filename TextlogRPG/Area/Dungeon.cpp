@@ -110,19 +110,13 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 		}
 		else if (monster->GetCharacterInfo().health <= 0)
 		{
-			cout << "\n===========================================\n";
-			cout << "\n[System] " << monster->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
-			//cout << "\n[System] 승리하였습니다! 전리품을 획득합니다.\n";
-			cout << "\n===========================================\n" << endl;
+			//cout << "\n===========================================\n";
+			//cout << "\n[System] " << monster->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
+			////cout << "\n[System] 승리하였습니다! 전리품을 획득합니다.\n";
+			//cout << "\n===========================================\n" << endl;
 			Sleep(2000);
 			system("cls");
-
-			
-
 		}
 	}
-	Sleep(2000);
-	system("cls");
 	return true;
-	//Enter(player);
 }
