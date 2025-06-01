@@ -1,4 +1,6 @@
 ﻿#include "GameManager.h"
+#include "../Util/EGameState.h"
+#include "../Util/Common.h"
 
 #include "../Character/Player.h"
 #include "../Character/Monster.h"
@@ -17,13 +19,13 @@
 #include "../Area/Dungeon.h"
 
 
-GameManager::GameManager(const GameMode& gm, Player* player)
-	: gameMode(GameMode(gm.GetGameState())), playerPtr(player)
+GameManager::GameManager(EGameState initialState, Player* player)
+	: gameState(initialState), playerPtr(player)
 {
 	//manage dynamic memory allocation for maps
-	maps.insert(make_pair(EGameState::TITLE, new Title()));
-	maps.insert(make_pair(EGameState::VILLAGE, new Village()));
-	maps.insert(make_pair(EGameState::DUNGEON, new Dungeon()));
+	mapList.insert(make_pair(EGameState::TITLE, new Title()));
+	mapList.insert(make_pair(EGameState::VILLAGE, new Village()));
+	mapList.insert(make_pair(EGameState::DUNGEON, new Dungeon()));
 	
 	ItemManager::GetInstance().InitializeItems();
 
@@ -41,17 +43,30 @@ void GameManager::Run()
 {
     InitializeGame();
 
-    while (gameMode.GetGameState() != EGameState::GAME_OVER) 
+    while (GetGameState() != EGameState::GAME_OVER) 
 	{
-        switch (gameMode.GetGameState()) 
+        switch ( GetGameState() )
 		{
             case EGameState::TITLE: RunProcessTitle(); break;
             case EGameState::VILLAGE: RunProcessVillage(); break;
             case EGameState::DUNGEON: RunProcessDungeon(); break;
-            default: gameMode.SetGameState(EGameState::GAME_OVER); break;
+            default: SetGameState(EGameState::GAME_OVER); break;
         }
     }
 }
+
+string GameManager::GetStateString() const
+{
+	switch (gameState)
+	{
+	case EGameState::TITLE: return "타이틀"; break;
+	case EGameState::VILLAGE: return "마을"; break;
+	case EGameState::DUNGEON: return "던전"; break;
+	case EGameState::GAME_OVER: return "게임 오버"; break;
+	default: return "알 수 없음"; break;
+	}
+}
+
 
 void GameManager::InitializeGame() 
 {
@@ -110,13 +125,13 @@ void GameManager::InitializeGame()
 	}
 	playerPtr->SetName(inputName);
 	Sleep(2000);
-	gameMode.SetGameState(EGameState::TITLE);
+	SetGameState(EGameState::TITLE);
 }
 
 
 void GameManager::RunProcessTitle() 
 {
-	maps[EGameState::TITLE]->Enter(playerPtr);
+	mapList[EGameState::TITLE]->Enter(playerPtr);
 
 	char menuChoice;
 	cin >> menuChoice;
@@ -124,9 +139,9 @@ void GameManager::RunProcessTitle()
 	Sleep(1000);
 	switch (menuChoice)
 	{
-		case '1': gameMode.SetGameState(EGameState::VILLAGE); break;
-		case '2': gameMode.SetGameState(EGameState::DUNGEON); break;
-		case '3': gameMode.SetGameState(EGameState::GAME_OVER); break;
+		case '1': SetGameState(EGameState::VILLAGE); break;
+		case '2': SetGameState(EGameState::DUNGEON); break;
+		case '3': SetGameState(EGameState::GAME_OVER); break;
 		default: cout << "[System] 잘못된 입력입니다.\n"; break;
 	}
 	system("cls");
@@ -135,7 +150,7 @@ void GameManager::RunProcessTitle()
 void GameManager::RunProcessVillage()
 {
 	
-	Village* village = static_cast<Village*>(maps[EGameState::VILLAGE]);
+	Village* village = static_cast<Village*>(mapList[EGameState::VILLAGE]);
 
 	Healer* healer = new Healer("앤더슨", 15);
     Merchant* merchant = new Merchant("토니");
@@ -151,7 +166,7 @@ void GameManager::RunProcessVillage()
 	merchant->AddItemForSale("가죽갑옷", 100);
 
 	//Choice in Village
-	maps[EGameState::VILLAGE]->Enter(playerPtr);
+	mapList[EGameState::VILLAGE]->Enter(playerPtr);
 
 	char villageChoice;
 	cin >> villageChoice;
@@ -164,7 +179,7 @@ void GameManager::RunProcessVillage()
 		case '1':
 		{
 			village->InteractWithNPC(playerPtr, healer);
-			gameMode.SetGameState(EGameState::VILLAGE);
+			SetGameState(EGameState::VILLAGE);
 			delete healer;
 			healer = nullptr;
 			break;
@@ -172,14 +187,14 @@ void GameManager::RunProcessVillage()
 		case '2':
 		{
 			village->InteractWithNPC(playerPtr, merchant);
-			gameMode.SetGameState(EGameState::VILLAGE);
+			SetGameState(EGameState::VILLAGE);
 			delete merchant;
 			merchant = nullptr;
 			break;
 		}
 		case '3':
 		{
-			gameMode.SetGameState(EGameState::TITLE); break;
+			SetGameState(EGameState::TITLE); break;
 		}
 		default: 
 			cout << "[System] 잘못된 입력입니다.\n"; break;
@@ -189,11 +204,11 @@ void GameManager::RunProcessVillage()
 
 void GameManager::RunProcessDungeon()
 {
-	maps[EGameState::DUNGEON]->Enter(playerPtr);
+	mapList[EGameState::DUNGEON]->Enter(playerPtr);
 
 	//generate monsters in the dungeon
 	//TODO : develop a MonsterFactory class to create monsters
-    Dungeon* dungeon = static_cast<Dungeon*>(maps[EGameState::DUNGEON]);	
+    Dungeon* dungeon = static_cast<Dungeon*>(mapList[EGameState::DUNGEON]);	
 	//Monster(const string& name, int32_t health, int32_t attack, int32_t defense, int32_t agility, short level, int32_t exp, int32_t gold);
 	Monster* goblin = new Monster("고블린", 10, 5, 3, 5, 1, 20, 10);
 	Monster* slime = new Monster("슬라임", 8, 4, 2, 1, 2, 15, 5);
@@ -227,7 +242,7 @@ void GameManager::RunProcessDungeon()
 				cout << "===========================================\n" << endl;
 				Sleep(2000);
 				system("cls");
-				gameMode.SetGameState(EGameState::VILLAGE);
+				SetGameState(EGameState::VILLAGE);
 				return;
 			}
 
@@ -246,7 +261,7 @@ void GameManager::RunProcessDungeon()
 				GameOverProcess();
 				return;
 			}
-			gameMode.SetGameState(EGameState::DUNGEON);
+			SetGameState(EGameState::DUNGEON);
 			break;
 		}
 		case '2':
@@ -257,7 +272,7 @@ void GameManager::RunProcessDungeon()
 			cout << "===========================================\n" << endl;
 			Sleep(2000);
 			system("cls");
-			gameMode.SetGameState(EGameState::VILLAGE);
+			SetGameState(EGameState::VILLAGE);
 			break;
 		}
 	}
@@ -277,7 +292,7 @@ void GameManager::GameOverProcess()
 	cout << "\n===========================================\n" << endl;
 	Sleep(2000);
 	system("cls");
-	gameMode.SetGameState(EGameState::GAME_OVER);
+	SetGameState(EGameState::GAME_OVER);
 }
 
 
@@ -289,12 +304,12 @@ GameManager::~GameManager()
 		playerPtr = nullptr; 
 	}
 
-	for (const pair<EGameState, Area*>& map : maps)
+	for (const pair<EGameState, Area*>& map : mapList)
 	{
 		delete map.second; // Delete each Area object
-		maps[map.first] = nullptr; // Set pointer to nullptr after deletion
+		mapList[map.first] = nullptr; // Set pointer to nullptr after deletion
 	}
-	maps.clear();
+	mapList.clear();
 	
 	Sleep(2000);
 	system("cls");

@@ -136,7 +136,6 @@
     <ClCompile Include="TextlogRPG\Item\ItemManager.cpp" />
     <ClCompile Include="TextlogRPG\Item\MiscItem.cpp" />
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp" />
-    <ClCompile Include="TextlogRPG\Core\GameMode.cpp" />
     <ClCompile Include="TextlogRPG.cpp" />
     <ClCompile Include="TextlogRPG\Item\Weapon.cpp" />
     <ClCompile Include="TextlogRPG\NPC\Healer.cpp" />
@@ -149,6 +148,7 @@
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
     <ClInclude Include="TextlogRPG\Character\Monster.h" />
+    <ClInclude Include="TextlogRPG\Util\EGameState.h" />
     <ClInclude Include="TextlogRPG\Item\EItemType.h" />
     <ClInclude Include="TextlogRPG\NPC\Merchant.h" />
     <ClInclude Include="TextlogRPG\NPC\Healer.h" />
@@ -163,7 +163,6 @@
     <ClInclude Include="TextlogRPG\Item\MiscItem.h" />
     <ClInclude Include="TextlogRPG\Item\Weapon.h" />
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h" />
-    <ClInclude Include="TextlogRPG\Core\GameMode.h" />
     <ClInclude Include="TextlogRPG\Util\Common.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

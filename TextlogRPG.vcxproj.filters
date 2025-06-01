@@ -18,9 +18,6 @@
     <ClCompile Include="TextlogRPG.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TextlogRPG\Core\GameMode.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -65,9 +62,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TextlogRPG\Core\GameMode.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -132,6 +126,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextlogRPG\Item\EItemType.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\Util\EGameState.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

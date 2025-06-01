@@ -1,4 +1,5 @@
 ﻿#include "TextlogRPG/Util/Common.h"
+#include "TextlogRPG/Util/EGameState.h"
 #include "TextlogRPG/Core/GameManager.h"
 #include "TextlogRPG/Character/Player.h"
 
@@ -8,11 +9,10 @@ using namespace std;
 int main()
 {
 	//Game Start Settings
-	GameMode gameMode(EGameState::TITLE);
-
 	Player* player = Player::CreateCharacter("NONE");
-	
-	GameManager gameManager(gameMode, player);
+	EGameState initialState = EGameState::TITLE;
+
+	GameManager gameManager(initialState, player);
 	
 	gameManager.Run();
 
