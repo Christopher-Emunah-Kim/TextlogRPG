@@ -60,6 +60,9 @@
     <ClCompile Include="TextlogRPG\Area\Dungeon.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TextlogRPG\Area\DungeonStage.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h">
@@ -129,6 +132,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextlogRPG\Util\EGameState.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\Character\CharacterInfo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\Area\DungeonStage.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

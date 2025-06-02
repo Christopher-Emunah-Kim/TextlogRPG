@@ -2,6 +2,42 @@
 #include "../Character/Player.h"
 #include "../Character/Monster.h"
 
+Dungeon::Dungeon()
+{
+	monsters.clear();
+	stages.clear();
+	currentStageIndex = 0;
+}
+
+Dungeon::Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo)
+{
+	for (const vector<FMonsterInfo>& monsterInfos : stageMonsterInfo)
+	{
+		stages.emplace_back(new DungeonStage(monsterInfos));
+	}
+	currentStageIndex = 0;
+}
+
+DungeonStage* Dungeon::GetCurrentStage()
+{
+	if (currentStageIndex < stages.size())
+	{
+		return stages[currentStageIndex];
+	}
+	return nullptr;
+
+}
+
+bool Dungeon::NextStage()
+{
+	if (currentStageIndex + 1 < stages.size())
+	{
+		++currentStageIndex;
+		return true;
+	}
+	return false;
+}
+
 void Dungeon::Enter(Player* player)
 {
 	cout << "\n===========================================\n";
@@ -119,4 +155,9 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 		}
 	}
 	return true;
+}
+
+Dungeon::~Dungeon()
+{
+	stages.clear();
 }

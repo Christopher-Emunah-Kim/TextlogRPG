@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="TextlogRPG\Area\Dungeon.cpp" />
+    <ClCompile Include="TextlogRPG\Area\DungeonStage.cpp" />
     <ClCompile Include="TextlogRPG\Area\Title.cpp" />
     <ClCompile Include="TextlogRPG\Area\Village.cpp" />
     <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
@@ -143,9 +144,11 @@
   <ItemGroup>
     <ClInclude Include="TextlogRPG\Area\Area.h" />
     <ClInclude Include="TextlogRPG\Area\Dungeon.h" />
+    <ClInclude Include="TextlogRPG\Area\DungeonStage.h" />
     <ClInclude Include="TextlogRPG\Area\Title.h" />
     <ClInclude Include="TextlogRPG\Area\Village.h" />
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
+    <ClInclude Include="TextlogRPG\Character\CharacterInfo.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
     <ClInclude Include="TextlogRPG\Character\Monster.h" />
     <ClInclude Include="TextlogRPG\Util\EGameState.h" />

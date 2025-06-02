@@ -1,18 +1,9 @@
 ﻿#pragma once
-#include "../Util/Common.h"
-#include "CharacterStatus.h"
+#include "../Character/CharacterInfo.h"
 
 using namespace std;
 
-struct FCharacterInfo
-{
-	CharacterStatus characterStats;
-	int32_t maxHealth = 100;
-	int32_t health = 100;
-	int16_t level = 1;
-	string characterName = "UNKNOWN";
 
-};
 
 class BaseCharacter abstract
 {
