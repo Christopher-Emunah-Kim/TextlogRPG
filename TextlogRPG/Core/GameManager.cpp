@@ -71,22 +71,28 @@ string GameManager::GetStateString() const
 void GameManager::InitializeDungeon()
 {
 	//Generate Monster Lists(info)
+	//FCharacterInfo(stats, maxHp, hp, lvl, name), dropExperience(exp), dropGold(gold)
 	vector<FMonsterInfo> stage1 = {
-		FMonsterInfo(CharacterStatus::NewStatus(4, 2, 1), 8, 8, 2, "슬라임", 15, 5)
+		FMonsterInfo(CharacterStatus::NewStatus(1, 1, 1), 1, 1, 1, "허약한 고블린", 10, 3),
+		FMonsterInfo(CharacterStatus::NewStatus(1, 1, 1), 1, 1, 1, "허약한 슬라임", 10, 3),
+		FMonsterInfo(CharacterStatus::NewStatus(3, 3, 3), 3, 3, 1, "허약한 스켈레톤", 15, 5),
+		FMonsterInfo(CharacterStatus::NewStatus(3, 3, 3), 3, 3, 1, "허약한 오크", 15, 5)
 	};
 	vector<FMonsterInfo> stage2 = {
-		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "고블린", 15, 8)
+		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "평범한 고블린", 15, 8),
+		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "평범한 스켈레톤", 25, 15),
+		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "평범한 오크", 30, 20),
+		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "평범한 드래곤", 50, 30)
 	};
     vector<FMonsterInfo> stage3 = {
-		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "스켈레톤", 25, 15)
+		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "강력한 고블린", 15, 8),
+		FMonsterInfo(CharacterStatus::NewStatus(4, 2, 1), 8, 8, 2, "강력한 슬라임", 15, 5),
+		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "강력한 스켈레톤", 25, 15),
+		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "강력한 오크", 30, 20),
+		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "강력한 드래곤", 50, 30)
 	};
-	vector<FMonsterInfo> stage4 = {
-		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "오크", 30, 20)
-	};
-	vector<FMonsterInfo> stage5 = {
-		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "드래곤", 50, 30)
-	};
-	vector<vector<FMonsterInfo>> dungeonStages = { stage1, stage2, stage3, stage4, stage5 };
+	
+	vector<vector<FMonsterInfo>> dungeonStages = { stage1, stage2, stage3 };
 
 
 	//Generate new Dungeon
@@ -257,6 +263,11 @@ void GameManager::RunProcessDungeon()
 
 	vector<Monster*> monsters = stage->GetMonsters();
 
+	vector<Monster*> aliveMonsters;
+	for (Monster* mon : monsters) {
+		if (mon->GetCharacterInfo().health > 0)
+			aliveMonsters.push_back(mon);
+	}
 
 	char dungeonChoice;
 	cin >> dungeonChoice;
@@ -268,21 +279,57 @@ void GameManager::RunProcessDungeon()
 		case '1':
 		{
 			//Check if there are any monsters left in the dungeon
-			if (monsters.empty())
-			{
-				cout << "\n===========================================\n";
-				cout << "[System] 던전에는 더 이상 몬스터가 없습니다.\n";
-				cout << "===========================================\n" << endl;
-				Sleep(2000);
-				system("cls");
-				SetGameState(EGameState::VILLAGE);
-				return;
+			if (aliveMonsters.empty()) {
+				if (dungeonptr->NextStage()) {
+					cout << "\n===========================================\n";
+					cout << "[System] 다음 스테이지로 이동합니다!\n";
+					cout << "===========================================\n" << endl;
+					Sleep(2000);
+					system("cls");
+					RunProcessDungeon();
+					return;
+				}
+				else {
+					cout << "\n===========================================\n";
+					cout << "[System] 모든 던전 스테이지를 클리어했습니다!\n";
+					cout << "[System] 마을로 돌아갑니다.\n";
+					cout << "===========================================\n" << endl;
+					Sleep(2000);
+					system("cls");
+					SetGameState(EGameState::VILLAGE);
+					return;
+				}
 			}
+			//if (monsters.empty())
+			//{
+			//	if (dungeonptr->NextStage())
+			//	{
+			//		cout << "\n===========================================\n";
+			//		cout << "[System] 다음 스테이지로 이동합니다!\n";
+			//		cout << "===========================================\n" << endl;
+			//		Sleep(2000);
+			//		system("cls");
+			//		// 다음 스테이지 진입
+			//		RunProcessDungeon();
+			//		return;
+			//	}
+			//	else
+			//	{
+			//		cout << "\n===========================================\n";
+			//		cout << "[System] 모든 던전 스테이지를 클리어했습니다!\n";
+			//		cout << "[System] 마을로 돌아갑니다.\n";
+			//		cout << "===========================================\n" << endl;
+			//		Sleep(2000);
+			//		system("cls");
+			//		SetGameState(EGameState::VILLAGE);
+			//		return;
+			//	}
+			//}
 
 			//Generate a random index 
 			srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
-			size_t randomIndex = rand() % monsters.size();
-			Monster* randomMonster = monsters[randomIndex];
+			size_t randomIndex = rand() % aliveMonsters.size();
+			Monster* randomMonster = aliveMonsters[randomIndex];
 
 			//Start Battle with the random monster
 			bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, randomMonster);
@@ -292,6 +339,10 @@ void GameManager::RunProcessDungeon()
 			{
 				GameOverProcess();
 				return;
+			}
+			if (randomMonster->GetCharacterInfo().health <= 0)
+			{
+				stage->OnMonsterDefeat(randomMonster);
 			}
 			SetGameState(EGameState::DUNGEON);
 			break;

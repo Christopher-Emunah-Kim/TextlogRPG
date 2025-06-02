@@ -10,6 +10,7 @@ class DungeonStage
 private:
 	vector<FMonsterInfo> monsterInfoList;
 	vector<class Monster*> monsterList;
+	class MonsterPool* monsterPool;
 
 public:
 	DungeonStage(const vector<FMonsterInfo>& monsterInfos);
@@ -18,6 +19,9 @@ public:
 	void ExitStage();
 
 	vector<Monster*> GetMonsters();
+	bool isCleared() const;
+
+	void OnMonsterDefeat(Monster* monster);
 
 	~DungeonStage();
 };
