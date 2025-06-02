@@ -41,8 +41,8 @@ void Player::TakeDamage(BaseCharacter& target)
 	else
 	{
 		cout << "\n===========================================\n";
-		cout << "[System] " << target.GetCharacterInfo().characterName << "에게" 
-				<< damage << "의 데미지를 입었습니다. 현재 체력: " << info.health;
+		cout << "\n[System] " << target.GetCharacterInfo().characterName << "에게" 
+				<< damage << "의 데미지를 입었습니다. 현재 체력: " << info.health << "\n";
 		cout << "\n===========================================\n" << endl;
 		Sleep(2000);
 		system("cls");

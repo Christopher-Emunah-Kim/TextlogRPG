@@ -3,8 +3,6 @@
 #include <unordered_map>
 #include <string>
 
-class Player;
-class Area;
 
 using namespace std;
 
@@ -12,18 +10,22 @@ class GameManager
 {
 private:
 	EGameState gameState;
-    Player* playerPtr;
-	std::unordered_map<EGameState, class Area*> mapList;
+    class Player* playerPtr;
+	class Dungeon* dungeonptr;
+	unordered_map<EGameState, class Area*> mapList;
     
 public:
-	GameManager(EGameState initialState, Player* player);
+	GameManager(EGameState initialState, class Player* player, class Dungeon* dungeon);
         
 	~GameManager();
 
 	//Managing GameState
 	void SetGameState(const EGameState& gs_in)	{ gameState = gs_in; }
 	EGameState GetGameState() const 	{return gameState;	}
-	std::string GetStateString() const;
+	string GetStateString() const;
+
+	//Dungeon-Stage-Monster Initialization
+	void InitializeDungeon();
 
 	//Main Process of Game
 	void InitializeGame();

@@ -4,6 +4,7 @@
 
 #include "../Character/Player.h"
 #include "../Character/Monster.h"
+#include "../Character/CharacterInfo.h"
 #include "../NPC/Healer.h"
 #include "../NPC/Merchant.h"
 
@@ -19,8 +20,8 @@
 #include "../Area/Dungeon.h"
 
 
-GameManager::GameManager(EGameState initialState, Player* player)
-	: gameState(initialState), playerPtr(player)
+GameManager::GameManager(EGameState initialState, Player* player, Dungeon* dungeon)
+	: gameState(initialState), playerPtr(player), dungeonptr(dungeon ? dungeon : nullptr)
 {
 	//manage dynamic memory allocation for maps
 	mapList.insert(make_pair(EGameState::TITLE, new Title()));
@@ -65,6 +66,37 @@ string GameManager::GetStateString() const
 	case EGameState::GAME_OVER: return "게임 오버"; break;
 	default: return "알 수 없음"; break;
 	}
+}
+
+void GameManager::InitializeDungeon()
+{
+	//Generate Monster Lists(info)
+	vector<FMonsterInfo> stage1 = {
+		FMonsterInfo(CharacterStatus::NewStatus(4, 2, 1), 8, 8, 2, "슬라임", 15, 5)
+	};
+	vector<FMonsterInfo> stage2 = {
+		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "고블린", 15, 8)
+	};
+    vector<FMonsterInfo> stage3 = {
+		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "스켈레톤", 25, 15)
+	};
+	vector<FMonsterInfo> stage4 = {
+		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "오크", 30, 20)
+	};
+	vector<FMonsterInfo> stage5 = {
+		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "드래곤", 50, 30)
+	};
+	vector<vector<FMonsterInfo>> dungeonStages = { stage1, stage2, stage3, stage4, stage5 };
+
+
+	//Generate new Dungeon
+	if (dungeonptr)
+	{
+		delete dungeonptr;
+		dungeonptr = nullptr;
+	}
+	dungeonptr = new Dungeon(dungeonStages);
+
 }
 
 
@@ -204,26 +236,27 @@ void GameManager::RunProcessVillage()
 
 void GameManager::RunProcessDungeon()
 {
-	mapList[EGameState::DUNGEON]->Enter(playerPtr);
-
 	//generate monsters in the dungeon
-	//TODO : develop a MonsterFactory class to create monsters
-    Dungeon* dungeon = static_cast<Dungeon*>(mapList[EGameState::DUNGEON]);	
-	//Monster(const string& name, int32_t health, int32_t attack, int32_t defense, int32_t agility, short level, int32_t exp, int32_t gold);
-	Monster* goblin = new Monster("고블린", 10, 5, 3, 5, 1, 20, 10);
-	Monster* slime = new Monster("슬라임", 8, 4, 2, 1, 2, 15, 5);
-	Monster* orc = new Monster("오크", 15, 8, 5, 10, 3, 30, 20);
-	Monster* skeleton = new Monster("스켈레톤", 12, 6, 4, 8, 4, 25, 15);
-	Monster* dragon = new Monster("드래곤", 25, 12, 8, 15, 5, 50, 30);
+	if (!dungeonptr)
+		InitializeDungeon();
 
-	//Add monsters to the dungeon
-	dungeon->AddMonster(goblin);
-	dungeon->AddMonster(slime);
-	dungeon->AddMonster(orc);
-	dungeon->AddMonster(skeleton);
-	dungeon->AddMonster(dragon);
+	dungeonptr->Enter(playerPtr);
 
-	vector<Monster*>& monsters = dungeon->GetMonsterList();
+	DungeonStage* stage = dungeonptr->GetCurrentStage();
+
+	if (stage) 
+	{
+		stage->EnterStage();
+	}
+	else
+	{
+		cout << "[System] 유효한 던전 스테이지가 존재하지 않습니다.\n[System] 마을로 돌아갑니다." << endl;
+		SetGameState(EGameState::VILLAGE);
+		return;
+	}
+
+	vector<Monster*> monsters = stage->GetMonsters();
+
 
 	char dungeonChoice;
 	cin >> dungeonChoice;
@@ -246,14 +279,13 @@ void GameManager::RunProcessDungeon()
 				return;
 			}
 
-
 			//Generate a random index 
 			srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
-			int randomIndex = rand() % monsters.size();
+			size_t randomIndex = rand() % monsters.size();
 			Monster* randomMonster = monsters[randomIndex];
 
 			//Start Battle with the random monster
-			bool isPlayerAlive = dungeon->EncounterMonster(playerPtr, randomMonster);
+			bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, randomMonster);
 			Sleep(2000);
 			system("cls");
 			if (isPlayerAlive == false)
@@ -276,11 +308,11 @@ void GameManager::RunProcessDungeon()
 			break;
 		}
 	}
-	delete goblin;
+	/*delete goblin;
 	delete slime;
 	delete orc;
 	delete skeleton;
-	delete dragon;
+	delete dragon;*/
 }
 
 void GameManager::GameOverProcess()
@@ -303,14 +335,14 @@ GameManager::~GameManager()
 		delete playerPtr;
 		playerPtr = nullptr; 
 	}
-
+	if (dungeonptr)
+	{
+		delete dungeonptr;
+		dungeonptr = nullptr;
+	}
 	for (const pair<EGameState, Area*>& map : mapList)
 	{
-		delete map.second; // Delete each Area object
-		mapList[map.first] = nullptr; // Set pointer to nullptr after deletion
+		delete map.second; 
 	}
 	mapList.clear();
-	
-	Sleep(2000);
-	system("cls");
 }
