@@ -44,9 +44,11 @@ void GameManager::Run()
 {
     InitializeGame();
 
-    while (GetGameState() != EGameState::GAME_OVER) 
+	EGameState CurrentGameState = GetGameState();
+
+    while (CurrentGameState != EGameState::GAME_OVER)
 	{
-        switch ( GetGameState() )
+        switch (CurrentGameState)
 		{
             case EGameState::TITLE: RunProcessTitle(); break;
             case EGameState::VILLAGE: RunProcessVillage(); break;
@@ -60,7 +62,9 @@ string GameManager::GetStateString() const
 {
 	switch (gameState)
 	{
-	case EGameState::TITLE: return "타이틀"; break;
+	case EGameState::TITLE: 
+		return "타이틀"; 
+		break;
 	case EGameState::VILLAGE: return "마을"; break;
 	case EGameState::DUNGEON: return "던전"; break;
 	case EGameState::GAME_OVER: return "게임 오버"; break;
@@ -73,10 +77,10 @@ void GameManager::InitializeDungeon()
 	//Generate Monster Lists(info)
 	//FCharacterInfo(stats, maxHp, hp, lvl, name), dropExperience(exp), dropGold(gold)
 	vector<FMonsterInfo> stage1 = {
-		FMonsterInfo(CharacterStatus::NewStatus(1, 1, 1), 1, 1, 1, "허약한 고블린", 10, 3),
-		FMonsterInfo(CharacterStatus::NewStatus(1, 1, 1), 1, 1, 1, "허약한 슬라임", 10, 3),
-		FMonsterInfo(CharacterStatus::NewStatus(3, 3, 3), 3, 3, 1, "허약한 스켈레톤", 15, 5),
-		FMonsterInfo(CharacterStatus::NewStatus(3, 3, 3), 3, 3, 1, "허약한 오크", 15, 5)
+		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "평범한 고블린", 15, 8),
+		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "평범한 스켈레톤", 25, 15),
+		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "평범한 오크", 30, 20),
+		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "평범한 드래곤", 50, 30)
 	};
 	vector<FMonsterInfo> stage2 = {
 		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "평범한 고블린", 15, 8),
@@ -272,8 +276,10 @@ void GameManager::RunProcessDungeon()
 	char dungeonChoice;
 	cin >> dungeonChoice;
 	cin.ignore(1024, '\n');
+
 	Sleep(2000);
 	system("cls");
+
 	switch (dungeonChoice)
 	{
 		case '1':
@@ -393,6 +399,7 @@ GameManager::~GameManager()
 	}
 	for (const pair<EGameState, Area*>& map : mapList)
 	{
+		if(map.second)
 		delete map.second; 
 	}
 	mapList.clear();

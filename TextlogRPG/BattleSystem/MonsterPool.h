@@ -8,8 +8,10 @@ using namespace std;
 class MonsterPool {
 private:
 	unordered_map<string, vector<Monster*>> monsterPool;
+
 public:
 	MonsterPool() {}
+	~MonsterPool();
 
 	void Initialize(const vector<FMonsterInfo>& monsterInfos, size_t countPerType);
 
@@ -18,5 +20,5 @@ public:
 	void Release(Monster* monster);
 
 
-	~MonsterPool();
+	
 };

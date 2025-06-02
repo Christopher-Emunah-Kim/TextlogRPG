@@ -10,6 +10,10 @@ using namespace std;
 
 class Player : public BaseCharacter
 {
+public:
+	//Default Constructor
+	Player(const FPlayerData& data, const FCharacterInfo& info) : BaseCharacter(info), playerData(data) {}
+
 private:
 	FPlayerData playerData;
 	vector<class Item*> inventory; 
@@ -17,11 +21,8 @@ private:
 	CharacterStatus baseStatus;
 	CharacterStatus equipmentStatus;
 
-public:
-	//Default Constructor
-	Player(const FPlayerData& data, const FCharacterInfo& info) : BaseCharacter(info), playerData(data) {}
 
-	//Override functions
+public:
 	virtual void TakeDamage(BaseCharacter& target) override;
 	virtual void Attack(BaseCharacter* target) override;
 

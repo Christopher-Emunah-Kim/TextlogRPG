@@ -140,7 +140,9 @@ void Player::EquipItem(Item* item)
 
 void Player::LoseItem(Item* item)
 {
-	if (item == nullptr) return;
+	if (item == nullptr) 
+		return;
+	
 	vector<Item*>::iterator it = find(inventory.begin(), inventory.end(), item);
 	if (it != inventory.end())
 	{

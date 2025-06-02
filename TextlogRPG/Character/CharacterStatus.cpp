@@ -7,11 +7,7 @@ CharacterStatus CharacterStatus::NewStatus(int16_t atk, int16_t def, int16_t agi
 
 CharacterStatus CharacterStatus::NewStatus(const CharacterStatus& other) const
 {
-	return CharacterStatus(
-		this->attack + other.attack,
-		this->defense + other.defense,
-		this->agility + other.agility
-	);
+	return CharacterStatus(	attack + other.attack,	defense + other.defense, agility + other.agility);
 }
 
 int32_t CharacterStatus::GetDamage(const CharacterStatus& other) const

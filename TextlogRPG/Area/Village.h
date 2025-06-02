@@ -19,5 +19,4 @@ public:
 	vector<NonPlayerCharacter*>& GetNPCList();
 
     void InteractWithNPC(Player* player, NonPlayerCharacter* npc);
-    
 };

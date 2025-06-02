@@ -284,6 +284,7 @@ void Merchant::Interact(Player* player)
 		system("cls");
 	}
 	break;
+
 	default:
 	{
 		cout << "\n===========================================\n";

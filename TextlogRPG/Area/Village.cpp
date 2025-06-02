@@ -17,6 +17,7 @@ void Village::Enter(Player* player)
 
 void Village::AddNPC(NonPlayerCharacter* npc) 
 {
+	npc = nullptr;
 	npcCharacters.push_back(npc);
 }
 

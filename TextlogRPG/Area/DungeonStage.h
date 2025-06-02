@@ -14,6 +14,7 @@ private:
 
 public:
 	DungeonStage(const vector<FMonsterInfo>& monsterInfos);
+	~DungeonStage();
 	
 	void EnterStage();
 	void ExitStage();
@@ -22,7 +23,5 @@ public:
 	bool isCleared() const;
 
 	void OnMonsterDefeat(Monster* monster);
-
-	~DungeonStage();
 };
 
