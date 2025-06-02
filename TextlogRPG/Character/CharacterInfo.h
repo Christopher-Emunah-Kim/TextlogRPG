@@ -25,7 +25,7 @@ struct FCharacterInfo
 struct FPlayerData : public FCharacterInfo
 {
 	int32_t playerExperience = 0;
-	int32_t playerMaxExperience = 10;
+	int32_t playerMaxExperience = 15;
 	int32_t playerGold = 10000;
 	class Weapon* weaponEquipped = nullptr;
 	class Armor* armorEquipped = nullptr;

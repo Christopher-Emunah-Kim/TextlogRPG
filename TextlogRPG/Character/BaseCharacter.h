@@ -23,6 +23,7 @@ public:
 	virtual ~BaseCharacter() = default;
 
 	virtual FCharacterInfo GetCharacterInfo() const { return characterInfo; }
+	virtual FCharacterInfo& GetCharacterInfo() { return characterInfo; }
 
 	//Pure virtual functions
 	virtual void TakeDamage(BaseCharacter& target) = 0;

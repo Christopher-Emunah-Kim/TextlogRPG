@@ -63,6 +63,9 @@
     <ClCompile Include="TextlogRPG\Area\DungeonStage.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TextlogRPG\BattleSystem\MonsterPool.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h">
@@ -138,6 +141,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextlogRPG\Area\DungeonStage.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\BattleSystem\MonsterPool.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

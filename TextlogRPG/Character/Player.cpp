@@ -10,8 +10,8 @@
 Player* Player::CreateCharacter(const string& characterName)
 {
 	//TODO : 임시_이후 LevelData 연결
-	FCharacterInfo characterInfo = { CharacterStatus::NewStatus(10, 5, 3),5, 5, 1, characterName };
- 
+	FCharacterInfo characterInfo = { CharacterStatus::NewStatus(10, 5, 3), 5, 5, 1, characterName };
+
 	FPlayerData playerData;
 
 	Player* player = new Player(playerData, characterInfo);
@@ -22,7 +22,6 @@ Player* Player::CreateCharacter(const string& characterName)
 void Player::TakeDamage(BaseCharacter& target)
 {
 	//플레이어의 TakeDamage함수 내에서 몬스터와 플레이어의 데미지 계산 및 출력메시지 대부분 처리
-	//몬스터의 TekeDamage함수는 최소한으로 유지
 	int32_t damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
 	damage > 0? damage : 1; //무한루프 막기위해 최소데미지 1보장.
 	FCharacterInfo& info = characterInfo;
@@ -34,8 +33,6 @@ void Player::TakeDamage(BaseCharacter& target)
 		cout << "\n===========================================\n" << endl;
 		Sleep(2000);
 		system("cls");
-		//TODO : 게임오버로직 추가
-		//gameMode.SetGameState(EGameState::GAME_OVER);
 		info.health = 0; // 체력을 0으로 설정하여 게임오버 상태로 유지
 	}
 	else
