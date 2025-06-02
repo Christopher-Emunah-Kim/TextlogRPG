@@ -6,8 +6,8 @@
 #include "../Item/MiscItem.h"
 
 //Constructor
-Monster::Monster(const string& name, int32_t health, int16_t attack, int16_t defense, int16_t agility, short level, int32_t exp, int32_t gold)
-	: BaseCharacter(FCharacterInfo{ CharacterStatus{attack, defense, agility}, health, health, level, name }), dropExperience(exp), dropGold(gold) 
+Monster::Monster(const FMonsterInfo& info)
+	: BaseCharacter(info), dropExperience(info.dropExperience), dropGold(info.dropGold)
 {
 	dropItemList = ItemManager::GetInstance().GetItemList();
 }

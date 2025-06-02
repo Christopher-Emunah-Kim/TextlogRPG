@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "BaseCharacter.h"
+#include "CharacterInfo.h"
 
 class Item;
 
@@ -13,7 +14,7 @@ private:
 public:
 	
 	// User-Defined Constructor for Monster creation
-	Monster(const string& name, int32_t health, int16_t attack, int16_t defense, int16_t agility, short level, int32_t exp, int32_t gold);
+	Monster(const FMonsterInfo& info);
 
 	// Override functions
 	void TakeDamage(BaseCharacter& target) override;
