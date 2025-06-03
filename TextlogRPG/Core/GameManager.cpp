@@ -1,13 +1,14 @@
 ﻿#include "GameManager.h"
 #include "../Util/EGameState.h"
 #include "../Util/Common.h"
+#include "../Util/Option.h"
+#include "../Util/Dialog.h"
 
 #include "../Character/Player.h"
 #include "../Character/Monster.h"
 #include "../Character/CharacterInfo.h"
 #include "../NPC/Healer.h"
 #include "../NPC/Merchant.h"
-
 
 #include "../Item/Weapon.h"
 #include "../Item/Armor.h"
@@ -18,10 +19,11 @@
 #include "../Area/Title.h"
 #include "../Area/Village.h"
 #include "../Area/Dungeon.h"
+#include "../Util/Dialogue.h"
 
 
 GameManager::GameManager(EGameState initialState, Player* player, Dungeon* dungeon)
-	: gameState(initialState), playerPtr(player), dungeonptr(dungeon ? dungeon : nullptr)
+	: gameState(initialState), playerPtr(player), dungeonptr(dungeon)
 {
 	//manage dynamic memory allocation for maps
 	mapList.insert(make_pair(EGameState::TITLE, new Title()));
@@ -40,37 +42,131 @@ GameManager::GameManager(EGameState initialState, Player* player, Dungeon* dunge
 	}
 }
 
+GameManager::~GameManager()
+{
+	if (playerPtr) 
+	{
+		delete playerPtr;
+		playerPtr = nullptr; 
+	}
+	if (dungeonptr)
+	{
+		delete dungeonptr;
+		dungeonptr = nullptr;
+	}
+	for (const pair<EGameState, Area*>& map : mapList)
+	{
+		if(map.second)
+		delete map.second; 
+	}
+	mapList.clear();
+}
+
+//string GameManager::GetStateString() const
+//{
+//	switch (gameState)
+//	{
+//	case EGameState::TITLE: 
+//		return "타이틀"; 
+//		break;
+//	case EGameState::VILLAGE: 
+//		return "마을"; 
+//		break;
+//	case EGameState::DUNGEON: 
+//		return "던전"; 
+//		break;
+//	case EGameState::GAME_OVER: 
+//		return "게임 오버"; 
+//		break;
+//
+//	default: 
+//		return "알 수 없음"; 
+//		break;
+//	}
+//}
+
 void GameManager::Run() 
 {
     InitializeGame();
 
+	LoopByGameState();
+}
+
+void GameManager::LoopByGameState()
+{
 	EGameState CurrentGameState = GetGameState();
 
-    while (CurrentGameState != EGameState::GAME_OVER)
+	while (CurrentGameState != EGameState::GAME_OVER)
 	{
-        switch (CurrentGameState)
+		switch (CurrentGameState)
 		{
-            case EGameState::TITLE: RunProcessTitle(); break;
-            case EGameState::VILLAGE: RunProcessVillage(); break;
-            case EGameState::DUNGEON: RunProcessDungeon(); break;
-            default: SetGameState(EGameState::GAME_OVER); break;
-        }
-    }
-}
-
-string GameManager::GetStateString() const
-{
-	switch (gameState)
-	{
-	case EGameState::TITLE: 
-		return "타이틀"; 
-		break;
-	case EGameState::VILLAGE: return "마을"; break;
-	case EGameState::DUNGEON: return "던전"; break;
-	case EGameState::GAME_OVER: return "게임 오버"; break;
-	default: return "알 수 없음"; break;
+		case EGameState::TITLE:
+			RunProcessTitle();
+			break;
+		case EGameState::VILLAGE:
+			RunProcessVillage();
+			break;
+		case EGameState::DUNGEON:
+			RunProcessDungeon();
+			break;
+		default:
+			SetGameState(EGameState::GAME_OVER);
+			break;
+		}
 	}
 }
+
+void GameManager::InitializeGame() 
+{
+	WelcomMsg();
+
+	Common::PauseAndClearScreen();
+
+	SetPlayerName();
+
+	SetGameState(EGameState::TITLE);
+}
+
+#pragma region InitializeGame methods
+void GameManager::WelcomMsg()
+{
+	vector<Dialogue> initialDialogs;
+	initialDialogs.push_back(Dialogue::NewText(0, "[System] 안녕하신가 용사여"));
+	initialDialogs.push_back(Dialogue::NewText(1, "[System] 놀라지 말게. 자네의 3D세상은 멀쩡하다네"));
+	initialDialogs.push_back(Dialogue::NewText(2, "[System] 다만, 자네의 실력이 고작 그정도인걸 어쩌겠는가?"));
+	initialDialogs.push_back(Dialogue::NewText(3, "[System] 그래, 자네 말일세.. 이곳은 자네에게 가장 잘어울리는 새로운 세상일세."));
+	initialDialogs.push_back(Dialogue::NewText(4, "[System] 자, 이제 게임을 시작하지"));
+	initialDialogs.push_back(Dialogue::NewText(5, "[System] 준비가 되었는가?"));
+	Dialogue::ShowDialogs(initialDialogs);
+}
+void GameManager::SetPlayerName()
+{
+	Dialogue::ShowOption("[System] 이해할 수 없는 곳이다. \n 당신의 선택은?\n1. 게임을 시작한다.\n2. 당장 도망친다.");
+
+	char titleChoice;
+	cin >> titleChoice;
+	cin.ignore(1024, '\n');
+
+	if (titleChoice == '1')
+	{
+		Common::PrintSystemMsg("도망치려 했지만, 이미 늦었다.\n\n게임을 시작할 수 밖에.");
+		Common::PauseAndClearScreen();
+	}
+	else
+	{
+		Common::PrintSystemMsg("당신은 도망칠 수 없습니다. 강제로 게임을 시작합니다..");
+		Common::PauseAndClearScreen();
+	}
+	Common::PrintSystemMsg("당신의 이름을 입력하시오. \n이름은 20자 이내로 입력해주세요.");
+	string inputName;
+	getline(cin, inputName);
+	if (inputName.length() > 20)
+	{
+		inputName = inputName.substr(0, 20);
+	}
+	playerPtr->SetName(inputName);
+}
+#pragma endregion
 
 void GameManager::InitializeDungeon()
 {
@@ -109,71 +205,10 @@ void GameManager::InitializeDungeon()
 
 }
 
-
-void GameManager::InitializeGame() 
-{
-	//TODO : adapting Dialog/Options class
-	Sleep(1000);
-	cout << "\n===========================================\n";
-	cout << "\n안녕하신가 용사여.\n\n";
-	cout << "놀라지 말게. 자네의 3D세상은 멀쩡하다네.\n\n";
-	cout << "다만, 자네의 실력이 고작 그정도인걸 어쩌겠는가? \n";
-	cout << "\n===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	Sleep(2000);
-	cout << "\n===========================================\n";
-	cout << "\n그래, 자네 말일세.. 이곳은 자네에게 가장 잘어울리는 새로운 세상일세.\n\n";
-	cout << "자, 이제 게임을 시작하지\n\n";
-	cout << "준비가 되었는가?\n";
-	cout << "\n===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	Sleep(2000);
-	cout << "\n===========================================\n";
-	cout << "\n[System] 이해할 수 없는 곳이다. \n\n "
-		<< "1. 게임을 시작한다. \n\n 2. 당장 도망친다. \n\n당신의 선택은 ? 선택지를 입력해주세요\n";
-	cout << "\n===========================================\n";
-	char titleChoice;
-	cin >> titleChoice;
-	cin.ignore();
-	system("cls");
-	Sleep(1000);
-	if (titleChoice == '1')
-	{
-		cout << "\n===========================================\n";
-		cout << "\n[System] 도망치려 했지만, 이미 늦었다.\n\n게임을 시작할 수 밖에.\n";
-		cout << "\n===========================================\n" << endl;
-		Sleep(2000);
-	}
-	else
-	{
-		cout << "\n===========================================\n";
-		cout << "\n[System] 잘못된 선택입니다. 게임을 시작합니다.\n";
-		cout << "\n===========================================\n";
-		Sleep(2000);
-	}
-	system("cls");
-	cout << "\n===========================================\n";
-	cout << "\n[System] 당신의 이름을 입력하시오. \n"
-		<< "\n이름은 20자 이내로 입력해주세요.  \n ";
-	cout << "\n===========================================\n" << endl;
-	string inputName;
-	getline(cin, inputName);
-	system("cls");
-	if (inputName.length() > 20)
-	{
-		inputName = inputName.substr(0, 20);
-	}
-	playerPtr->SetName(inputName);
-	Sleep(2000);
-	SetGameState(EGameState::TITLE);
-}
-
-
 void GameManager::RunProcessTitle() 
 {
-	mapList[EGameState::TITLE]->Enter(playerPtr);
+	Area* ptrTitleArea = mapList[EGameState::TITLE];
+	ptrTitleArea->Enter(playerPtr);
 
 	char menuChoice;
 	cin >> menuChoice;
@@ -181,10 +216,19 @@ void GameManager::RunProcessTitle()
 	Sleep(1000);
 	switch (menuChoice)
 	{
-		case '1': SetGameState(EGameState::VILLAGE); break;
-		case '2': SetGameState(EGameState::DUNGEON); break;
-		case '3': SetGameState(EGameState::GAME_OVER); break;
-		default: cout << "[System] 잘못된 입력입니다.\n"; break;
+		case '1': 
+			SetGameState(EGameState::VILLAGE); 
+			break;
+		case '2': 
+			SetGameState(EGameState::DUNGEON); 
+			break;
+		case '3': 
+			SetGameState(EGameState::GAME_OVER); 
+			break;
+
+		default: 
+			Common::PrintErrorMsg("잘못된 입력입니다.");
+			break;
 	}
 	system("cls");
 }
@@ -214,14 +258,15 @@ void GameManager::RunProcessVillage()
 	cin >> villageChoice;
 	cin.ignore(1024, '\n');
 
-	Sleep(2000);
-	system("cls");
+	Common::PauseAndClearScreen();
+
 	switch (villageChoice)
 	{
 		case '1':
 		{
 			village->InteractWithNPC(playerPtr, healer);
 			SetGameState(EGameState::VILLAGE);
+
 			delete healer;
 			healer = nullptr;
 			break;
@@ -230,6 +275,7 @@ void GameManager::RunProcessVillage()
 		{
 			village->InteractWithNPC(playerPtr, merchant);
 			SetGameState(EGameState::VILLAGE);
+
 			delete merchant;
 			merchant = nullptr;
 			break;
@@ -238,10 +284,11 @@ void GameManager::RunProcessVillage()
 		{
 			SetGameState(EGameState::TITLE); break;
 		}
+
 		default: 
-			cout << "[System] 잘못된 입력입니다.\n"; break;
+			Common::PrintErrorMsg("잘못된 입력입니다.");
 	}
-	system("cls");
+	Common::PauseAndClearScreen();
 }
 
 void GameManager::RunProcessDungeon()
@@ -260,7 +307,7 @@ void GameManager::RunProcessDungeon()
 	}
 	else
 	{
-		cout << "[System] 유효한 던전 스테이지가 존재하지 않습니다.\n[System] 마을로 돌아갑니다." << endl;
+		Common::PrintSystemMsg("유효한 던전 스테이지가 존재하지 않습니다.\n마을로 돌아갑니다.");
 		SetGameState(EGameState::VILLAGE);
 		return;
 	}
@@ -287,51 +334,18 @@ void GameManager::RunProcessDungeon()
 			//Check if there are any monsters left in the dungeon
 			if (aliveMonsters.empty()) {
 				if (dungeonptr->NextStage()) {
-					cout << "\n===========================================\n";
-					cout << "[System] 다음 스테이지로 이동합니다!\n";
-					cout << "===========================================\n" << endl;
-					Sleep(2000);
-					system("cls");
+					Common::PrintSystemMsg("다음 스테이지로 이동합니다.");
+					Common::PauseAndClearScreen();
 					RunProcessDungeon();
 					return;
 				}
 				else {
-					cout << "\n===========================================\n";
-					cout << "[System] 모든 던전 스테이지를 클리어했습니다!\n";
-					cout << "[System] 마을로 돌아갑니다.\n";
-					cout << "===========================================\n" << endl;
-					Sleep(2000);
-					system("cls");
+					Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다!\n마을로 돌아갑니다.");
+					Common::PauseAndClearScreen();
 					SetGameState(EGameState::VILLAGE);
 					return;
 				}
 			}
-			//if (monsters.empty())
-			//{
-			//	if (dungeonptr->NextStage())
-			//	{
-			//		cout << "\n===========================================\n";
-			//		cout << "[System] 다음 스테이지로 이동합니다!\n";
-			//		cout << "===========================================\n" << endl;
-			//		Sleep(2000);
-			//		system("cls");
-			//		// 다음 스테이지 진입
-			//		RunProcessDungeon();
-			//		return;
-			//	}
-			//	else
-			//	{
-			//		cout << "\n===========================================\n";
-			//		cout << "[System] 모든 던전 스테이지를 클리어했습니다!\n";
-			//		cout << "[System] 마을로 돌아갑니다.\n";
-			//		cout << "===========================================\n" << endl;
-			//		Sleep(2000);
-			//		system("cls");
-			//		SetGameState(EGameState::VILLAGE);
-			//		return;
-			//	}
-			//}
-
 			//Generate a random index 
 			srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
 			size_t randomIndex = rand() % aliveMonsters.size();
@@ -355,52 +369,28 @@ void GameManager::RunProcessDungeon()
 		}
 		case '2':
 		{
-			cout << "\n===========================================\n";
-			cout << "[System] 무모한 도전이 반드시 정답은 아닙니다.\n";
-			cout << "[System] 마을로 복귀합니다.\n";
-			cout << "===========================================\n" << endl;
-			Sleep(2000);
-			system("cls");
+			Common::PrintSystemMsg("무모한 도전이 반드시 정답은 아닙니다.\n던전 탐험을 중단하고 마을로 돌아갑니다.");
+			Common::PauseAndClearScreen();
 			SetGameState(EGameState::VILLAGE);
 			break;
 		}
+
+		default:
+		{
+			Common::PrintErrorMsg("잘못된 입력입니다.");
+			Common::PrintErrorMsg("던전에 재입장합니다..");
+			Common::PauseAndClearScreen();
+			SetGameState(EGameState::DUNGEON);
+			break;
+		}
 	}
-	/*delete goblin;
-	delete slime;
-	delete orc;
-	delete skeleton;
-	delete dragon;*/
 }
 
 void GameManager::GameOverProcess()
 {
 	//TODO : 던전에서 죽었을때 마을로 돌아가는것이 아니라 종료되는문제 해결
-	cout << "\n===========================================\n";
-	cout << "\n[System] 게임이 종료되었습니다.\n";
-	cout << "\n[System] 다시 시작하려면 게임을 재실행해주세요.\n";
-	cout << "\n===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
+	Common::PrintSystemMsg("게임이 종료되었습니다.\n다시 시작하려면 게임을 재실행해주세요.");
+	Common::PauseAndClearScreen();
 	SetGameState(EGameState::GAME_OVER);
 }
 
-
-GameManager::~GameManager()
-{
-	if (playerPtr) 
-	{
-		delete playerPtr;
-		playerPtr = nullptr; 
-	}
-	if (dungeonptr)
-	{
-		delete dungeonptr;
-		dungeonptr = nullptr;
-	}
-	for (const pair<EGameState, Area*>& map : mapList)
-	{
-		if(map.second)
-		delete map.second; 
-	}
-	mapList.clear();
-}

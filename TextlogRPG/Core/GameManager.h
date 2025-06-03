@@ -22,17 +22,20 @@ public:
 	//Managing GameState
 	void SetGameState(const EGameState& gs_in)	{ gameState = gs_in; }
 	EGameState GetGameState() const 	{return gameState;	}
-	string GetStateString() const;
+	//string GetStateString() const;
 
 	//Dungeon-Stage-Monster Initialization
 	void InitializeDungeon();
 
 	//Main Process of Game
 	void InitializeGame();
+	void SetPlayerName();
+	void WelcomMsg();
 	void RunProcessTitle();
 	void RunProcessVillage();
 	void RunProcessDungeon();
 	void GameOverProcess();
 	
     void Run();
+	void LoopByGameState();
 };
