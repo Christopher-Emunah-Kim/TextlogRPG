@@ -7,10 +7,10 @@
 struct FCharacterInfo
 {
 	CharacterStatus characterStats;
-	int32_t maxHealth = 100;
-	int32_t health = 100;
-	int16_t level = 1;
-	string characterName = "UNKNOWN";
+	int32_t iMaxHealth = 100;
+	int32_t iCurrentHealth = 100;
+	int16_t iCurrentLevel = 1;
+	string strCharacterName = "UNKNOWN";
 
 
 	//Default Constructor
@@ -18,7 +18,7 @@ struct FCharacterInfo
 
 	//User-Defined Constructor
 	FCharacterInfo(const CharacterStatus& stats, int32_t maxHp, int32_t hp, int16_t lvl, const string& name)
-		: characterStats(stats), maxHealth(maxHp), health(hp), level(lvl), characterName(name) {
+		: characterStats(stats), iMaxHealth(maxHp), iCurrentHealth(hp), iCurrentLevel(lvl), strCharacterName(name) {
 	}
 };
 

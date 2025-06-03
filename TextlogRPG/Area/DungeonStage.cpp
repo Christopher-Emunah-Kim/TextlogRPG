@@ -13,12 +13,12 @@ void DungeonStage::EnterStage()
 	monsterList.clear();
 	for (const FMonsterInfo& info : monsterInfoList) 
 	{
-		Monster* mon = monsterPool->Acquire(info.characterName);
+		Monster* mon = monsterPool->Acquire(info.strCharacterName);
 		if (!mon)
 		{
 			//Exception 
 			mon = new Monster(info);
-			mon->GetCharacterInfo().health = mon->GetCharacterInfo().maxHealth;
+			mon->GetCharacterInfo().iCurrentHealth = mon->GetCharacterInfo().iMaxHealth;
 		}
 		monsterList.push_back(mon);
 		//monsterList.emplace_back(new Monster(info));
@@ -44,7 +44,7 @@ bool DungeonStage::isCleared() const
 {
 	for (Monster* mon : monsterList)
 	{
-		if (mon->GetCharacterInfo().health > 0)
+		if (mon->GetCharacterInfo().iCurrentHealth > 0)
 			return false;
 	}
 	return true;

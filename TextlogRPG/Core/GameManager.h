@@ -19,23 +19,25 @@ public:
         
 	~GameManager();
 
-	//Managing GameState
 	void SetGameState(const EGameState& gs_in)	{ gameState = gs_in; }
-	EGameState GetGameState() const 	{return gameState;	}
+	inline EGameState GetGameState() const 	{return gameState;	}
 	//string GetStateString() const;
 
-	//Dungeon-Stage-Monster Initialization
-	void InitializeDungeon();
+    void Run();
 
+private:
 	//Main Process of Game
 	void InitializeGame();
-	void SetPlayerName();
+	void InitializeDungeon();
+
+	//InitializeGameMethods
 	void WelcomMsg();
+	void SetPlayerName();
+
+	//RunProcess Methods
 	void RunProcessTitle();
 	void RunProcessVillage();
 	void RunProcessDungeon();
 	void GameOverProcess();
 	
-    void Run();
-	void LoopByGameState();
 };

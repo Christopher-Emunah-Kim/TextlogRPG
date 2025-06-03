@@ -23,36 +23,30 @@ void Player::TakeDamage(BaseCharacter& target)
 {
 	//플레이어의 TakeDamage함수 내에서 몬스터와 플레이어의 데미지 계산 및 출력메시지 대부분 처리
 	int32_t damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
-	damage > 0? damage : 1; //무한루프 막기위해 최소데미지 1보장.
-	FCharacterInfo& info = characterInfo;
-	info.health -= damage;
-	if (info.health <= 0)
+	//무한루프 막기위해 최소데미지 1보장.
+	if (damage <= 0)
+		damage = 1;
+	
+	characterInfo.iCurrentHealth -= damage;
+	if (characterInfo.iCurrentHealth <= 0)
 	{
-		cout << "\n===========================================\n";
-		cout << "[System] 당신은 여신의 곁으로 돌아갑니다.... ";
-		cout << "\n===========================================\n" << endl;
-		Sleep(2000);
-		system("cls");
-		info.health = 0; // 체력을 0으로 설정하여 게임오버 상태로 유지
+		Common::PrintSystemMsg("당신은 여신의 곁으로 돌아갑니다..");
+		characterInfo.iCurrentHealth = 0; // 체력을 0으로 설정하여 게임오버 상태로 유지
 	}
 	else
 	{
-		cout << "\n===========================================\n";
-		cout << "\n[System] " << target.GetCharacterInfo().characterName << "에게" 
-				<< damage << "의 데미지를 입었습니다. 현재 체력: " << info.health << "\n";
-		cout << "\n===========================================\n" << endl;
-		Sleep(2000);
-		system("cls");
+		string strDamageText = "[System] " + target.GetCharacterInfo().strCharacterName + "에게 " + to_string(damage) + "의 데미지를 입었습니다.";
+		Common::PrintSystemMsg(strDamageText);
 	}
+	Common::PauseAndClearScreen();
 }
 
 void Player::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
-	cout << "\n===========================================\n";
-	cout << "\n[System] " << target->GetCharacterInfo().characterName <<"을(를) 공격합니다.\n";
-	cout << "\n===========================================\n" << endl;
+	string strAttackText = "[System] 당신은 " + target->GetCharacterInfo().strCharacterName + "을(를) 공격합니다.";
+	Common::PrintSystemMsg(strAttackText);
 
 	target->TakeDamage(*this);
 	
@@ -60,12 +54,12 @@ void Player::Attack(BaseCharacter* target)
 
 void Player::SetName(const string& name)
 {
-	characterInfo.characterName = name;
+	characterInfo.strCharacterName = name;
 }
 
 string Player::GetName() const  
 {  
-    return characterInfo.characterName;
+    return characterInfo.strCharacterName;
 }
 
 FPlayerData Player::GetPlayerData() const
@@ -134,7 +128,7 @@ void Player::EquipItem(Item* item)
 	UpdateFinalStatus(); // update status
 
 	// update and display the result of the equipment change
-	item->Use(this);
+	item->EquippedBy(this);
 
 }
 
@@ -181,10 +175,10 @@ void Player::LoseItem(Item* item)
 void Player::Heal(int32_t healAmount)
 {
 	if (healAmount <= 0) return;
-	characterInfo.health += healAmount;
-	if (characterInfo.health > characterInfo.maxHealth)
+	characterInfo.iCurrentHealth += healAmount;
+	if (characterInfo.iCurrentHealth > characterInfo.iMaxHealth)
 	{
-		characterInfo.health = characterInfo.maxHealth;
+		characterInfo.iCurrentHealth = characterInfo.iMaxHealth;
 	}
 }
 
@@ -206,9 +200,8 @@ void Player::EarnGold(int32_t earnGold)
 	if (earnGold <= 0) return;
 
 	playerData.playerGold += earnGold;
-	cout << "\n===========================================\n";
-	cout << "\n[System] " << earnGold << " 골드를 획득했습니다. 현재 골드: " << playerData.playerGold;
-	cout << "\n===========================================\n" << endl;
+	string strEarnGoldMsg = "[System] " + to_string(earnGold) + " 골드를 획득했습니다. 현재 골드: " + to_string(playerData.playerGold);
+	Common::PrintSystemMsg(strEarnGoldMsg);
 }
 
 void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
@@ -217,7 +210,8 @@ void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
 
 	playerData.playerExperience += experience;
 	playerData.playerGold += gold;
-	cout << "\n===========================================\n";
+
+	Common::PrintLine();
 	cout << "\n[System] 최종 전투 결과입니다!!\n";
 	cout << "\n[System] " << experience << " 경험치와 " << gold << " 골드를 획득했습니다.\n";
 	if (item != nullptr)
@@ -225,12 +219,9 @@ void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
 		AddToInventory(item);
 		cout << "\n[System] 아이템 " << item->GetItemInfo().itemName << "을(를) 획득했습니다.\n";
 	}
-	cout << "\n===========================================\n" << endl;
+	Common::PrintLine();
 
-	Sleep(2000);
-	system("cls");
-
-	ShowPlayerStatus(this);
+	ShowPlayerStatus();
 
 	//TODO : 레벨업 로직 구현
 	if (playerData.playerExperience >= playerData.playerMaxExperience)
@@ -251,54 +242,47 @@ void Player::UpdateFinalStatus()
 BaseCharacter& Player::CharacterLevelUp()
 {
 	//TODO : 레벨업할때 장비스탯 제대로 반영안되는것같은데 해결 필요.
-
 	//LevelData 클래스의 FLevelData 구조체 어레이를 사용하여 레벨업 시 캐릭터의 상태를 업데이트
-	FCharacterInfo& info = characterInfo;
-	info.level++;
+	characterInfo.iCurrentLevel++;
+	if (characterInfo.iCurrentLevel > 100)
+	{
+		characterInfo.iCurrentLevel = 100; // 최대 100 레벨 초과 방지
+		return *this;
+	}
+
 	LevelData levelDataInstance;
-	FLevelProperties levelData = levelDataInstance.GetLevelData(info.level);
-	info.maxHealth += levelData.maxHealthPerLevel;
-	info.health = info.maxHealth; // 레벨업 시 체력을 최대치로 회복
+	FLevelProperties levelData = levelDataInstance.GetLevelData(characterInfo.iCurrentLevel);
+
+	characterInfo.iMaxHealth += levelData.maxHealthPerLevel;
+	characterInfo.iCurrentHealth = characterInfo.iMaxHealth; // 레벨업 시 체력을 최대치로 회복
 
 	// 레벨업 시 공격력, 방어력, 민첩성 증가
-	// CharacterStatus의 NewStatus 객체 반환 메서드를 사용하여 상태 업데이트
-	info.characterStats = CharacterStatus::NewStatus(
-		levelData.attackPerLevel,
-		levelData.defensePerLevel,
-		levelData.agilityPerLevel
-	);
+	characterInfo.characterStats = CharacterStatus::NewStatus(levelData.attackPerLevel, levelData.defensePerLevel,levelData.agilityPerLevel	);
 
 	UpdateFinalStatus();
 
-	cout << "\n===========================================\n";
-	cout << "\n[System] 레벨업!\n";
-	cout << "현재 레벨 : " << info.level;
-	cout << "\n체력: " << info.health << "/" << info.maxHealth;
-	cout << "\n공격력: " << info.characterStats.GetAttack();
-	cout << "\n방어력: " << info.characterStats.GetDefense();
-	cout << "\n민첩성: " << info.characterStats.GetAgility();
-	cout << "\n===========================================\n" << endl;
+	string strLevelUpMsg = "레벨업!\n현재 레벨 : " + to_string(characterInfo.iCurrentLevel)
+		+ "체력 : " + to_string(characterInfo.iCurrentHealth) + "/" + to_string(characterInfo.iMaxHealth)
+		+ "공격력 : " + to_string(characterInfo.characterStats.GetAttack())
+		+ "방어력 : " + to_string(characterInfo.characterStats.GetDefense())
+		+ "민첩성 : " + to_string(characterInfo.characterStats.GetAgility());
 
-	Sleep(4000);
-	system("cls");
+	Common::PrintSystemMsg(strLevelUpMsg);
 	return *this; 
 }
 
-void Player::ShowPlayerStatus(Player* player)
+void Player::ShowPlayerStatus()
 {
-	//플레이어 현재 상태 보여주는 함수
-	FCharacterInfo& info = player->characterInfo;
-	cout << "\n===========================================\n";
-	cout << "\n[System] "<< player->GetName() << "용사의 스탯창!\n";
-	cout << "\n현재 레벨 : " << info.level << "\n";
-	cout << "\n체력: " << info.health << "/" << info.maxHealth << "\n";
-	cout << "\n공격력: " << info.characterStats.GetAttack() << "\n";
-	cout << "\n방어력: " << info.characterStats.GetDefense() << "\n";
-	cout << "\n민첩성: " << info.characterStats.GetAgility() << "\n";
-	cout << "\n\n===========================================\n" << endl;
+	string strPlayerStatus = GetName() + " 용사님의 스탯창을 출력합니다.\n"
+		+ "현재 레벨 : " + to_string(characterInfo.iCurrentLevel) + "\n"
+		+ "체력 : " + to_string(characterInfo.iCurrentHealth) + "/" + to_string(characterInfo.iMaxHealth) + "\n"
+		+ "공격력 : " + to_string(characterInfo.characterStats.GetAttack()) + "\n"
+		+ "방어력 : " + to_string(characterInfo.characterStats.GetDefense()) + "\n"
+		+ "민첩성 : " + to_string(characterInfo.characterStats.GetAgility()) + "\n";
 
-	Sleep(4000);
-	system("cls");
+	Common::PrintSystemMsg(strPlayerStatus);
+
+	Common::PauseAndClearScreen(3000);
 }
 
 

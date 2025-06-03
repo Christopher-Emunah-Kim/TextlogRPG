@@ -3,14 +3,18 @@
 
 
 
-void Weapon::ShowItemInfo() const
-{
-	//TODO : 가격빼고 한줄로 표시
-	cout << "아이템명: " << GetItemInfo().itemName << "( ATK : " << GetItemInfo().attack << ", DEF : " << GetItemInfo().defense << ", AGI : " << GetItemInfo().agility << " )\n";
+//void Weapon::ShowItemInfo() const
+//{
+//	string strItemInfo = "아이템명: " + GetItemInfo().itemName +
+//		" ( ATK : " + to_string(GetItemInfo().attack) +
+//		", DEF : " + to_string(GetItemInfo().defense) +
+//		", AGI : " + to_string(GetItemInfo().agility) + " )";
+//
+//	Common::PrintSystemMsg(strItemInfo);
+//}
 
-}
-
-void Weapon::Use(Player* player)
+//TODO : !!!!!! 반드시 의존역전관계 해결(ITEM클래스들)
+void Weapon::EquippedBy(Player* player)
 {
 	if (player == nullptr) return;
 	CharacterStatus status = CharacterStatus::NewStatus(
@@ -18,14 +22,12 @@ void Weapon::Use(Player* player)
 		GetItemInfo().defense,
 		GetItemInfo().agility
 	);
+
 	player->GetCharacterInfo().characterStats = status.NewStatus(status);
 
-	cout << "\n===========================================\n";
-	cout << "[System] " << GetItemInfo().itemName << "을(를) 장착했습니다.";
-	cout << "\n===========================================\n" << endl;
+	string strUseWeapon = "[System] " + GetItemInfo().itemName + "을(를) 장착합니다.\n";
+	Common::PrintSystemMsg(strUseWeapon);
+	Common::PauseAndClearScreen();
 
-	Sleep(2000);
-	system("cls");
-
-	player->ShowPlayerStatus(player);
+	player->ShowPlayerStatus();
 }

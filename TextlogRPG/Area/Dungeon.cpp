@@ -1,6 +1,7 @@
 ﻿#include "Dungeon.h"
 #include "../Character/Player.h"
 #include "../Character/Monster.h"
+#include "../Util/Dialogue.h"
 
 Dungeon::Dungeon()
 {
@@ -40,22 +41,11 @@ bool Dungeon::NextStage()
 
 void Dungeon::Enter(Player* player)
 {
-	cout << "\n===========================================\n";
-	cout << "\n[System] 던전 탐험을 시작합니다.\n" ;
-	cout << "\n===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	cout << "\n===========================================\n";
-	cout << "\n[system] 기억하십시오. 심연을 들여다볼수록,\n 당신 또한 심연에 물들 것입니다.\n";
-	cout << "\n===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	//TODO : 던전 탐험 로직 구현
-	//탐색진행 or 마을로 돌아가기
-	cout << "\n===========================================\n";
-	cout << "\n[System] 던전의 입구에 도착했습니다.\n도전하시겠습니까?\n";
-	cout << "\n1. 인생은 모험이지!\n2. 아니 지금은 아닌것 같아.(마을로 돌아간다)\n";
-	cout << "\n===========================================\n" << endl;
+	Common::PrintSystemMsg("던전 탐험을 시작합니다.");
+	Common::PrintSystemMsg("기억하십시오. 심연을 들여다볼수록,\n 당신 또한 심연에 물들 것입니다.");
+	Common::PauseAndClearScreen();
+
+	Dialogue::ShowOption("[System] 던전의 입구에 도착했습니다. 도전하시겠습니까?\n\n1. 인생은 모험이지!\n2. 아니 지금은 아닌것 같아.(마을로 돌아간다)");
 }
 
 void Dungeon::AddMonster(Monster* monster) {
@@ -73,29 +63,29 @@ vector<Monster*>& Dungeon::GetMonsterList()
 
 bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 {
-	cout << "\n===========================================\n";
-	cout << "\n[System] " << monster->GetCharacterInfo().characterName << "과(와) 조우했습니다!\n";
-	cout << "\n===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	//TODO : 전투 로직 _ 둘의 Agility를 비교하여 먼저 공격하는 캐릭터 결정
-	bool isPlayerTurn = player->GetCharacterInfo().characterStats.GetAgility() >= monster->GetCharacterInfo().characterStats.GetAgility();
-	bool isBattleOver = false;
+	string strEncounterText = "[System] " + monster->GetCharacterInfo().strCharacterName + "과(와) 조우했습니다!";
+	Dialogue::ShowOption(strEncounterText);
 
-	while (player->GetCharacterInfo().health > 0 && monster->GetCharacterInfo().health > 0 && !isBattleOver)
+	//TODO : 전투 로직 _ 둘의 Agility를 비교하여 먼저 공격하는 캐릭터 결정
+	int16_t iPlayerAgility = player->GetCharacterInfo().characterStats.GetAgility();
+	int16_t iMonsterAgility = monster->GetCharacterInfo().characterStats.GetAgility();
+
+	bool bIsPlayerTurn = iPlayerAgility >= iMonsterAgility;
+	bool bIsBattleOver = false;
+
+	int32_t iPlayerHealth = player->GetCharacterInfo().iCurrentHealth;
+	int32_t iMonsterHealth = monster->GetCharacterInfo().iCurrentHealth;
+	while (iPlayerHealth > 0 && monster->GetCharacterInfo().iCurrentHealth > 0 && !bIsBattleOver)
 	{
-		if (isPlayerTurn)
+		if (bIsPlayerTurn)
 		{
-			cout << "\n===========================================\n";
-			cout << "\n1. " << monster->GetCharacterInfo().characterName << "를(을) 공격한다!! \n2. 이대로는 위험하다. 도망가자..\n당신의 선택은??: \n";
-			cout << "\n===========================================\n" << endl;
+			string battleText = "1. " + monster->GetCharacterInfo().strCharacterName + "를(을) 공격한다!! \n2. 이대로는 위험하다. 도망가자..\n당신의 선택은??";
+			Dialogue::ShowOption(battleText);
 			int battleChoice;
 			cin >> battleChoice;
 			if (battleChoice == 1)
-
 			{
-				Sleep(2000);
-				system("cls");
+				Common::PauseAndClearScreen();
 				player->Attack(monster);
 			}
 			else if (battleChoice == 2)
@@ -106,9 +96,8 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 					cout << "\n===========================================\n";
 					cout << "\n[System] 당신은 도망에 성공했습니다!\n";
 					cout << "\n===========================================\n" << endl;
-					isBattleOver = true;
-					Sleep(2000);
-					system("cls");
+					bIsBattleOver = true;
+					Common::PauseAndClearScreen();
 					break;
 				}
 				else
@@ -116,8 +105,7 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 					cout << "\n===========================================\n";
 					cout << "\n[System] 도망에 실패했습니다!\n";
 					cout << "\n===========================================\n" << endl;
-					Sleep(2000);
-					system("cls");
+					Common::PauseAndClearScreen();
 				}
 			}
 		}
@@ -127,31 +115,25 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 		}
 
 		// 턴 교대
-		isPlayerTurn = !isPlayerTurn;
+		bIsPlayerTurn = !bIsPlayerTurn;
 		
 	}
 
 	// 결과 출력
-	if (!isBattleOver)
+	if (!bIsBattleOver)
 	{
-		if (player->GetCharacterInfo().health <= 0)
+		if (player->GetCharacterInfo().iCurrentHealth <= 0)
 		{
 			cout << "\n===========================================\n";
-			cout << "\n[System] " << player->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
+			cout << "\n[System] " << player->GetCharacterInfo().strCharacterName << "이(가) 쓰러졌습니다.\n";
 			cout << "\n[System] 게임 오버입니다. 마을로 돌아갑니다.\n";
 			cout << "\n===========================================\n" << endl;
-			Sleep(2000);
-			system("cls");
+			Common::PauseAndClearScreen();
 			return false;
 		}
-		else if (monster->GetCharacterInfo().health <= 0)
+		else if (monster->GetCharacterInfo().iCurrentHealth <= 0)
 		{
-			//cout << "\n===========================================\n";
-			//cout << "\n[System] " << monster->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
-			////cout << "\n[System] 승리하였습니다! 전리품을 획득합니다.\n";
-			//cout << "\n===========================================\n" << endl;
-			Sleep(2000);
-			system("cls");
+			//TODO :몬스터 처치시 출력되는 내용 옮기기
 		}
 	}
 	return true;

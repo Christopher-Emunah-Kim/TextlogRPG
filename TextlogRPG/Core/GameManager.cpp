@@ -89,16 +89,11 @@ void GameManager::Run()
 {
     InitializeGame();
 
-	LoopByGameState();
-}
-
-void GameManager::LoopByGameState()
-{
 	EGameState CurrentGameState = GetGameState();
 
 	while (CurrentGameState != EGameState::GAME_OVER)
 	{
-		switch (CurrentGameState)
+		switch (gameState)
 		{
 		case EGameState::TITLE:
 			RunProcessTitle();
@@ -109,6 +104,7 @@ void GameManager::LoopByGameState()
 		case EGameState::DUNGEON:
 			RunProcessDungeon();
 			break;
+
 		default:
 			SetGameState(EGameState::GAME_OVER);
 			break;
@@ -127,16 +123,14 @@ void GameManager::InitializeGame()
 	SetGameState(EGameState::TITLE);
 }
 
+
 #pragma region InitializeGame methods
 void GameManager::WelcomMsg()
 {
 	vector<Dialogue> initialDialogs;
-	initialDialogs.push_back(Dialogue::NewText(0, "[System] 안녕하신가 용사여"));
-	initialDialogs.push_back(Dialogue::NewText(1, "[System] 놀라지 말게. 자네의 3D세상은 멀쩡하다네"));
-	initialDialogs.push_back(Dialogue::NewText(2, "[System] 다만, 자네의 실력이 고작 그정도인걸 어쩌겠는가?"));
-	initialDialogs.push_back(Dialogue::NewText(3, "[System] 그래, 자네 말일세.. 이곳은 자네에게 가장 잘어울리는 새로운 세상일세."));
-	initialDialogs.push_back(Dialogue::NewText(4, "[System] 자, 이제 게임을 시작하지"));
-	initialDialogs.push_back(Dialogue::NewText(5, "[System] 준비가 되었는가?"));
+	initialDialogs.push_back(Dialogue::NewText(0, "[Unknown] 안녕하신가 용사여\n[Unknown] 놀라지 말게. 자네의 3D세상은 멀쩡하다네"));
+	initialDialogs.push_back(Dialogue::NewText(1, "[Unknown] 다만, 자네의 실력이 고작 그정도인걸 어쩌겠는가?\n[Unknown] 그래, 자네 말일세.. 이곳은 자네에게 가장 잘어울리는 새로운 세상일세."));
+	initialDialogs.push_back(Dialogue::NewText(2, "[Unknown] 자, 이제 게임을 시작하지\n[Unknown] 준비가 되었는가?"));
 	Dialogue::ShowDialogs(initialDialogs);
 }
 void GameManager::SetPlayerName()
@@ -213,7 +207,7 @@ void GameManager::RunProcessTitle()
 	char menuChoice;
 	cin >> menuChoice;
 	cin.ignore(1024, '\n');
-	Sleep(1000);
+	
 	switch (menuChoice)
 	{
 		case '1': 
@@ -222,7 +216,16 @@ void GameManager::RunProcessTitle()
 		case '2': 
 			SetGameState(EGameState::DUNGEON); 
 			break;
-		case '3': 
+		case '3':
+			if (!playerPtr) {
+				Common::PrintErrorMsg("플레이어 정보가 없습니다.");
+				return;
+			}
+			Common::PauseAndClearScreen();
+			playerPtr->ShowPlayerStatus();
+			SetGameState(EGameState::TITLE);
+			break;
+		case '4': 
 			SetGameState(EGameState::GAME_OVER); 
 			break;
 
@@ -230,7 +233,7 @@ void GameManager::RunProcessTitle()
 			Common::PrintErrorMsg("잘못된 입력입니다.");
 			break;
 	}
-	system("cls");
+	Common::PauseAndClearScreen();
 }
 
 void GameManager::RunProcessVillage()
@@ -252,7 +255,8 @@ void GameManager::RunProcessVillage()
 	merchant->AddItemForSale("가죽갑옷", 100);
 
 	//Choice in Village
-	mapList[EGameState::VILLAGE]->Enter(playerPtr);
+	Area* pVilalgeArea = mapList[EGameState::VILLAGE];
+	pVilalgeArea->Enter(playerPtr);
 
 	char villageChoice;
 	cin >> villageChoice;
@@ -293,10 +297,11 @@ void GameManager::RunProcessVillage()
 
 void GameManager::RunProcessDungeon()
 {
-	//generate monsters in the dungeon
 	if (!dungeonptr)
+	{
 		InitializeDungeon();
-
+	}
+ 
 	dungeonptr->Enter(playerPtr);
 
 	DungeonStage* stage = dungeonptr->GetCurrentStage();
@@ -316,7 +321,7 @@ void GameManager::RunProcessDungeon()
 
 	vector<Monster*> aliveMonsters;
 	for (Monster* mon : monsters) {
-		if (mon->GetCharacterInfo().health > 0)
+		if (mon->GetCharacterInfo().iCurrentHealth > 0)
 			aliveMonsters.push_back(mon);
 	}
 
@@ -324,8 +329,7 @@ void GameManager::RunProcessDungeon()
 	cin >> dungeonChoice;
 	cin.ignore(1024, '\n');
 
-	Sleep(2000);
-	system("cls");
+	Common::PauseAndClearScreen();
 
 	switch (dungeonChoice)
 	{
@@ -353,14 +357,14 @@ void GameManager::RunProcessDungeon()
 
 			//Start Battle with the random monster
 			bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, randomMonster);
-			Sleep(2000);
-			system("cls");
+			Common::PauseAndClearScreen();
+
 			if (isPlayerAlive == false)
 			{
 				GameOverProcess();
 				return;
 			}
-			if (randomMonster->GetCharacterInfo().health <= 0)
+			if (randomMonster->GetCharacterInfo().iCurrentHealth <= 0)
 			{
 				stage->OnMonsterDefeat(randomMonster);
 			}

@@ -30,7 +30,8 @@ public:
 	}
 
 	static void ShowDialogs(const vector<Dialogue>& dialogs) {
-		for (const auto& dialog : dialogs) {
+		for (const auto& dialog : dialogs) 
+		{
 			cout << "\n===========================================\n\n";
 			cout << dialog.GetText() << "\n";
 			cout << "\n===========================================\n";

@@ -16,8 +16,7 @@ public:
 	{
 		return new Weapon(*this);
 	}
-	void ShowItemInfo() const override;
-	void Use(Player* player) override;
+	void EquippedBy(Player* player) override;
 
 
 	//Destructor

@@ -2,27 +2,33 @@
 #include "../Character/Player.h" 
 
 
-void Armor::ShowItemInfo() const
-{
-	cout << "아이템명: " << GetItemInfo().itemName << "( ATK : " << GetItemInfo().attack << ", DEF : " << GetItemInfo().defense << ", AGI : " << GetItemInfo().agility << " )\n";
-}
+//void Armor::ShowItemInfo() const
+//{
+//	string strItemInfo = "아이템명: " + GetItemInfo().itemName +
+//		" ( ATK : " + to_string(GetItemInfo().attack) +
+//		", DEF : " + to_string(GetItemInfo().defense) +
+//		", AGI : " + to_string(GetItemInfo().agility) + " )";
+//
+//	Common::PrintSystemMsg(strItemInfo);
+//}
 
 
-void Armor::Use(Player* player)
+void Armor::EquippedBy(Player* player)
 {
-	if (player == nullptr) return;
+	if (player == nullptr) 
+		return;
+
 	CharacterStatus status = CharacterStatus::NewStatus(
 		GetItemInfo().attack,
 		GetItemInfo().defense,
 		GetItemInfo().agility
 	);
 	player->GetCharacterInfo().characterStats = status.NewStatus(status);
-	cout << "\n===========================================\n";
-	cout << "[System] " << GetItemInfo().itemName << "을(를) 장착했습니다.";
-	cout << "\n===========================================\n" << endl;
 
-	Sleep(2000);
-	system("cls");
+	string strUseArmor = "[System] " + GetItemInfo().itemName + "을(를) 장착합니다.\n";
+	Common::PrintSystemMsg(strUseArmor);
 
-	player->ShowPlayerStatus(player);
+	Common::PauseAndClearScreen();
+
+	player->ShowPlayerStatus();
 }

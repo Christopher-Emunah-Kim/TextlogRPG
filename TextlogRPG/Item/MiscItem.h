@@ -17,8 +17,8 @@ public:
 	{
 		return new MiscItem(*this);
 	}
-	void ShowItemInfo() const override;
-	void Use(Player* player) override;
+
+	void EquippedBy(Player* player) override;
 
 	//Destructor
 	~MiscItem() { }

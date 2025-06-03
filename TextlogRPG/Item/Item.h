@@ -52,11 +52,20 @@ public:
 	}
 
 	virtual string GetItemName() const { return itemInfo.itemName; }
+	
+	virtual void ShowItemInfo() const
+	{
+		string strItemInfo = "아이템명: " + GetItemInfo().itemName +
+			" ( ATK : " + to_string(GetItemInfo().attack) +
+			", DEF : " + to_string(GetItemInfo().defense) +
+			", AGI : " + to_string(GetItemInfo().agility) + " )";
+
+		Common::PrintInfoMsg(strItemInfo);
+	}
 
 	//Pure virtual functions
 	virtual Item* CloneItem() const = 0;
-	virtual void ShowItemInfo() const = 0;
-	virtual void Use(Player* player) = 0;
+	virtual void EquippedBy(Player* player) = 0;
 
 	//Default Destructor
 	virtual ~Item() = default; 

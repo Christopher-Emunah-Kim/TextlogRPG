@@ -49,7 +49,7 @@ public:
 
 	BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class
 	
-	void ShowPlayerStatus(Player* player);
+	void ShowPlayerStatus();
 
 	////Destructor
 	~Player();

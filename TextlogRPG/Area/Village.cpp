@@ -3,15 +3,9 @@
 
 void Village::Enter(Player* player)
 {
-	cout << "\n===========================================\n";
-	cout << "\n[System] 마을로 이동합니다...\n";
-	cout << "\n===========================================\n" << endl;
-	Sleep(2000);
-	system("cls");
-	cout << "\n===========================================\n";
-	cout << "\n[System] 마을에 도착했습니다.\n";
-	cout << "\n1. 힐러 만나기\n2. 상인 만나기\n3. 마을 나가기\n";
-	cout << "\n===========================================\n" << endl;
+	Common::PrintSystemMsg("마을로 이동합니다..");
+	Common::PauseAndClearScreen();
+	Common::PrintSystemMsg("마을에 도착했습니다. \n\n1. 힐러 만나기\n2. 상인 만나기\n3. 마을 나가기");
 }
 
 

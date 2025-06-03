@@ -35,9 +35,7 @@ public:
 		cerr << "[Error] " << errorMessage << endl;
 	}
 	static void PrintInfoMsg(const string& infoMessage) {
-		cout << "\n===========================================\n";
-		cout << "[Info] " << infoMessage;
-		cout << "\n===========================================\n" << endl;
+		cout << "[Info] " << infoMessage <<endl;
 	}
 	static void PrintWarningMsg(const string& warningMessage) {
 		cerr << "[Warning] " << warningMessage << endl;
@@ -47,8 +45,12 @@ public:
 		cout << "[System] " << systemMessage;
 		cout << "\n\n===========================================\n" << endl;
 	}
+
+	static void PrintLine() {
+		cout << "\n===========================================\n" <<endl;
+	}
 	
-	static void PauseAndClearScreen(int32_t milliseconds=2000) {
+	static void PauseAndClearScreen(int32_t milliseconds=1500) {
 		Sleep(milliseconds);
 		system("cls");
 	}
