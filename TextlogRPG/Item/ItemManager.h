@@ -1,7 +1,5 @@
 ﻿#pragma once
-#include <string>
-#include <cstdint>
-#include <unordered_map>
+#include "../Util/Common.h"
 #include "item.h"
 
 using namespace std;

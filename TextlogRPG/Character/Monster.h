@@ -7,8 +7,8 @@ class Item;
 class Monster : public BaseCharacter
 {
 private:
-	int32_t dropExperience;
-	int32_t dropGold;
+	uint32 dropExperience;
+	uint32 dropGold;
 	//vector<Item*> dropItems; // weapon, armor, misc items
 	vector<string> dropItemList;
 public:

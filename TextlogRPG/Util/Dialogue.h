@@ -10,22 +10,22 @@ using std::cin;
 
 class Dialogue {
 public:
-	Dialogue(int32_t id, const string& content)
+	Dialogue(uint32 id, const string& content)
 		: dialogId(id), content(content) {
 	}
 
 	~Dialogue() = default;
 	
 private:
-	int32_t dialogId;
+	uint32 dialogId;
 	string content;
 
 public:
 
 	string GetText() const { return content; }
-	int32_t GetId() const { return dialogId; }
+	uint32 GetId() const { return dialogId; }
 
-	static Dialogue NewText(int32_t id, const string& content) {
+	static Dialogue NewText(uint32 id, const string& content) {
 		return Dialogue(id, content);
 	}
 

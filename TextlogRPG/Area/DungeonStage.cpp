@@ -13,11 +13,12 @@ void DungeonStage::EnterStage()
 	monsterList.clear();
 	for (const FMonsterInfo& info : monsterInfoList) 
 	{
-		Monster* mon = monsterPool->Acquire(info.strCharacterName);
+		Monster* mon = monsterPool->ActivateMonster(info.strCharacterName);
 		if (!mon)
 		{
 			//Exception 
 			mon = new Monster(info);
+
 			mon->GetCharacterInfo().iCurrentHealth = mon->GetCharacterInfo().iMaxHealth;
 		}
 		monsterList.push_back(mon);
@@ -29,7 +30,7 @@ void DungeonStage::ExitStage()
 {
 	for (Monster* mon : monsterList)
 	{
-		monsterPool->Release(mon);
+		monsterPool->DeactivateMonster(mon);
 	}
 
 	monsterList.clear();
@@ -52,7 +53,10 @@ bool DungeonStage::isCleared() const
 
 void DungeonStage::OnMonsterDefeat(Monster* monster)
 {
-	monsterPool->Release(monster);
+	if (monsterPool != nullptr)
+	{
+		monsterPool->DeactivateMonster(monster);
+	}
 }
 
 

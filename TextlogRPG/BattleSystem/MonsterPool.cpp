@@ -11,31 +11,37 @@ void MonsterPool::Initialize(const vector<FMonsterInfo>& monsterInfos, size_t co
 		for (size_t i = 0; i < countPerType; ++i)
 		{
 			Monster* mon = new Monster(info);
-			mon->GetCharacterInfo().iCurrentHealth = mon->GetCharacterInfo().iMaxHealth;
-			vec.emplace_back(mon);
+			ReviveMonster(mon);
+			vec.push_back(mon);
 		}
 	}
 }
 
-Monster* MonsterPool::Acquire(const string& name)
+Monster* MonsterPool::ActivateMonster(const string& name)
 {
 	vector<Monster*>& vec = monsterPool[name];
 	for (Monster* monster : vec) 
 	{
 		if (monster->GetCharacterInfo().iCurrentHealth <= 0)
 		{
-			monster->GetCharacterInfo().iCurrentHealth = monster->GetCharacterInfo().iMaxHealth;
+			ReviveMonster(monster);
 			return monster;
 		}
 	}
 	return nullptr;
 }
 
-void MonsterPool::Release(Monster* monster)
+void MonsterPool::DeactivateMonster(Monster* monster)
 {
 	monster->GetCharacterInfo().iCurrentHealth = 0;
 }
 
+void MonsterPool::ReviveMonster(Monster* monster)
+{
+	uint32& iCurrentHealth = monster->GetCharacterInfo().iCurrentHealth;
+	uint32& iMaxHealth = monster->GetCharacterInfo().iMaxHealth;
+	iCurrentHealth = iMaxHealth;
+}
 
 MonsterPool::~MonsterPool()
 {

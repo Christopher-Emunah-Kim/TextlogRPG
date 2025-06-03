@@ -39,12 +39,12 @@ public:
 	void EquipItem(class Item* item);
 	void LoseItem(class Item* item);
 	
-	void Heal(int32_t healAmount);
+	void Heal(uint32 healAmount);
 	
-	void UseGold(int32_t cost);
-	void EarnGold(int32_t earnGold);
+	void UseGold(uint32 cost);
+	void EarnGold(uint32 earnGold);
 	
-	void GainLoot(int32_t experience, int32_t gold, class Item* item);
+	void GainLoot(uint32 experience, uint32 gold, class Item* item);
 	void UpdateFinalStatus();
 
 	BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class

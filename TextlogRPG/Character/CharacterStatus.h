@@ -4,9 +4,9 @@
 class CharacterStatus  
 {  
 private:  
-	const int16_t attack;  
-	const int16_t defense;  
-	const int16_t agility;  
+	const uint16 attack;  
+	const uint16 defense;  
+	const uint16 agility;  
 
 public:  
 	CharacterStatus()  
@@ -14,30 +14,30 @@ public:
 	{  
 	}  
 
-	CharacterStatus(int16_t atk, int16_t def, int16_t agi)  
+	CharacterStatus(uint16 atk, uint16 def, uint16 agi)  
 		: attack{atk}, defense{def}, agility{agi}  
 	{  
 	}  
 
-	static CharacterStatus NewStatus(int16_t atk, int16_t def, int16_t agi);  
+	static CharacterStatus NewStatus(uint16 atk, uint16 def, uint16 agi);  
 
 	CharacterStatus NewStatus(const CharacterStatus& other) const;  
 
-	int32_t GetDamage(const CharacterStatus& other) const;  
+	uint32 GetDamage(const CharacterStatus& other) const;  
 
 	//Get Status Info
-	int16_t GetAttack() const { return attack; }
-	int16_t GetDefense() const { return defense; }
-	int16_t GetAgility() const { return agility; }
+	uint16 GetAttack() const { return attack; }
+	uint16 GetDefense() const { return defense; }
+	uint16 GetAgility() const { return agility; }
 
 	//operator = overloading
 	CharacterStatus& operator=(const CharacterStatus& other)
 	{
 		if (this != &other)
 		{
-			const_cast<int16_t&>(attack) = other.attack;
-			const_cast<int16_t&>(defense) = other.defense;
-			const_cast<int16_t&>(agility) = other.agility;
+			const_cast<uint16&>(attack) = other.attack;
+			const_cast<uint16&>(defense) = other.defense;
+			const_cast<uint16&>(agility) = other.agility;
 		}
 		return *this;
 	}

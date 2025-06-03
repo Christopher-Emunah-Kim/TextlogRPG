@@ -67,14 +67,14 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 	Dialogue::ShowOption(strEncounterText);
 
 	//TODO : 전투 로직 _ 둘의 Agility를 비교하여 먼저 공격하는 캐릭터 결정
-	int16_t iPlayerAgility = player->GetCharacterInfo().characterStats.GetAgility();
-	int16_t iMonsterAgility = monster->GetCharacterInfo().characterStats.GetAgility();
+	uint16 iPlayerAgility = player->GetCharacterInfo().characterStats.GetAgility();
+	uint16 iMonsterAgility = monster->GetCharacterInfo().characterStats.GetAgility();
 
 	bool bIsPlayerTurn = iPlayerAgility >= iMonsterAgility;
 	bool bIsBattleOver = false;
 
-	int32_t iPlayerHealth = player->GetCharacterInfo().iCurrentHealth;
-	int32_t iMonsterHealth = monster->GetCharacterInfo().iCurrentHealth;
+	uint32 iPlayerHealth = player->GetCharacterInfo().iCurrentHealth;
+	uint32 iMonsterHealth = monster->GetCharacterInfo().iCurrentHealth;
 	while (iPlayerHealth > 0 && monster->GetCharacterInfo().iCurrentHealth > 0 && !bIsBattleOver)
 	{
 		if (bIsPlayerTurn)

@@ -22,7 +22,7 @@ Player* Player::CreateCharacter(const string& characterName)
 void Player::TakeDamage(BaseCharacter& target)
 {
 	//플레이어의 TakeDamage함수 내에서 몬스터와 플레이어의 데미지 계산 및 출력메시지 대부분 처리
-	int32_t damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
+	uint32 damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
 	//무한루프 막기위해 최소데미지 1보장.
 	if (damage <= 0)
 		damage = 1;
@@ -172,7 +172,7 @@ void Player::LoseItem(Item* item)
 
 }
 
-void Player::Heal(int32_t healAmount)
+void Player::Heal(uint32 healAmount)
 {
 	if (healAmount <= 0) return;
 	characterInfo.iCurrentHealth += healAmount;
@@ -182,7 +182,7 @@ void Player::Heal(int32_t healAmount)
 	}
 }
 
-void Player::UseGold(int32_t cost)
+void Player::UseGold(uint32 cost)
 {
 	if (cost <= 0) return;
 	if (playerData.playerGold >= cost)
@@ -195,7 +195,7 @@ void Player::UseGold(int32_t cost)
 	}
 }
 
-void Player::EarnGold(int32_t earnGold)
+void Player::EarnGold(uint32 earnGold)
 {
 	if (earnGold <= 0) return;
 
@@ -204,7 +204,7 @@ void Player::EarnGold(int32_t earnGold)
 	Common::PrintSystemMsg(strEarnGoldMsg);
 }
 
-void Player::GainLoot(int32_t experience, int32_t gold, Item* item)
+void Player::GainLoot(uint32 experience, uint32 gold, Item* item)
 {
 	if (experience < 0 || gold < 0) return;
 

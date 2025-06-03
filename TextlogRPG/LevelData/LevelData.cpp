@@ -17,7 +17,7 @@ LevelData::LevelData()
 	//TODO : 레벨데이터 csv파일에서 값 가져와 세팅하기
 }
 
-FLevelProperties LevelData::GetLevelData(int16_t level)
+FLevelProperties LevelData::GetLevelData(uint16 level)
 {
 	
 	if (level < 1 || level > 100)

@@ -15,10 +15,10 @@ public:
 
 	void Initialize(const vector<FMonsterInfo>& monsterInfos, size_t countPerType);
 
-	Monster* Acquire(const string& name);
+	Monster* ActivateMonster(const string& name);
 
-	void Release(Monster* monster);
+	void DeactivateMonster(Monster* monster);
 
-
+	void ReviveMonster(Monster* monster);
 	
 };

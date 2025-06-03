@@ -1,15 +1,15 @@
 ﻿#pragma once  
-#include <cstdint>
+#include "../Util/Common.h"
 
 using namespace std;
 
 struct FLevelProperties
 {
-	int32_t maxExperiencePerLevel;
-	int32_t maxHealthPerLevel;
-	int16_t attackPerLevel;
-	int16_t defensePerLevel;
-	int16_t agilityPerLevel;
+	uint32 maxExperiencePerLevel;
+	uint32 maxHealthPerLevel;
+	uint16 attackPerLevel;
+	uint16 defensePerLevel;
+	uint16 agilityPerLevel;
 };
 
 static FLevelProperties levelData[100]; // Array to hold level data for 100 levels
@@ -22,7 +22,7 @@ public:
 	//Constructor
 	LevelData();
 	
-	FLevelProperties GetLevelData(int16_t level);
+	FLevelProperties GetLevelData(uint16 level);
 
 	//Destructor
 	~LevelData();

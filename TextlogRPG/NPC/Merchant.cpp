@@ -2,14 +2,14 @@
 #include "../Item/Item.h"
 #include "../Item/ItemManager.h"
 
-void Merchant::AddItemForSale(const string& itemName, int32_t price)
+void Merchant::AddItemForSale(const string& itemName, uint32 price)
 {
     itemLists[itemName] = price;
 }
 
 void Merchant::SellItem(Player* player, const string& itemName)
 {
-	map<string, int32_t>::iterator it = itemLists.find(itemName);
+	map<string, uint32>::iterator it = itemLists.find(itemName);
 	if (it == itemLists.end())
 	{
 		Common::PrintErrorMsg("판매하지 않는 아이템입니다. 아이템 이름을 확인하세요.");
@@ -17,7 +17,7 @@ void Merchant::SellItem(Player* player, const string& itemName)
 		return;
 	}
 
-	int32_t itemPrice = it->second;
+	uint32 itemPrice = it->second;
 	if (player->GetPlayerData().playerGold < itemPrice)
 	{
 		Common::PrintErrorMsg("골드가 부족합니다. 아이템을 구매할 수 없습니다.");
@@ -62,7 +62,7 @@ void Merchant::BuyItem(Player* player, const string& itemName)
 		Common::PauseAndClearScreen();
 		return;
 	}
-	int32_t sellPrice = sellItem->GetItemInfo().itemCost / 2; // sell price is half of the original cost
+	uint32 sellPrice = sellItem->GetItemInfo().itemCost / 2; // sell price is half of the original cost
 
 	if (sellPrice <= 0)
 	{
@@ -107,15 +107,15 @@ void Merchant::Interact(Player* player)
 	vector<string> availableWeapons;
 	vector<string> availableArmors;
 	vector<string> miscItems;
-	int weaponChoice;
-	int armorChoice;
+	uint8 weaponChoice;
+	uint8 armorChoice;
 
 	switch (merchantChoice) 
 	{
 		case '1':
 		{
 			//Selling Weapons
-			for (const pair<string, int32_t>& pair : itemLists)
+			for (const pair<string, uint32>& pair : itemLists)
 			{
 				Item* item = ItemManager::GetInstance().GetItem(pair.first);
 				if (item && item->GetItemInfo().itemType == EItemType::WEAPON)
@@ -161,7 +161,7 @@ void Merchant::Interact(Player* player)
 		case '2':
 		{
 			//Selling Armors
-			for (const pair<string, int32_t>& pair : itemLists)
+			for (const pair<string, uint32>& pair : itemLists)
 			{
 				Item* item = ItemManager::GetInstance().GetItem(pair.first);
 				if (item && item->GetItemInfo().itemType == EItemType::ARMOR)
@@ -222,13 +222,13 @@ void Merchant::Interact(Player* player)
 			for (size_t i = 0; i < miscItems.size(); ++i) {
 				cout << (i + 1) << ". ";
 				miscItems[i]->ShowItemInfo();
-				int sellPrice = miscItems[i]->GetItemInfo().itemCost / 2;
+				uint32 sellPrice = miscItems[i]->GetItemInfo().itemCost / 2;
 				cout << " -> 판매 가격: " << sellPrice << " 골드\n\n";
 			}
 			cout << (miscItems.size() + 1) << ". 뒤로 가기\n";
 			Common::PrintLine();
 
-			int miscChoice;
+			uint8 miscChoice;
 			cin >> miscChoice;
 			cin.ignore(1024, '\n');
 			if (miscChoice > 0 && miscChoice <= static_cast<int>(miscItems.size()))

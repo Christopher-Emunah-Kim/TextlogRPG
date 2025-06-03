@@ -17,7 +17,7 @@ Monster::Monster(const FMonsterInfo& info)
 
 void Monster::TakeDamage(BaseCharacter& target)
 {
-	int32_t damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
+	uint32 damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
 	damage <= 0 ? damage = 0 : damage;
 	FCharacterInfo& info = characterInfo;
 	info.iCurrentHealth -= damage;
