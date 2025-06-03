@@ -202,8 +202,11 @@ void GameManager::InitializeDungeon()
 void GameManager::RunProcessTitle() 
 {
 	Area* ptrTitleArea = mapList[EGameState::TITLE];
-	ptrTitleArea->Enter(playerPtr);
-
+	if (ptrTitleArea)
+	{
+		ptrTitleArea->Enter(playerPtr);
+	}
+	
 	char menuChoice;
 	cin >> menuChoice;
 	cin.ignore(1024, '\n');
@@ -238,14 +241,14 @@ void GameManager::RunProcessTitle()
 
 void GameManager::RunProcessVillage()
 {
-	
-	Village* village = static_cast<Village*>(mapList[EGameState::VILLAGE]);
+	//Choice in Village
+	Village* pVilalgeArea = static_cast<Village*>(mapList[EGameState::VILLAGE]);
 
 	Healer* healer = new Healer("앤더슨", 15);
     Merchant* merchant = new Merchant("토니");
 	
-	village->AddNPC(healer);
-	village->AddNPC(merchant);
+	pVilalgeArea->AddNPC(healer);
+	pVilalgeArea->AddNPC(merchant);
 	
 	//TODO : 아이템 리스트 정보를 csv에서 불러와 배열 push해주는 메서드 추가
 	//TODO : 반복되는기능 함수로 묶기
@@ -254,8 +257,7 @@ void GameManager::RunProcessVillage()
 	merchant->AddItemForSale("초보자의 갑옷", 60);
 	merchant->AddItemForSale("가죽갑옷", 100);
 
-	//Choice in Village
-	Area* pVilalgeArea = mapList[EGameState::VILLAGE];
+	
 	pVilalgeArea->Enter(playerPtr);
 
 	char villageChoice;
@@ -268,20 +270,18 @@ void GameManager::RunProcessVillage()
 	{
 		case '1':
 		{
-			village->InteractWithNPC(playerPtr, healer);
+			//village->InteractWithNPC(playerPtr, healer);
+			pVilalgeArea->InteractWithNPC(playerPtr, healer);
 			SetGameState(EGameState::VILLAGE);
 
-			delete healer;
-			healer = nullptr;
 			break;
 		}
 		case '2':
 		{
-			village->InteractWithNPC(playerPtr, merchant);
+			//village->InteractWithNPC(playerPtr, merchant);
+			pVilalgeArea->InteractWithNPC(playerPtr, merchant);
 			SetGameState(EGameState::VILLAGE);
 
-			delete merchant;
-			merchant = nullptr;
 			break;
 		}
 		case '3':
@@ -293,6 +293,11 @@ void GameManager::RunProcessVillage()
 			Common::PrintErrorMsg("잘못된 입력입니다.");
 	}
 	Common::PauseAndClearScreen();
+
+	delete healer;
+	delete merchant;
+	healer = nullptr;
+	merchant = nullptr;
 }
 
 void GameManager::RunProcessDungeon()
@@ -301,7 +306,16 @@ void GameManager::RunProcessDungeon()
 	{
 		InitializeDungeon();
 	}
- 
+	else
+	{
+		Common::PrintSystemMsg("던전이 이미 준비되어 있습니다.");
+	}
+	if (!playerPtr)
+	{
+		Common::PrintErrorMsg("플레이어 정보가 없습니다. 던전 탐험을 시작할 수 없습니다.");
+		return;
+	}
+
 	dungeonptr->Enter(playerPtr);
 
 	DungeonStage* stage = dungeonptr->GetCurrentStage();

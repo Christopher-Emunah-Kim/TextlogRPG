@@ -39,5 +39,6 @@ private:
 	void RunProcessVillage();
 	void RunProcessDungeon();
 	void GameOverProcess();
+
 	
 };

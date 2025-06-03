@@ -26,7 +26,6 @@ DungeonStage* Dungeon::GetCurrentStage()
 		return stages[currentStageIndex];
 	}
 	return nullptr;
-
 }
 
 bool Dungeon::NextStage()
@@ -41,6 +40,12 @@ bool Dungeon::NextStage()
 
 void Dungeon::Enter(Player* player)
 {
+	if (player == nullptr)
+	{
+		Common::PrintErrorMsg("플레이어 정보가 없습니다.  Enter Dungeon을 중단합니다.");
+		return;
+	}
+
 	Common::PrintSystemMsg("던전 탐험을 시작합니다.");
 	Common::PrintSystemMsg("기억하십시오. 심연을 들여다볼수록,\n 당신 또한 심연에 물들 것입니다.");
 	Common::PauseAndClearScreen();
@@ -48,11 +53,23 @@ void Dungeon::Enter(Player* player)
 	Dialogue::ShowOption("[System] 던전의 입구에 도착했습니다. 도전하시겠습니까?\n\n1. 인생은 모험이지!\n2. 아니 지금은 아닌것 같아.(마을로 돌아간다)");
 }
 
-void Dungeon::AddMonster(Monster* monster) {
+void Dungeon::AddMonster(Monster* monster) 
+{
+	if (monster == nullptr)
+	{
+		Common::PrintErrorMsg("몬스터 정보가 없습니다. AddMonster를 중단합니다.");
+		return;
+	}
 	monsters.push_back(monster);
 }
 
-void Dungeon::RemoveMonster(Monster* monster) {
+void Dungeon::RemoveMonster(Monster* monster) 
+{
+	if (monster == nullptr)
+	{
+		Common::PrintErrorMsg("몬스터 정보가 없습니다. RemoveMonster를 중단합니다.");
+		return;
+	}
 	monsters.erase(remove(monsters.begin(), monsters.end(), monster), monsters.end());
 }
 
@@ -65,6 +82,12 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 {
 	string strEncounterText = "[System] " + monster->GetCharacterInfo().strCharacterName + "과(와) 조우했습니다!";
 	Dialogue::ShowOption(strEncounterText);
+
+	if (!player || !monster)
+	{
+		Common::PrintErrorMsg("플레이어 또는 몬스터 정보가 없습니다. 전투를 종료합니다.");
+		return false;
+	}
 
 	//TODO : 전투 로직 _ 둘의 Agility를 비교하여 먼저 공격하는 캐릭터 결정
 	uint16 iPlayerAgility = player->GetCharacterInfo().characterStats.GetAgility();
@@ -86,6 +109,7 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 			if (battleChoice == 1)
 			{
 				Common::PauseAndClearScreen();
+				//TODO : WARNING : 플레이어가 몬스터를 공격하는 로직
 				player->Attack(monster);
 			}
 			else if (battleChoice == 2)
@@ -93,18 +117,14 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 				// 도망 확률 계산 (예: 50% 확률)
 				if (rand() % 2 == 0)
 				{
-					cout << "\n===========================================\n";
-					cout << "\n[System] 당신은 도망에 성공했습니다!\n";
-					cout << "\n===========================================\n" << endl;
+					Common::PrintSystemMsg("몬스터가 당신을 쫓아왔지만, 당신은 무사히 던전 입구로 도망쳤습니다.");
 					bIsBattleOver = true;
 					Common::PauseAndClearScreen();
 					break;
 				}
 				else
 				{
-					cout << "\n===========================================\n";
-					cout << "\n[System] 도망에 실패했습니다!\n";
-					cout << "\n===========================================\n" << endl;
+					Common::PrintSystemMsg("당신은 필사적으로 도망쳤지만, 몬스터가 뛰어올라 당신의 앞을 가로막습니다.");
 					Common::PauseAndClearScreen();
 				}
 			}
@@ -124,10 +144,9 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 	{
 		if (player->GetCharacterInfo().iCurrentHealth <= 0)
 		{
-			cout << "\n===========================================\n";
-			cout << "\n[System] " << player->GetCharacterInfo().strCharacterName << "이(가) 쓰러졌습니다.\n";
-			cout << "\n[System] 게임 오버입니다. 마을로 돌아갑니다.\n";
-			cout << "\n===========================================\n" << endl;
+			string strGameOverText = player->GetCharacterInfo().strCharacterName + "이(가) 쓰러졌습니다.\n"
+				+ "[System] 당신은 여신의 가호 아래 마을로 돌아갑니다.";
+			Common::PrintSystemMsg(strGameOverText);
 			Common::PauseAndClearScreen();
 			return false;
 		}

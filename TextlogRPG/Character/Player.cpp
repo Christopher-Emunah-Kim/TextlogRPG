@@ -92,7 +92,7 @@ vector<Item*> Player::GetInventoryItems(EItemType type) const
 void Player::EquipItem(Item* item)
 {
 	if (item == nullptr) return;
-
+	//TODO : 아이템 착용 후 캐릭터 스탯 이상하게 덮어씌워지는 문제 확인
 	// remove status of former equipment(Weapon)
 	if (item->GetItemInfo().itemType == EItemType::WEAPON && playerData.weaponEquipped != nullptr) {
 		equipmentStatus = CharacterStatus::NewStatus(
