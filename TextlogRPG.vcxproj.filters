@@ -146,5 +146,8 @@
     <ClInclude Include="TextlogRPG\BattleSystem\MonsterPool.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="TextlogRPG\Util\Dialogue.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
