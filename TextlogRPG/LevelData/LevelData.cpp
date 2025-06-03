@@ -1,46 +1,31 @@
 ﻿#include "../../TextlogRPG/LevelData/LevelData.h"
+#include <iostream>
 
-int32_t LevelData::experiencePerLevel[100];
-int16_t LevelData::statsPerLevel[100][4];
+using namespace std;
 
 LevelData::LevelData()
 {
-	//Initialize the experience and stats data
-	for (int8_t i = 0; i < 100; ++i)
+	// Initialize level data for 100 levels
+	for (int i = 0; i < 100; ++i)
 	{
-		if (i == 0)
-		{
-			experiencePerLevel[i] = InitializationData[0];
-			statsPerLevel[i][0] = InitializationData[1];
-			statsPerLevel[i][1] = InitializationData[2];
-			statsPerLevel[i][2] = InitializationData[3];
-			statsPerLevel[i][3] = InitializationData[4];
-		}
-		else
-		{
-			experiencePerLevel[i] = experiencePerLevel[i - 1] + 2000; //EXP
-			statsPerLevel[i][0] = statsPerLevel[i - 1][0] + 500; //HP
-			statsPerLevel[i][1] = statsPerLevel[i - 1][1] + 3; //ATK
-			statsPerLevel[i][2] = statsPerLevel[i - 1][2] + 2; //DEF
-			statsPerLevel[i][3] = statsPerLevel[i - 1][3] + 2; //AGI
-		}
+		levelData[i].maxExperiencePerLevel = 100 + (i * 50); // Example formula
+		levelData[i].maxHealthPerLevel = 100 + (i * 10); // Example formula
+		levelData[i].attackPerLevel = 5 + (i * 2); // Example formula
+		levelData[i].defensePerLevel = 3 + (i * 1); // Example formula
+		levelData[i].agilityPerLevel = 2 + (i * 1); // Example formula
 	}
+	//TODO : 레벨데이터 csv파일에서 값 가져와 세팅하기
 }
 
-const int32_t& LevelData::getExperienceForLevel(int16_t level)
+FLevelProperties LevelData::GetLevelData(int16_t level)
 {
-	if (level < 1 || level > 100) return experiencePerLevel[0]; 
-	return experiencePerLevel[level - 1];
+	
+	if (level < 1 || level > 100)
+	{
+		cout << "Level must be between 1 and 100." << endl;
+        return FLevelProperties{ 0, 0, 0, 0, 0 };
+	}
+	return levelData[level - 1];
 }
 
-const int16_t* LevelData::getStatsForLevel(int16_t level)
-{
-	if (level < 1 || level > 100) return nullptr;
-	return statsPerLevel[level - 1];
-}
-
-
-LevelData::~LevelData()
-{
-
-}
+LevelData::~LevelData() { }

@@ -1,0 +1,163 @@
+﻿#include "Dungeon.h"
+#include "../Character/Player.h"
+#include "../Character/Monster.h"
+
+Dungeon::Dungeon()
+{
+	monsters.clear();
+	stages.clear();
+	currentStageIndex = 0;
+}
+
+Dungeon::Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo)
+{
+	for (const vector<FMonsterInfo>& monsterInfos : stageMonsterInfo)
+	{
+		stages.emplace_back(new DungeonStage(monsterInfos));
+	}
+	currentStageIndex = 0;
+}
+
+DungeonStage* Dungeon::GetCurrentStage()
+{
+	if (currentStageIndex < stages.size())
+	{
+		return stages[currentStageIndex];
+	}
+	return nullptr;
+
+}
+
+bool Dungeon::NextStage()
+{
+	if (currentStageIndex + 1 < stages.size())
+	{
+		++currentStageIndex;
+		return true;
+	}
+	return false;
+}
+
+void Dungeon::Enter(Player* player)
+{
+	cout << "\n===========================================\n";
+	cout << "\n[System] 던전 탐험을 시작합니다.\n" ;
+	cout << "\n===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
+	cout << "\n===========================================\n";
+	cout << "\n[system] 기억하십시오. 심연을 들여다볼수록,\n 당신 또한 심연에 물들 것입니다.\n";
+	cout << "\n===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
+	//TODO : 던전 탐험 로직 구현
+	//탐색진행 or 마을로 돌아가기
+	cout << "\n===========================================\n";
+	cout << "\n[System] 던전의 입구에 도착했습니다.\n도전하시겠습니까?\n";
+	cout << "\n1. 인생은 모험이지!\n2. 아니 지금은 아닌것 같아.(마을로 돌아간다)\n";
+	cout << "\n===========================================\n" << endl;
+}
+
+void Dungeon::AddMonster(Monster* monster) {
+	monsters.push_back(monster);
+}
+
+void Dungeon::RemoveMonster(Monster* monster) {
+	monsters.erase(remove(monsters.begin(), monsters.end(), monster), monsters.end());
+}
+
+vector<Monster*>& Dungeon::GetMonsterList() 
+{
+	return monsters;
+}
+
+bool Dungeon::EncounterMonster(Player* player, Monster* monster)
+{
+	cout << "\n===========================================\n";
+	cout << "\n[System] " << monster->GetCharacterInfo().characterName << "과(와) 조우했습니다!\n";
+	cout << "\n===========================================\n" << endl;
+	Sleep(2000);
+	system("cls");
+	//TODO : 전투 로직 _ 둘의 Agility를 비교하여 먼저 공격하는 캐릭터 결정
+	bool isPlayerTurn = player->GetCharacterInfo().characterStats.GetAgility() >= monster->GetCharacterInfo().characterStats.GetAgility();
+	bool isBattleOver = false;
+
+	while (player->GetCharacterInfo().health > 0 && monster->GetCharacterInfo().health > 0 && !isBattleOver)
+	{
+		if (isPlayerTurn)
+		{
+			cout << "\n===========================================\n";
+			cout << "\n1. " << monster->GetCharacterInfo().characterName << "를(을) 공격한다!! \n2. 이대로는 위험하다. 도망가자..\n당신의 선택은??: \n";
+			cout << "\n===========================================\n" << endl;
+			int battleChoice;
+			cin >> battleChoice;
+			if (battleChoice == 1)
+
+			{
+				Sleep(2000);
+				system("cls");
+				player->Attack(monster);
+			}
+			else if (battleChoice == 2)
+			{
+				// 도망 확률 계산 (예: 50% 확률)
+				if (rand() % 2 == 0)
+				{
+					cout << "\n===========================================\n";
+					cout << "\n[System] 당신은 도망에 성공했습니다!\n";
+					cout << "\n===========================================\n" << endl;
+					isBattleOver = true;
+					Sleep(2000);
+					system("cls");
+					break;
+				}
+				else
+				{
+					cout << "\n===========================================\n";
+					cout << "\n[System] 도망에 실패했습니다!\n";
+					cout << "\n===========================================\n" << endl;
+					Sleep(2000);
+					system("cls");
+				}
+			}
+		}
+		else
+		{
+			monster->Attack(player);
+		}
+
+		// 턴 교대
+		isPlayerTurn = !isPlayerTurn;
+		
+	}
+
+	// 결과 출력
+	if (!isBattleOver)
+	{
+		if (player->GetCharacterInfo().health <= 0)
+		{
+			cout << "\n===========================================\n";
+			cout << "\n[System] " << player->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
+			cout << "\n[System] 게임 오버입니다. 마을로 돌아갑니다.\n";
+			cout << "\n===========================================\n" << endl;
+			Sleep(2000);
+			system("cls");
+			return false;
+		}
+		else if (monster->GetCharacterInfo().health <= 0)
+		{
+			//cout << "\n===========================================\n";
+			//cout << "\n[System] " << monster->GetCharacterInfo().characterName << "이(가) 쓰러졌습니다.\n";
+			////cout << "\n[System] 승리하였습니다! 전리품을 획득합니다.\n";
+			//cout << "\n===========================================\n" << endl;
+			Sleep(2000);
+			system("cls");
+		}
+	}
+	return true;
+}
+
+Dungeon::~Dungeon()
+{
+	stages.clear();
+}

@@ -124,13 +124,52 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="TextlogRPG\Area\Dungeon.cpp" />
+    <ClCompile Include="TextlogRPG\Area\DungeonStage.cpp" />
+    <ClCompile Include="TextlogRPG\Area\Title.cpp" />
+    <ClCompile Include="TextlogRPG\Area\Village.cpp" />
+    <ClCompile Include="TextlogRPG\BattleSystem\MonsterPool.cpp" />
+    <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Monster.cpp" />
+    <ClCompile Include="TextlogRPG\NPC\Merchant.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Player.cpp" />
+    <ClCompile Include="TextlogRPG\Core\GameManager.cpp" />
+    <ClCompile Include="TextlogRPG\Item\Armor.cpp" />
+    <ClCompile Include="TextlogRPG\Item\ItemManager.cpp" />
+    <ClCompile Include="TextlogRPG\Item\MiscItem.cpp" />
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp" />
-    <ClCompile Include="TextlogRPG\GameMode\GameMode.cpp" />
     <ClCompile Include="TextlogRPG.cpp" />
+    <ClCompile Include="TextlogRPG\Item\Weapon.cpp" />
+    <ClCompile Include="TextlogRPG\NPC\Healer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TextlogRPG\Area\Area.h" />
+    <ClInclude Include="TextlogRPG\Area\Dungeon.h" />
+    <ClInclude Include="TextlogRPG\Area\DungeonStage.h" />
+    <ClInclude Include="TextlogRPG\Area\Title.h" />
+    <ClInclude Include="TextlogRPG\Area\Village.h" />
+    <ClInclude Include="TextlogRPG\BattleSystem\MonsterPool.h" />
+    <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
+    <ClInclude Include="TextlogRPG\Character\CharacterInfo.h" />
+    <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
+    <ClInclude Include="TextlogRPG\Character\Monster.h" />
+    <ClInclude Include="TextlogRPG\Util\EGameState.h" />
+    <ClInclude Include="TextlogRPG\Item\EItemType.h" />
+    <ClInclude Include="TextlogRPG\NPC\Merchant.h" />
+    <ClInclude Include="TextlogRPG\NPC\Healer.h" />
+    <ClInclude Include="TextlogRPG\NPC\NonPlayerCharacter.h" />
+    <ClInclude Include="TextlogRPG\Character\Player.h" />
+    <ClInclude Include="TextlogRPG\Core\GameManager.h" />
+    <ClInclude Include="TextlogRPG\Util\Dialog.h" />
+    <ClInclude Include="TextlogRPG\Util\Option.h" />
+    <ClInclude Include="TextlogRPG\Item\Armor.h" />
+    <ClInclude Include="TextlogRPG\Item\Item.h" />
+    <ClInclude Include="TextlogRPG\Item\ItemManager.h" />
+    <ClInclude Include="TextlogRPG\Item\MiscItem.h" />
+    <ClInclude Include="TextlogRPG\Item\Weapon.h" />
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h" />
-    <ClInclude Include="TextlogRPG\GameMode\GameMode.h" />
+    <ClInclude Include="TextlogRPG\Util\Common.h" />
+    <ClInclude Include="TextlogRPG\Util\Dialogue.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
