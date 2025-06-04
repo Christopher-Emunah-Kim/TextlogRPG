@@ -353,43 +353,59 @@ void GameManager::RunProcessDungeon()
 				stageMonsterList = stage->GetMonsters();
 			}
 
-			BattleInDungeonStage(stageMonsterList, stage);
-
-			// 스테이지 내 모든 몬스터가 죽었는지 확인
-			bool allMonstersDead = true;
-			for (Monster* mon : stageMonsterList)
+			while (true)
 			{
-				if (mon->GetCharacterInfo().iCurrentHealth > 0)
+				// 스테이지 내 모든 몬스터가 죽었는지 확인
+				bool allMonstersDead = true;
+				for (Monster* mon : stageMonsterList)
 				{
-					allMonstersDead = false;
-					break;
+					if (mon->GetCharacterInfo().iCurrentHealth > 0)
+					{
+						allMonstersDead = false;
+						break;
+					}
 				}
-			}
 
-			if (GetGameState() == EGameState::VILLAGE || GetGameState() == EGameState::GAME_OVER)
-				return;
 
-			if (allMonstersDead)
-			{
-				if (dungeonptr->IsMoreStageLeft())
+				if (allMonstersDead)
 				{
-					Common::PrintSystemMsg("다음 스테이지로 진입합니다");
-					Common::PauseAndClearScreen();
-					continue;
+					if (dungeonptr->IsMoreStageLeft())
+					{
+						Common::PrintSystemMsg("다음 스테이지로 진입합니다");
+						Common::PauseAndClearScreen();
+						continue;
+					}
+					else
+					{
+						Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다.\n마을로 돌아갑니다..");
+						Common::PauseAndClearScreen();
+						SetGameState(EGameState::VILLAGE);
+						return;
+					}
 				}
-				else
-				{
-					Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다.\n마을로 돌아갑니다..");
+
+				// 도전/도망 선택
+				Common::PrintSystemMsg("이 스테이지에서 계속 도전하시겠습니까?\n1. 계속 도전\n2. 도망간다(마을로 복귀)");
+				char stageChoice;
+				cin >> stageChoice;
+				cin.ignore(1024, '\n');
+				Common::PauseAndClearScreen();
+
+				if (stageChoice == '2') {
+					Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
 					Common::PauseAndClearScreen();
 					SetGameState(EGameState::VILLAGE);
 					return;
 				}
+
+				// 전투 진행
+				BattleInDungeonStage(stageMonsterList, stage);
+
+				// 전투 중 도망/사망 처리
+				if (GetGameState() == EGameState::VILLAGE || GetGameState() == EGameState::GAME_OVER)
+					return;
 			}
-			else
-			{
-				// 아직 몬스터가 남아있으면 반복
-				continue;
-			}
+
 		}
 		break;
 	}
@@ -432,8 +448,8 @@ void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* 
 		break;
 		case EBattleResult::PLAYER_RUN:
 		{
-			Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
-			Common::PauseAndClearScreen();
+			/*Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
+			Common::PauseAndClearScreen();*/
 			SetGameState(EGameState::VILLAGE);
 			return;
 		}

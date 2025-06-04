@@ -60,7 +60,7 @@ public:
 			", DEF : " + to_string(GetItemInfo().defense) +
 			", AGI : " + to_string(GetItemInfo().agility) + " )";
 
-		Common::PrintSystemMsg(strItemInfo);
+		Common::PrintInfoMsg(strItemInfo);
 	}
 
 	//Pure virtual functions
