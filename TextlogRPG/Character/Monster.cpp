@@ -46,9 +46,7 @@ void Monster::ReceiveDamageFrom(BaseCharacter& target)
 				randomDropItem->ShowItemInfo();
 				Common::PrintSystemMsg("이 아이템을 장착하시겠습니까?\n-> 1. 새로운 장비를 장착한다.  2. 기존의 장비를 사용한다.");
 				
-				char equipChoice;
-				cin >> equipChoice;
-				cin.ignore(1024, '\n');
+				char equipChoice = Common::GetCharInput();
 
 				if (equipChoice == '1')
 				{

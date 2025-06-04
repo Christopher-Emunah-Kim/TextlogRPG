@@ -43,7 +43,7 @@ void Healer::Interact(Player* player)
 		+"1. 네, 치유해주세요.(" + to_string(healCost) + "골드)\n2. 아니요, 괜찮습니다.\n";
 	Common::PrintSystemMsg(strHealerMsg);
 
-	char healerChoice;
+	char healerChoice = Common::GetCharInput();
 	cin >> healerChoice;
 	cin.ignore(1024, '\n');
 	Common::PauseAndClearScreen();

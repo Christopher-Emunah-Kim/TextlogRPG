@@ -113,21 +113,21 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 		if (bIsPlayerTurn)
 		{
 			Common::ShowOption("1. " + monster->GetCharacterInfo().strCharacterName + "를(을) 공격한다!! \n\n2. 내 상태가 어떤지 확인한다..\n\n3. 이대로는 위험하다. 도망가자..\n\n당신의 선택은??");
-			int battleChoice;
-			cin >> battleChoice;
-			if (battleChoice == 1)
+			char battleChoice = Common::GetCharInput();
+
+			if (battleChoice == '1')
 			{
 				Common::PauseAndClearScreen();
 
 				Common::PrintSystemMsg(player->GetCharacterInfo().strCharacterName + "이(가) 공격할 차례입니다.");
 				player->Attack(monster);
 			}
-			else if (battleChoice == 2)
+			else if (battleChoice == '2')
 			{
 				Common::PauseAndClearScreen(500);
 				player->ShowPlayerStatus();
 			}
-			else if (battleChoice == 3)
+			else if (battleChoice == '3')
 			{
 				// 도망 확률 계산 (예: 50% 확률)
 				if (rand() % 2 == 0)

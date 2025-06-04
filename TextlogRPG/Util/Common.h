@@ -66,4 +66,12 @@ public:
 		cout << text << "\n";
 		cout << "\n===========================================" << endl;
 	}
+
+	static char GetCharInput()
+	{
+		char input;
+		cin >> input;
+		cin.ignore(1024, '\n'); 
+		return input;
+	}
 };

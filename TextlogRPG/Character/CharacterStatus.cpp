@@ -15,7 +15,7 @@ int32 CharacterStatus::CalculateDamage(const CharacterStatus& other) const
 	int32 damage = other.GetAttack() - this->GetDefense();
 	if (damage <= 0)
 	{
-		return 1;
+		return 10;
 	}
 	else
 	{

@@ -115,9 +115,7 @@ void GameManager::SetPlayerName()
 {
 	Common::ShowOption("[System] 이해할 수 없는 곳이다. \n 당신의 선택은?\n1. 게임을 시작한다.\n2. 당장 도망친다.");
 
-	char titleChoice;
-	cin >> titleChoice;
-	cin.ignore(1024, '\n');
+	char titleChoice = Common::GetCharInput();
 
 	if (titleChoice == '1')
 	{
@@ -205,9 +203,7 @@ void GameManager::RunProcessTitle()
 		ptrTitleArea->Enter(playerPtr);
 	}
 	
-	char menuChoice;
-	cin >> menuChoice;
-	cin.ignore(1024, '\n');
+	char menuChoice = Common::GetCharInput();
 	
 	switch (menuChoice)
 	{
@@ -268,9 +264,7 @@ void GameManager::RunProcessVillage()
 	
 	pVilalgeArea->Enter(playerPtr);
 
-	char villageChoice;
-	cin >> villageChoice;
-	cin.ignore(1024, '\n');
+	char villageChoice = Common::GetCharInput();
 
 	Common::PauseAndClearScreen();
 
@@ -327,9 +321,7 @@ void GameManager::RunProcessDungeon()
 
 	dungeonptr->Enter(playerPtr);
 
-	char dungeonChoice;
-	cin >> dungeonChoice;
-	cin.ignore(1024, '\n');
+	char dungeonChoice = Common::GetCharInput();
 
 	Common::PauseAndClearScreen();
 
@@ -390,9 +382,8 @@ void GameManager::RunProcessDungeon()
 
 				// 도전/도망 선택
 				Common::PrintSystemMsg("정말 이 스테이지를 도전하시겠습니까?\n\n1. 멈출 수 없다. 앞으로 나아가자.\n\n2. 목숨은 소중하니까, 도망간다(마을로 복귀)");
-				char stageChoice;
-				cin >> stageChoice;
-				cin.ignore(1024, '\n');
+				char stageChoice = Common::GetCharInput();
+
 				Common::PauseAndClearScreen();
 
 				if (stageChoice == '2') {
