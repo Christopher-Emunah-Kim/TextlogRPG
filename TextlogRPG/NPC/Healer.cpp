@@ -21,7 +21,7 @@ void Healer::HealPlayer(Player* player, uint32 cost)
 		Common::PrintSystemMsg("골드가 부족합니다..");
 		
 	}
-	Common::PauseAndClearScreen(5000);
+	Common::PauseAndClearScreen(3000);
 }
 
 void Healer::Interact(Player* player)
@@ -59,7 +59,5 @@ void Healer::Interact(Player* player)
 	{
 		Common::PrintSystemMsg("잘못된 선택입니다. 치유의 집을 떠나 길거리로 나갑니다.");;
 	}
-	Common::PauseAndClearScreen();
-	
 }
 

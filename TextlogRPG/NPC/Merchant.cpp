@@ -36,13 +36,15 @@ void Merchant::SellItem(Player* player, const string& itemName)
 	}
 
 	player->UseGold(itemPrice);
+	string strEquipItemMsg = item->GetItemInfo().itemName + "을(를) " + to_string(itemPrice) + " 골드에 구매했습니다.";
+	Common::PrintSystemMsg(strEquipItemMsg);
+	Common::PauseAndClearScreen();
+
 	player->EquipItem(item); 
 	player->AddToInventory(item); 
 
-	string strEquipItemMsg = "[System] " + item->GetItemInfo().itemName + "을(를) " + to_string(itemPrice) + " 골드에 구매했습니다.";
-	Common::PrintSystemMsg(strEquipItemMsg);
-	Common::PauseAndClearScreen();
-	
+	Interact(player);
+
 }
 
 void Merchant::BuyItem(Player* player, const string& itemName)
@@ -81,6 +83,7 @@ void Merchant::BuyItem(Player* player, const string& itemName)
 	Common::PrintSystemMsg(strSellItemMsg);
 	Common::PauseAndClearScreen();
 
+	Interact(player);
 }
 
 void Merchant::Interact(Player* player) 

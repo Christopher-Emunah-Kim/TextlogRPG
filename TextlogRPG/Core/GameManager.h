@@ -21,7 +21,6 @@ public:
 
 	void SetGameState(const EGameState& gs_in)	{ gameState = gs_in; }
 	inline EGameState GetGameState() const 	{return gameState;	}
-	//string GetStateString() const;
 
     void Run();
 
@@ -38,6 +37,10 @@ private:
 	void RunProcessTitle();
 	void RunProcessVillage();
 	void RunProcessDungeon();
+
+	void BattleInDungeonStage(vector<class Monster*> monsters, class DungeonStage* stage);
+	
+
 	void GameOverProcess();
 
 	

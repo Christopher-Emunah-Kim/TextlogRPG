@@ -14,6 +14,7 @@ Dungeon::Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo)
 {
 	for (const vector<FMonsterInfo>& monsterInfos : stageMonsterInfo)
 	{
+		//TODO FOR문 해체
 		stages.emplace_back(new DungeonStage(monsterInfos));
 	}
 	currentStageIndex = 0;

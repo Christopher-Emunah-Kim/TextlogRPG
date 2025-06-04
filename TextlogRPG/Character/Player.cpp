@@ -24,18 +24,18 @@ void Player::TakeDamage(BaseCharacter& target)
 	//플레이어의 TakeDamage함수 내에서 몬스터와 플레이어의 데미지 계산 및 출력메시지 대부분 처리
 	const FCharacterInfo& fTargetCharacterInfo = target.GetCharacterInfo();
 
-	uint32 iCalculatedDamage = characterInfo.characterStats.CalculateDamage(fTargetCharacterInfo.characterStats);
+	int32 iCalculatedDamage = playerData.characterStats.CalculateDamage(fTargetCharacterInfo.characterStats);
 
 	//무한루프 막기위해 최소데미지 1보장.
 	if (iCalculatedDamage <= 0)
 		iCalculatedDamage = 1;
 	
-	characterInfo.iCurrentHealth -= iCalculatedDamage;
+	playerData.iCurrentHealth -= iCalculatedDamage;
 
-	if (characterInfo.iCurrentHealth <= 0)
+	if (playerData.iCurrentHealth <= 0)
 	{
 		Common::PrintSystemMsg("당신은 여신의 곁으로 돌아갑니다..");
-		characterInfo.iCurrentHealth = 0; // 체력을 0으로 설정하여 게임오버 상태로 유지
+		playerData.iCurrentHealth = 0; // 체력을 0으로 설정하여 게임오버 상태로 유지
 	}
 	else
 	{
@@ -59,12 +59,12 @@ void Player::Attack(BaseCharacter* target)
 
 void Player::SetName(const string& name)
 {
-	characterInfo.strCharacterName = name;
+	playerData.strCharacterName = name;
 }
 
 string Player::GetName() const  
 {  
-    return characterInfo.strCharacterName;
+    return playerData.strCharacterName;
 }
 
 FPlayerData Player::GetPlayerData() const
@@ -107,7 +107,7 @@ void Player::EquipItem(Item* item)
 	// update the equipment change
 	//item->EquippedBy(this);
 
-	string strUseWeapon = "[System] " + item->GetItemInfo().itemName + "을(를) 장착합니다.\n";
+	string strUseWeapon = item->GetItemInfo().itemName + "을(를) 장착합니다.\n";
 	Common::PrintSystemMsg(strUseWeapon);
 	Common::PauseAndClearScreen();
 
@@ -192,10 +192,10 @@ void Player::LoseItem(Item* item)
 void Player::Heal(uint32 healAmount)
 {
 	if (healAmount <= 0) return;
-	characterInfo.iCurrentHealth += healAmount;
-	if (characterInfo.iCurrentHealth > characterInfo.iMaxHealth)
+	playerData.iCurrentHealth += healAmount;
+	if (playerData.iCurrentHealth > playerData.iMaxHealth)
 	{
-		characterInfo.iCurrentHealth = characterInfo.iMaxHealth;
+		playerData.iCurrentHealth = playerData.iMaxHealth;
 	}
 }
 
@@ -249,7 +249,7 @@ void Player::GainLoot(uint32 experience, uint32 gold, Item* item)
 
 void Player::UpdateFinalStatus()
 {
-	characterInfo.characterStats = CharacterStatus::NewStatus(
+	playerData.characterStats = CharacterStatus::NewStatus(
 		baseStatus.GetAttack() + equipmentStatus.GetAttack(),
 		baseStatus.GetDefense() + equipmentStatus.GetDefense(),
 		baseStatus.GetAgility() + equipmentStatus.GetAgility()
@@ -260,29 +260,29 @@ BaseCharacter& Player::CharacterLevelUp()
 {
 	//TODO : 레벨업할때 장비스탯 제대로 반영안되는것같은데 해결 필요.
 	//LevelData 클래스의 FLevelData 구조체 어레이를 사용하여 레벨업 시 캐릭터의 상태를 업데이트
-	characterInfo.iCurrentLevel++;
-	if (characterInfo.iCurrentLevel > 100)
+	playerData.iCurrentLevel++;
+	if (playerData.iCurrentLevel > 100)
 	{
-		characterInfo.iCurrentLevel = 100; // 최대 100 레벨 초과 방지
+		playerData.iCurrentLevel = 100; // 최대 100 레벨 초과 방지
 		return *this;
 	}
 
 	LevelData levelDataInstance;
 	FLevelProperties levelData = levelDataInstance.GetLevelData(characterInfo.iCurrentLevel);
 
-	characterInfo.iMaxHealth += levelData.maxHealthPerLevel;
-	characterInfo.iCurrentHealth = characterInfo.iMaxHealth; // 레벨업 시 체력을 최대치로 회복
+	playerData.iMaxHealth += levelData.maxHealthPerLevel;
+	playerData.iCurrentHealth = characterInfo.iMaxHealth; // 레벨업 시 체력을 최대치로 회복
 
 	// 레벨업 시 공격력, 방어력, 민첩성 증가
-	characterInfo.characterStats = CharacterStatus::NewStatus(levelData.attackPerLevel, levelData.defensePerLevel,levelData.agilityPerLevel	);
+	playerData.characterStats = CharacterStatus::NewStatus(levelData.attackPerLevel, levelData.defensePerLevel,levelData.agilityPerLevel	);
 
 	UpdateFinalStatus();
 
-	string strLevelUpMsg = "레벨업!\n현재 레벨 : " + to_string(characterInfo.iCurrentLevel)
-		+ "체력 : " + to_string(characterInfo.iCurrentHealth) + "/" + to_string(characterInfo.iMaxHealth)
-		+ "공격력 : " + to_string(characterInfo.characterStats.GetAttack())
-		+ "방어력 : " + to_string(characterInfo.characterStats.GetDefense())
-		+ "민첩성 : " + to_string(characterInfo.characterStats.GetAgility());
+	string strLevelUpMsg = "레벨업!\n현재 레벨 : " + to_string(playerData.iCurrentLevel)
+		+ "체력 : " + to_string(playerData.iCurrentHealth) + "/" + to_string(playerData.iMaxHealth)
+		+ "공격력 : " + to_string(playerData.characterStats.GetAttack())
+		+ "방어력 : " + to_string(playerData.characterStats.GetDefense())
+		+ "민첩성 : " + to_string(playerData.characterStats.GetAgility());
 
 	Common::PrintSystemMsg(strLevelUpMsg);
 	return *this; 
@@ -290,12 +290,46 @@ BaseCharacter& Player::CharacterLevelUp()
 
 void Player::ShowPlayerStatus()
 {
-	string strPlayerStatus = GetName() + " 용사님의 스탯창을 출력합니다.\n"
-		+ "현재 레벨 : " + to_string(characterInfo.iCurrentLevel) + "\n"
-		+ "체력 : " + to_string(characterInfo.iCurrentHealth) + "/" + to_string(characterInfo.iMaxHealth) + "\n"
-		+ "공격력 : " + to_string(characterInfo.characterStats.GetAttack()) + "\n"
-		+ "방어력 : " + to_string(characterInfo.characterStats.GetDefense()) + "\n"
-		+ "민첩성 : " + to_string(characterInfo.characterStats.GetAgility()) + "\n";
+	string strWeaponName, strArmorName, strMiscItemName;
+	if (playerData.weaponEquipped != nullptr)
+	{
+		strWeaponName = playerData.weaponEquipped->GetItemName();
+	}
+	else
+	{
+		strWeaponName = "비어있음";
+	}
+	
+	if (playerData.armorEquipped != nullptr)
+	{
+		strArmorName = playerData.armorEquipped->GetItemName();
+	}
+	else
+	{
+		strArmorName = "비어있음";
+	}
+
+	if (playerData.miscOwned != nullptr)
+	{
+		strMiscItemName = playerData.miscOwned->GetItemName();
+	}
+	else
+	{
+		strMiscItemName = "비어있음";
+	}
+	
+
+	string strPlayerStatus = GetName() + " 용사의 스테이터스\n"
+		+ "현재 레벨 : " + to_string(playerData.iCurrentLevel) + "\n"
+		+ "경험치 : " + to_string(playerData.playerExperience) + "/" + to_string(playerData.playerMaxExperience) + "\n"
+		+ "체력 : " + to_string(playerData.iCurrentHealth) + "/" + to_string(playerData.iMaxHealth) + "\n\n"
+		+ "공격력 : " + to_string(playerData.characterStats.GetAttack()) + "\n"
+		+ "방어력 : " + to_string(playerData.characterStats.GetDefense()) + "\n"
+		+ "민첩성 : " + to_string(playerData.characterStats.GetAgility()) + "\n\n"
+		+ "장착 중인 무기 : " + strWeaponName + "\n"
+		+ "장착 중인 방어구 : " + strArmorName + "\n"
+		+ "보유 중인 아이템 : " + strMiscItemName + "\n\n"
+		+ "보유 금화 : " + to_string(playerData.playerGold) + "\n";
 
 	Common::PrintSystemMsg(strPlayerStatus);
 

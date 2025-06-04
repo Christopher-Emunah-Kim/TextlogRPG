@@ -19,7 +19,7 @@ void Monster::TakeDamage(BaseCharacter& target)
 {
 	const FCharacterInfo& fTragetCharacterInfo = target.GetCharacterInfo();
 
-	uint32 iCalculatedDamage = characterInfo.characterStats.CalculateDamage(fTragetCharacterInfo.characterStats);
+	int32 iCalculatedDamage = characterInfo.characterStats.CalculateDamage(fTragetCharacterInfo.characterStats);
 
 	//무한루프 막기위해 최소데미지 1보장.
 	if (iCalculatedDamage <= 0)

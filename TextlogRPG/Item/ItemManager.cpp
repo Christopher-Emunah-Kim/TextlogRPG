@@ -66,6 +66,7 @@ vector<string> ItemManager::GetItemList() const
 	vector<string> list;
 	for (const pair<const string, Item*>& pair : itemTable)
 	{
+		//TODO FOR문 해체
 		list.push_back(pair.first);
 	}
 	return list;

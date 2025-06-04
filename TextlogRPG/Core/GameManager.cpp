@@ -19,6 +19,7 @@
 #include "../Area/Title.h"
 #include "../Area/Village.h"
 #include "../Area/Dungeon.h"
+#include "../Area/DungeonStage.h"
 #include "../Util/Dialogue.h"
 
 
@@ -62,28 +63,6 @@ GameManager::~GameManager()
 	mapList.clear();
 }
 
-//string GameManager::GetStateString() const
-//{
-//	switch (gameState)
-//	{
-//	case EGameState::TITLE: 
-//		return "타이틀"; 
-//		break;
-//	case EGameState::VILLAGE: 
-//		return "마을"; 
-//		break;
-//	case EGameState::DUNGEON: 
-//		return "던전"; 
-//		break;
-//	case EGameState::GAME_OVER: 
-//		return "게임 오버"; 
-//		break;
-//
-//	default: 
-//		return "알 수 없음"; 
-//		break;
-//	}
-//}
 
 void GameManager::Run() 
 {
@@ -151,13 +130,33 @@ void GameManager::SetPlayerName()
 		Common::PrintSystemMsg("당신은 도망칠 수 없습니다. 강제로 게임을 시작합니다..");
 		Common::PauseAndClearScreen();
 	}
-	Common::PrintSystemMsg("당신의 이름을 입력하시오. \n이름은 20자 이내로 입력해주세요.");
+	
 	string inputName;
-	getline(cin, inputName);
-	if (inputName.length() > 20)
+	while (true)
 	{
-		inputName = inputName.substr(0, 20);
+		Common::PrintSystemMsg("당신의 이름을 입력하시오. \n이름은 20자 이내로 입력해주세요.");
+		getline(cin, inputName);
+
+		// 공백이 포함되어 있으면 에러 메시지 출력
+		if (any_of(inputName.begin(), inputName.end(), ::isspace))
+		{
+			Common::PrintErrorMsg("이름에 공백이 포함될 수 없습니다. 다시 입력해주세요.");
+			continue;
+		}
+
+		if (inputName.empty())
+		{
+			Common::PrintErrorMsg("이름을 입력해주세요.");
+			continue;
+		}
+
+		if (inputName.length() > 20)
+		{
+			inputName = inputName.substr(0, 20);
+		}
+		break;
 	}
+	
 	playerPtr->SetName(inputName);
 }
 #pragma endregion
@@ -214,12 +213,17 @@ void GameManager::RunProcessTitle()
 	switch (menuChoice)
 	{
 		case '1': 
-			SetGameState(EGameState::VILLAGE); 
+		{
+			SetGameState(EGameState::VILLAGE);
+		}
 			break;
 		case '2': 
+		{
 			SetGameState(EGameState::DUNGEON); 
+		}
 			break;
 		case '3':
+		{
 			if (!playerPtr) {
 				Common::PrintErrorMsg("플레이어 정보가 없습니다.");
 				return;
@@ -227,13 +231,18 @@ void GameManager::RunProcessTitle()
 			Common::PauseAndClearScreen();
 			playerPtr->ShowPlayerStatus();
 			SetGameState(EGameState::TITLE);
+		}
 			break;
 		case '4': 
+		{
 			SetGameState(EGameState::GAME_OVER); 
+		}
 			break;
 
-		default: 
+		default:
+		{
 			Common::PrintErrorMsg("잘못된 입력입니다.");
+		}
 			break;
 	}
 	Common::PauseAndClearScreen();
@@ -308,8 +317,9 @@ void GameManager::RunProcessDungeon()
 	}
 	else
 	{
-		Common::PrintSystemMsg("던전이 이미 준비되어 있습니다.");
+		Common::PrintSystemMsg("당신을 위한 던전 스테이지가 준비되어 있습니다.");
 	}
+
 	if (!playerPtr)
 	{
 		Common::PrintErrorMsg("플레이어 정보가 없습니다. 던전 탐험을 시작할 수 없습니다.");
@@ -318,6 +328,7 @@ void GameManager::RunProcessDungeon()
 
 	dungeonptr->Enter(playerPtr);
 
+	//Dungeon Settings
 	DungeonStage* stage = dungeonptr->GetCurrentStage();
 
 	if (stage) 
@@ -331,13 +342,8 @@ void GameManager::RunProcessDungeon()
 		return;
 	}
 
-	vector<Monster*> monsters = stage->GetMonsters();
 
-	vector<Monster*> aliveMonsters;
-	for (Monster* mon : monsters) {
-		if (mon->GetCharacterInfo().iCurrentHealth > 0)
-			aliveMonsters.push_back(mon);
-	}
+	vector<Monster*> monsters = stage->GetMonsters();
 
 	char dungeonChoice;
 	cin >> dungeonChoice;
@@ -347,45 +353,12 @@ void GameManager::RunProcessDungeon()
 
 	switch (dungeonChoice)
 	{
-		case '1':
+		case '1': //ChooseBattle
 		{
-			//Check if there are any monsters left in the dungeon
-			if (aliveMonsters.empty()) {
-				if (dungeonptr->NextStage()) {
-					Common::PrintSystemMsg("다음 스테이지로 이동합니다.");
-					Common::PauseAndClearScreen();
-					RunProcessDungeon();
-					return;
-				}
-				else {
-					Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다!\n마을로 돌아갑니다.");
-					Common::PauseAndClearScreen();
-					SetGameState(EGameState::VILLAGE);
-					return;
-				}
-			}
-			//Generate a random index 
-			srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
-			size_t randomIndex = rand() % aliveMonsters.size();
-			Monster* randomMonster = aliveMonsters[randomIndex];
-
-			//Start Battle with the random monster
-			bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, randomMonster);
-			Common::PauseAndClearScreen();
-
-			if (isPlayerAlive == false)
-			{
-				GameOverProcess();
-				return;
-			}
-			if (randomMonster->GetCharacterInfo().iCurrentHealth <= 0)
-			{
-				stage->OnMonsterDefeat(randomMonster);
-			}
-			SetGameState(EGameState::DUNGEON);
+			BattleInDungeonStage(monsters, stage);
 			break;
 		}
-		case '2':
+		case '2': //ChooseRun
 		{
 			Common::PrintSystemMsg("무모한 도전이 반드시 정답은 아닙니다.\n던전 탐험을 중단하고 마을로 돌아갑니다.");
 			Common::PauseAndClearScreen();
@@ -403,6 +376,54 @@ void GameManager::RunProcessDungeon()
 		}
 	}
 }
+
+void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* stage)
+{
+	vector<Monster*> aliveMonsters;
+	for (size_t i = 0; i < monsters.size(); ++i)
+	{
+		Monster* mon = monsters[i];
+		if (mon->GetCharacterInfo().iCurrentHealth > 0)
+			aliveMonsters.push_back(mon);
+	}
+
+	//Check if there are any monsters left in the dungeon
+	if (aliveMonsters.empty()) {
+		if (dungeonptr->NextStage()) {
+			Common::PrintSystemMsg("다음 스테이지로 이동합니다.");
+			Common::PauseAndClearScreen();
+			RunProcessDungeon();
+			return;
+		}
+		else {
+			Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다!\n마을로 돌아갑니다.");
+			Common::PauseAndClearScreen();
+			SetGameState(EGameState::VILLAGE);
+			return;
+		}
+	}
+	//Generate a random index 
+	srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
+	size_t randomIndex = rand() % aliveMonsters.size();
+	Monster* randomMonster = aliveMonsters[randomIndex];
+
+	//Start Battle with the random monster
+	bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, randomMonster);
+	Common::PauseAndClearScreen();
+
+	if (isPlayerAlive == false)
+	{
+		GameOverProcess();
+		return;
+	}
+	if (randomMonster->GetCharacterInfo().iCurrentHealth <= 0)
+	{
+		stage->OnMonsterDefeat(randomMonster);
+	}
+	SetGameState(EGameState::DUNGEON);
+}
+
+
 
 void GameManager::GameOverProcess()
 {
