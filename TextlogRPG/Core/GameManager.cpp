@@ -166,24 +166,22 @@ void GameManager::InitializeDungeon()
 	//FCharacterInfo(stats, maxHp, hp, lvl, name), dropExperience(exp), dropGold(gold)
 	vector<FMonsterInfo> stage1 = {
 		FMonsterInfo(CharacterStatus::NewStatus(5, 5, 8), 10, 10, 3, "허약한 고블린", 30, 16),
-		FMonsterInfo(CharacterStatus::NewStatus(9, 7, 11), 25, 25, 5, "허약한 슬라임", 30, 10),
-		FMonsterInfo(CharacterStatus::NewStatus(9, 10, 12), 30, 30, 8, "허약한 스켈레톤", 50, 30),
+		FMonsterInfo(CharacterStatus::NewStatus(3, 5, 6), 15, 15, 5, "허약한 슬라임", 30, 10),
+		FMonsterInfo(CharacterStatus::NewStatus(7, 5, 9), 20, 20, 8, "허약한 스켈레톤", 50, 30),
 	};
 	vector<FMonsterInfo> stage2 = {
 		FMonsterInfo(CharacterStatus::NewStatus(14, 15, 15), 40, 40, 10, "허약한 오크", 60, 40),
 		FMonsterInfo(CharacterStatus::NewStatus(20, 18, 20), 50, 50, 15, "허약한 드래곤", 100, 60),
-		FMonsterInfo(CharacterStatus::NewStatus(9, 5, 8), 20, 20, 3, "강력한 고블린", 30, 16),
-		FMonsterInfo(CharacterStatus::NewStatus(9, 7, 11), 25, 25, 5, "강력한 슬라임", 30, 10),
-		FMonsterInfo(CharacterStatus::NewStatus(9, 10, 12), 30, 30, 8, "강력한 스켈레톤", 50, 30),
-		FMonsterInfo(CharacterStatus::NewStatus(14, 15, 15), 40, 40, 10, "강력한 오크", 60, 40),
-		FMonsterInfo(CharacterStatus::NewStatus(20, 18, 20), 50, 50, 15, "강력한 드래곤", 100, 60)
+		FMonsterInfo(CharacterStatus::NewStatus(27, 27, 27), 20, 20, 3, "강력한 고블린", 30, 16),
+		FMonsterInfo(CharacterStatus::NewStatus(25, 25, 25), 25, 25, 5, "강력한 슬라임", 30, 10),
+		FMonsterInfo(CharacterStatus::NewStatus(28, 28, 28), 30, 30, 8, "강력한 스켈레톤", 50, 30)
 	};
     vector<FMonsterInfo> stage3 = {
-		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "완전 강력한 고블린", 15, 8),
-		FMonsterInfo(CharacterStatus::NewStatus(4, 2, 1), 8, 8, 2, "완전 강력한 슬라임", 15, 5),
-		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "완전 강력한 스켈레톤", 25, 15),
-		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "완전 강력한 오크", 30, 20),
-		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "완전 강력한 드래곤", 50, 30)
+		FMonsterInfo(CharacterStatus::NewStatus(30, 30, 30), 40, 40, 10, "강력한 오크", 60, 40),
+		FMonsterInfo(CharacterStatus::NewStatus(35, 35, 35), 50, 50, 15, "완전 강력한 스켈레톤", 100, 60),
+		FMonsterInfo(CharacterStatus::NewStatus(50, 50, 50), 100, 100, 21, "완전 강력한 고블린", 150, 80),
+		FMonsterInfo(CharacterStatus::NewStatus(70, 60, 50), 88, 88, 19, "완전 강력한 슬라임", 120, 70),
+		FMonsterInfo(CharacterStatus::NewStatus(100, 100, 100), 200, 200, 41, "완전 강력한 드래곤", 25, 15)
 	};
 	
 	vector<vector<FMonsterInfo>> dungeonStages = { stage1, stage2, stage3 };
@@ -436,62 +434,91 @@ void GameManager::RunProcessDungeon()
 
 void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* stage)
 {
-	for (size_t i = 0; i < monsters.size(); ++i)
+	// 랜덤 시드 설정 (프로그램 전체에서 한 번만 호출하는 것이 더 좋음)
+	srand(static_cast<unsigned int>(time(NULL)));
+
+	while (true)
 	{
-		Monster* monster = monsters[i];
+		// 살아있는 몬스터만 추출
+		vector<Monster*> aliveMonsters;
+		for (size_t i = 0; i < monsters.size(); ++i)
+		{
+			Monster* mon = monsters[i];
+			if (mon->GetCharacterInfo().iCurrentHealth > 0)
+				aliveMonsters.push_back(mon);
+		}
 
+		// 모두 죽었으면 종료
+		if (aliveMonsters.empty())
+			break;
 
-		if (monster->GetCharacterInfo().iCurrentHealth <= 0)
-			continue;
+		// 랜덤 인덱스 선택
+		size_t randomIndex = rand() % aliveMonsters.size();
+		Monster* randomMonster = aliveMonsters[randomIndex];
 
-		EBattleResult result = dungeonptr->EncounterMonster(playerPtr, monster);
-		
+		// 전투 시작
+		EBattleResult result = dungeonptr->EncounterMonster(playerPtr, randomMonster);
 
 		switch (result)
 		{
-		case EBattleResult::PLAYER_DEAD :
-		{
+		case EBattleResult::PLAYER_DEAD:
 			GameOverProcess();
 			return;
-		}
-		break;
 		case EBattleResult::PLAYER_RUN:
-		{
-			
 			SetGameState(EGameState::VILLAGE);
 			return;
-		}
-		break;
 		case EBattleResult::PLAYER_WIN:
-		{
-			stage->OnMonsterDefeat(monster);
+			stage->OnMonsterDefeat(randomMonster);
 			// 경험치, 골드 등 보상 지급 로직 추가 가능
-		}
-		break;
-		
+			break;
 		default:
-		{
 			Common::PrintErrorMsg("전투 중 알 수 없는 오류가 발생했습니다.");
 			return;
 		}
-		break;
-		}
 	}
 
-	//TODO : 랜덤 로직은 나중에.
-	//srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
-	//size_t listSize;
-	//if (!aliveMonsters.empty())
-	//	listSize = aliveMonsters.size();
-	//else
-	//	listSize = 5;
+	//for (size_t i = 0; i < monsters.size(); ++i)
+	//{
+	//	Monster* monster = monsters[i];
 
-	//size_t randomIndex = rand() % listSize;
-	//Monster* randomMonster = aliveMonsters[randomIndex];
 
-	////Start Battle with the random monster
-	//bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, randomMonster);
-	//Common::PauseAndClearScreen();
+	//	if (monster->GetCharacterInfo().iCurrentHealth <= 0)
+	//		continue;
+
+	//	EBattleResult result = dungeonptr->EncounterMonster(playerPtr, monster);
+	//	
+
+	//	switch (result)
+	//	{
+	//	case EBattleResult::PLAYER_DEAD :
+	//	{
+	//		GameOverProcess();
+	//		return;
+	//	}
+	//	break;
+	//	case EBattleResult::PLAYER_RUN:
+	//	{
+	//		
+	//		SetGameState(EGameState::VILLAGE);
+	//		return;
+	//	}
+	//	break;
+	//	case EBattleResult::PLAYER_WIN:
+	//	{
+	//		stage->OnMonsterDefeat(monster);
+	//		// 경험치, 골드 등 보상 지급 로직 추가 가능
+	//	}
+	//	break;
+	//	
+	//	default:
+	//	{
+	//		Common::PrintErrorMsg("전투 중 알 수 없는 오류가 발생했습니다.");
+	//		return;
+	//	}
+	//	break;
+	//	}
+	//}
+
 
 }
 
