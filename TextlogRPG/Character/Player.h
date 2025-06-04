@@ -12,12 +12,11 @@ class Player : public BaseCharacter
 {
 public:
 	//Default Constructor
-	Player(const FPlayerData& data, const FCharacterInfo& info) : BaseCharacter(info), playerData(data) {}
+	Player(const FPlayerInfo& data) : BaseCharacter(data), playerInfo(data) {}
 
 private:
-	FPlayerData playerData;
+	FPlayerInfo playerInfo;
 	vector<class Item*> inventory; 
-
 	CharacterStatus baseStatus;
 	CharacterStatus equipmentStatus;
 
@@ -31,7 +30,7 @@ public:
 	
 	void SetName(const string& name);
 	string GetName() const;
-	FPlayerData GetPlayerData() const;
+	FPlayerInfo GetPlayerData() const;
 	
 	void AddToInventory(class Item* item);
 	vector<Item*> GetInventoryItems(EItemType type) const;

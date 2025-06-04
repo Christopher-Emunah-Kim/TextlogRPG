@@ -22,7 +22,7 @@ struct FCharacterInfo
 	}
 };
 
-struct FPlayerData : public FCharacterInfo
+struct FPlayerInfo : public FCharacterInfo
 {
 	int32 playerExperience = 0;
 	int32 playerMaxExperience = 15;
@@ -32,10 +32,10 @@ struct FPlayerData : public FCharacterInfo
 	class MiscItem* miscOwned = nullptr;
 
 	//Default Constructor
-	FPlayerData() = default;
+	FPlayerInfo() = default;
 
 	//User-Defined Constructor
-	FPlayerData(const CharacterStatus& stats, int32 maxHp, int32 hp, int16 lvl, const string& name,
+	FPlayerInfo(const CharacterStatus& stats, int32 maxHp, int32 hp, int16 lvl, const string& name,
 		int32 exp = 0, int32 maxExp = 10, int32 gold = 10000,
 		Weapon* weapon = nullptr, Armor* armor = nullptr, MiscItem* misc = nullptr)
 		: FCharacterInfo(stats, maxHp, hp, lvl, name),

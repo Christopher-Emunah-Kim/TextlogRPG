@@ -311,7 +311,7 @@ void GameManager::RunProcessVillage()
 
 void GameManager::RunProcessDungeon()
 {
-	if (!dungeonptr)
+	if (dungeonptr==nullptr)
 	{
 		InitializeDungeon();
 	}
@@ -320,7 +320,7 @@ void GameManager::RunProcessDungeon()
 		Common::PrintSystemMsg("당신을 위한 던전 스테이지가 준비되어 있습니다.");
 	}
 
-	if (!playerPtr)
+	if (playerPtr == nullptr)
 	{
 		Common::PrintErrorMsg("플레이어 정보가 없습니다. 던전 탐험을 시작할 수 없습니다.");
 		return;
@@ -379,48 +379,64 @@ void GameManager::RunProcessDungeon()
 
 void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* stage)
 {
-	vector<Monster*> aliveMonsters;
-	for (size_t i = 0; i < monsters.size(); ++i)
-	{
-		Monster* mon = monsters[i];
-		if (mon->GetCharacterInfo().iCurrentHealth > 0)
-			aliveMonsters.push_back(mon);
-	}
 
-	//Check if there are any monsters left in the dungeon
-	if (aliveMonsters.empty()) {
-		if (dungeonptr->NextStage()) {
-			Common::PrintSystemMsg("다음 스테이지로 이동합니다.");
-			Common::PauseAndClearScreen();
-			RunProcessDungeon();
+	while (true)
+	{
+		//update the list of alive_monsters
+		vector<Monster*> aliveMonsters;
+		for (size_t i = 0; i < monsters.size(); ++i)
+		{
+			Monster* mon = monsters[i];
+			if (mon->GetCharacterInfo().iCurrentHealth > 0)
+				aliveMonsters.push_back(mon);
+		}
+
+		//Check if there are any monsters left in the dungeon
+		if (aliveMonsters.empty()) {
+			if (dungeonptr->NextStage()) 
+			{
+				Common::PrintSystemMsg("다음 스테이지로 이동합니다.");
+				Common::PauseAndClearScreen();
+				
+				//Enter Next Stage
+				DungeonStage* nextStage = dungeonptr->GetCurrentStage();
+				if (nextStage)
+				{
+					nextStage->EnterStage();
+					monsters = nextStage->GetMonsters();
+					stage = nextStage;
+					continue;
+				}
+			}
+			else 
+			{
+				Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다!\n마을로 돌아갑니다.");
+				Common::PauseAndClearScreen();
+				SetGameState(EGameState::VILLAGE);
+				return;
+			}
+		}
+		//Generate a random index 
+		srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
+		size_t randomIndex = rand() % aliveMonsters.size();
+		Monster* randomMonster = aliveMonsters[randomIndex];
+
+		//Start Battle with the random monster
+		bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, randomMonster);
+		Common::PauseAndClearScreen();
+
+		if (isPlayerAlive == false)
+		{
+			GameOverProcess();
 			return;
 		}
-		else {
-			Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다!\n마을로 돌아갑니다.");
-			Common::PauseAndClearScreen();
-			SetGameState(EGameState::VILLAGE);
-			return;
+
+		if (randomMonster->GetCharacterInfo().iCurrentHealth <= 0)
+		{
+			stage->OnMonsterDefeat(randomMonster);
 		}
 	}
-	//Generate a random index 
-	srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
-	size_t randomIndex = rand() % aliveMonsters.size();
-	Monster* randomMonster = aliveMonsters[randomIndex];
-
-	//Start Battle with the random monster
-	bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, randomMonster);
-	Common::PauseAndClearScreen();
-
-	if (isPlayerAlive == false)
-	{
-		GameOverProcess();
-		return;
-	}
-	if (randomMonster->GetCharacterInfo().iCurrentHealth <= 0)
-	{
-		stage->OnMonsterDefeat(randomMonster);
-	}
-	SetGameState(EGameState::DUNGEON);
+	
 }
 
 

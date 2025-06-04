@@ -7,32 +7,31 @@
 
 //Constructor
 Monster::Monster(const FMonsterInfo& info)
-	: BaseCharacter(info), dropExperience(info.dropExperience), dropGold(info.dropGold)
+	: BaseCharacter(info), fMonsterInfo(info), dropExperience(info.dropExperience), dropGold(info.dropGold)
 {
+	//setting the dropItemList of Monster
 	dropItemList = ItemManager::GetInstance().GetItemList();
 }
-
-
 
 
 void Monster::TakeDamage(BaseCharacter& target)
 {
 	const FCharacterInfo& fTragetCharacterInfo = target.GetCharacterInfo();
 
-	int32 iCalculatedDamage = characterInfo.characterStats.CalculateDamage(fTragetCharacterInfo.characterStats);
+	int32 iCalculatedDamage = fMonsterInfo.characterStats.CalculateDamage(fTragetCharacterInfo.characterStats);
 
 	//무한루프 막기위해 최소데미지 1보장.
 	if (iCalculatedDamage <= 0)
 		iCalculatedDamage = 1;
 
-	characterInfo.iCurrentHealth -= iCalculatedDamage;
-	if (characterInfo.iCurrentHealth <= 0)
+	fMonsterInfo.iCurrentHealth -= iCalculatedDamage;
+	if (fMonsterInfo.iCurrentHealth <= 0)
 	{
 		//print msg
-		string strMonsterDefeatMesg = "몬스터 " + characterInfo.strCharacterName + "이(가) 쓰러졌습니다.";
+		string strMonsterDefeatMesg = "몬스터 " + fMonsterInfo.strCharacterName + "이(가) 쓰러졌습니다.";
 		Common::PrintSystemMsg(strMonsterDefeatMesg);
 
-		characterInfo.iCurrentHealth = 0;
+		fMonsterInfo.iCurrentHealth = 0;
 
 		// 몬스터가 쓰러졌을 때 플레이어에게 경험치와 아이템 드랍
 		Player* playerTarget = static_cast<Player*>(&target);
@@ -84,7 +83,7 @@ void Monster::TakeDamage(BaseCharacter& target)
 	}
 	else
 	{
-		string strMonsterMsg = characterInfo.strCharacterName + "은(는) " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.\n현재 체력: " + to_string(characterInfo.iCurrentHealth);
+		string strMonsterMsg = fMonsterInfo.strCharacterName + "은(는) " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.\n현재 체력: " + to_string(fMonsterInfo.iCurrentHealth);
 		Common::PrintSystemMsg(strMonsterMsg);
 		
 	}
@@ -95,7 +94,7 @@ void Monster::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
-	string strMonsterAttackMsg = characterInfo.strCharacterName + "가(이) 당신을 공격합니다.\n";
+	string strMonsterAttackMsg = fMonsterInfo.strCharacterName + "가(이) 당신을 공격합니다.\n";
 	Common::PrintSystemMsg(strMonsterAttackMsg);
 
 	target->TakeDamage(*this);
@@ -104,7 +103,7 @@ void Monster::Attack(BaseCharacter* target)
 
 void Monster::SetCurrentHealth(int32 health)
 {
-	characterInfo.iCurrentHealth = health;
+	fMonsterInfo.iCurrentHealth = health;
 }
 
 Monster::~Monster()
