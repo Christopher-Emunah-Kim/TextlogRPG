@@ -17,7 +17,6 @@ Player* Player::CreateCharacter(const string& characterName)
 
 void Player::ReceiveDamageFrom(BaseCharacter& target)
 {
-	//플레이어의 TakeDamage함수 내에서 몬스터와 플레이어의 데미지 계산 및 출력메시지 대부분 처리
 	const FCharacterInfo& fTargetCharacterInfo = target.GetCharacterInfo();
 
 	int32 iCalculatedDamage = playerInfo.characterStats.CalculateDamage(fTargetCharacterInfo.characterStats);
@@ -27,7 +26,7 @@ void Player::ReceiveDamageFrom(BaseCharacter& target)
 	if (playerInfo.iCurrentHealth <= 0)
 	{
 		Common::PrintSystemMsg("당신은 여신의 곁으로 돌아갑니다..");
-		playerInfo.iCurrentHealth = 0; // 체력을 0으로 설정하여 게임오버 상태로 유지
+		playerInfo.iCurrentHealth = 0; // maintain gameover state with zero health
 	}
 	else
 	{
@@ -233,7 +232,6 @@ void Player::GainLoot(int32 experience, int32 gold, Item* item)
 	Common::PauseAndClearScreen();
 	ShowPlayerStatus();
 
-	//TODO : 레벨업 로직 구현
 	if (playerInfo.playerExperience >= playerInfo.playerMaxExperience)
 	{
 		CharacterLevelUp();
@@ -251,12 +249,11 @@ void Player::UpdateFinalStatus()
 
 BaseCharacter& Player::CharacterLevelUp()
 {
-	//TODO : 레벨업할때 장비스탯 제대로 반영안되는것같은데 해결 필요.
-	//LevelData 클래스의 FLevelData 구조체 어레이를 사용하여 레벨업 시 캐릭터의 상태를 업데이트
+	//Update Player's level and status based on LevelData Array
 	playerInfo.iCurrentLevel++;
 	if (playerInfo.iCurrentLevel > 100)
 	{
-		playerInfo.iCurrentLevel = 100; // 최대 100 레벨 초과 방지
+		playerInfo.iCurrentLevel = 100; // MAX LEVEL
 		return *this;
 	}
 
@@ -265,9 +262,9 @@ BaseCharacter& Player::CharacterLevelUp()
 
 	playerInfo.iMaxHealth += levelData.maxHealthPerLevel;
 	playerInfo.playerMaxExperience += levelData.maxExperiencePerLevel;
-	playerInfo.iCurrentHealth = playerInfo.iMaxHealth; // 레벨업 시 체력을 최대치로 회복
+	playerInfo.iCurrentHealth = playerInfo.iMaxHealth; // Reset current health to max health after level up
 
-	// 레벨업 시 공격력, 방어력, 민첩성 증가
+	// Update character stats based on level data
 	playerInfo.characterStats = CharacterStatus::NewStatus(levelData.attackPerLevel, levelData.defensePerLevel,levelData.agilityPerLevel	);
 
 	UpdateFinalStatus();

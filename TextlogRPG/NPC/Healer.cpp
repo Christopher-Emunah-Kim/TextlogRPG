@@ -44,9 +44,9 @@ void Healer::Interact(Player* player)
 	Common::PrintSystemMsg(strHealerMsg);
 
 	char healerChoice = Common::GetCharInput();
-	cin >> healerChoice;
-	cin.ignore(1024, '\n');
+
 	Common::PauseAndClearScreen();
+
 	if (healerChoice == '1')
 	{
 		HealPlayer(player, healCost);
