@@ -5,14 +5,15 @@
 
 void MonsterPool::Initialize(const vector<FMonsterInfo>& monsterInfos, size_t countPerType)
 {
-	for (const FMonsterInfo& info : monsterInfos)
+	for (size_t idx = 0; idx < monsterInfos.size(); ++idx)
 	{
+		const FMonsterInfo& info = monsterInfos[idx];
 		vector<Monster*>& vec = monsterPool[info.strCharacterName];
 		for (size_t i = 0; i < countPerType; ++i)
 		{
-			Monster* mon = new Monster(info);
-			ReviveMonster(mon);
-			vec.push_back(mon);
+			Monster* pMonster = new Monster(info);
+			ReviveMonster(pMonster);
+			vec.push_back(pMonster);
 		}
 	}
 }
@@ -20,36 +21,38 @@ void MonsterPool::Initialize(const vector<FMonsterInfo>& monsterInfos, size_t co
 Monster* MonsterPool::ActivateMonster(const string& name)
 {
 	vector<Monster*>& vec = monsterPool[name];
-	for (Monster* monster : vec) 
+	for (size_t i = 0; i < vec.size(); ++i) 
 	{
-		if (monster->GetCharacterInfo().iCurrentHealth <= 0)
+		Monster* pMonster = vec[i];
+		if (pMonster->GetCharacterInfo().iCurrentHealth <= 0)
 		{
-			ReviveMonster(monster);
-			return monster;
+			ReviveMonster(pMonster);
+			return pMonster;
 		}
 	}
 	return nullptr;
 }
 
-void MonsterPool::DeactivateMonster(Monster* monster)
+void MonsterPool::DeactivateMonster(Monster* pMonster)
 {
-	monster->SetCurrentHealth(0);
+	pMonster->SetCurrentHealth(0);
 }
 
-void MonsterPool::ReviveMonster(Monster* monster)
+void MonsterPool::ReviveMonster(Monster* pMonster)
 {
-	monster->SetCurrentHealth(monster->GetCharacterInfo().iMaxHealth);
+	pMonster->SetCurrentHealth(pMonster->GetCharacterInfo().iMaxHealth);
 }
 
 MonsterPool::~MonsterPool()
 {
-	for (pair<const string, vector<Monster*>>& pair : monsterPool)
+	for (unordered_map<string, vector<Monster*>>::iterator it = monsterPool.begin(); it != monsterPool.end();++it)
 	{
-		for (Monster* mon : pair.second)
+		vector<Monster*>& monsterList = it->second;
+		for (size_t i = 0; i < monsterList.size(); ++i)
 		{
-			delete mon;
+			delete monsterList[i];
 		}
-		pair.second.clear();
+		it->second.clear();
 	}
 	monsterPool.clear();
 }

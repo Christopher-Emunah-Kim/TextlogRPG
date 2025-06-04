@@ -37,6 +37,7 @@ public:
 	vector<Item*> GetInventoryItems(EItemType type) const;
 	
 	void EquipItem(class Item* item);
+	void CaculateNewStatus(Item* item);
 	void LoseItem(class Item* item);
 	
 	void Heal(uint32 healAmount);

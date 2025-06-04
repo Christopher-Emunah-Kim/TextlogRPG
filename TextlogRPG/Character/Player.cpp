@@ -82,8 +82,9 @@ vector<Item*> Player::GetInventoryItems(EItemType type) const
 {
 	vector<Item*> itemListByType;
 
-	for (Item* item : inventory) 
+	for (size_t i = 0; i < inventory.size(); ++i) 
 	{
+		Item* item = inventory[i];
 		if (item->GetItemInfo().itemType == type)
 		{
 			itemListByType.push_back(item);
@@ -99,6 +100,23 @@ void Player::EquipItem(Item* item)
 	if (item == nullptr) return;
 	//TODO : 아이템 착용 후 캐릭터 스탯 이상하게 덮어씌워지는 문제 확인
 	// remove status of former equipment(Weapon)
+	CaculateNewStatus(item);
+
+	UpdateFinalStatus(); // update status
+
+	// update the equipment change
+	//item->EquippedBy(this);
+
+	string strUseWeapon = "[System] " + item->GetItemInfo().itemName + "을(를) 장착합니다.\n";
+	Common::PrintSystemMsg(strUseWeapon);
+	Common::PauseAndClearScreen();
+
+	ShowPlayerStatus();
+
+}
+
+void Player::CaculateNewStatus(Item* item)
+{
 	if (item->GetItemInfo().itemType == EItemType::WEAPON && playerData.weaponEquipped != nullptr) {
 		equipmentStatus = CharacterStatus::NewStatus(
 			equipmentStatus.GetAttack() - playerData.weaponEquipped->GetItemInfo().attack,
@@ -129,12 +147,6 @@ void Player::EquipItem(Item* item)
 		equipmentStatus.GetDefense() + item->GetItemInfo().defense,
 		equipmentStatus.GetAgility() + item->GetItemInfo().agility
 	);
-
-	UpdateFinalStatus(); // update status
-
-	// update and display the result of the equipment change
-	item->EquippedBy(this);
-
 }
 
 void Player::LoseItem(Item* item)
@@ -308,8 +320,9 @@ Player::~Player()
 		delete playerData.miscOwned;
 		playerData.miscOwned = nullptr;
 	}
-	for (Item* item : inventory)
+	for (size_t i = 0; i<inventory.size(); ++i)
 	{
+		Item* item = inventory[i];
 		delete item;
 	}
 	inventory.clear();

@@ -9,7 +9,7 @@ void Merchant::AddItemForSale(const string& itemName, uint32 price)
 
 void Merchant::SellItem(Player* player, const string& itemName)
 {
-	map<string, uint32>::iterator it = itemLists.find(itemName);
+	unordered_map<string, uint32>::iterator it = itemLists.find(itemName);
 	if (it == itemLists.end())
 	{
 		Common::PrintErrorMsg("판매하지 않는 아이템입니다. 아이템 이름을 확인하세요.");
@@ -18,6 +18,7 @@ void Merchant::SellItem(Player* player, const string& itemName)
 	}
 
 	uint32 itemPrice = it->second;
+
 	if (player->GetPlayerData().playerGold < itemPrice)
 	{
 		Common::PrintErrorMsg("골드가 부족합니다. 아이템을 구매할 수 없습니다.");
@@ -26,6 +27,7 @@ void Merchant::SellItem(Player* player, const string& itemName)
 	}
 
 	Item* item = ItemManager::GetInstance().CreateItem(itemName);
+
 	if (item == nullptr)
 	{
 		Common::PrintErrorMsg("아이템 생성에 실패했습니다. 아이템 이름을 확인하세요.");
@@ -48,8 +50,9 @@ void Merchant::BuyItem(Player* player, const string& itemName)
 	//find item in player's inventory
 	vector<Item*> miscItems = player->GetInventoryItems(EItemType::MISC);
 	Item* sellItem = nullptr;
-	for (Item* item : miscItems)
+	for (size_t i = 0; i<miscItems.size(); ++i)
 	{
+		Item* item = miscItems[i];
 		if (item->GetItemInfo().itemName == itemName)
 		{
 			sellItem = item;
@@ -100,15 +103,15 @@ void Merchant::Interact(Player* player)
 	char merchantChoice;
 	cin >> merchantChoice;
 	cin.ignore(1024, '\n');
-	Common::PauseAndClearScreen();
+	Common::PauseAndClearScreen(1000);
 
 	//TODO : 아이템 레이블 정보 불러오기 구현
 
 	vector<string> availableWeapons;
 	vector<string> availableArmors;
 	vector<string> miscItems;
-	uint8 weaponChoice;
-	uint8 armorChoice;
+	size_t weaponChoice;
+	size_t armorChoice;
 
 	switch (merchantChoice) 
 	{
@@ -147,11 +150,11 @@ void Merchant::Interact(Player* player)
 
 			cin >> weaponChoice;
 			cin.ignore(1024, '\n');
-			if (weaponChoice > 0 && weaponChoice <= static_cast<int>(availableWeapons.size()))
+			if (weaponChoice > 0 && weaponChoice <= availableWeapons.size())
 			{
 				SellItem(player, availableWeapons[weaponChoice - 1]);
 			}
-			else if (weaponChoice == static_cast<int>(availableWeapons.size() + 1))
+			else if (weaponChoice == (availableWeapons.size() + 1))
 			{
 				Common::PauseAndClearScreen();
 				Merchant::Interact(player);
@@ -161,12 +164,12 @@ void Merchant::Interact(Player* player)
 		case '2':
 		{
 			//Selling Armors
-			for (const pair<string, uint32>& pair : itemLists)
+			for (unordered_map<string, uint32>::iterator it = itemLists.begin(); it != itemLists.end(); ++it)
 			{
-				Item* item = ItemManager::GetInstance().GetItem(pair.first);
+				Item* item = ItemManager::GetInstance().GetItem(it->first);
 				if (item && item->GetItemInfo().itemType == EItemType::ARMOR)
 				{
-					availableArmors.push_back(pair.first);
+					availableArmors.push_back(it->first);
 				}
 			}
 			if (availableArmors.empty())
@@ -193,11 +196,11 @@ void Merchant::Interact(Player* player)
 
 			cin >> armorChoice;
 			cin.ignore(1024, '\n');
-			if (armorChoice > 0 && armorChoice <= static_cast<int>(availableArmors.size()))
+			if (armorChoice > 0 && armorChoice <= availableArmors.size())
 			{
 				SellItem(player, availableArmors[armorChoice - 1]);
 			}
-			else if (armorChoice == static_cast<int>(availableArmors.size() + 1))
+			else if (armorChoice == (availableArmors.size() + 1))
 			{
 				Merchant::Interact(player);
 			}
@@ -231,11 +234,11 @@ void Merchant::Interact(Player* player)
 			uint8 miscChoice;
 			cin >> miscChoice;
 			cin.ignore(1024, '\n');
-			if (miscChoice > 0 && miscChoice <= static_cast<int>(miscItems.size()))
+			if (miscChoice > 0 && miscChoice <= miscItems.size())
 			{
 				BuyItem(player, miscItems[miscChoice - 1]->GetItemInfo().itemName);
 			}
-			else if (miscChoice == static_cast<int>(miscItems.size() + 1))
+			else if (miscChoice == (miscItems.size() + 1))
 			{
 				Merchant::Interact(player);
 			}

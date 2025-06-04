@@ -11,8 +11,9 @@ DungeonStage::DungeonStage(const vector<FMonsterInfo>& monsterInfos)
 void DungeonStage::EnterStage()
 {
 	monsterList.clear();
-	for (const FMonsterInfo& info : monsterInfoList) 
+	for (size_t i = 0; i< monsterInfoList.size(); ++i) 
 	{
+		const FMonsterInfo& info = monsterInfoList[i];
 		Monster* mon = monsterPool->ActivateMonster(info.strCharacterName);
 		if (!mon)
 		{
@@ -28,9 +29,9 @@ void DungeonStage::EnterStage()
 
 void DungeonStage::ExitStage()
 {
-	for (Monster* mon : monsterList)
+	for (size_t i = 0; i  < monsterList.size(); ++i)
 	{
-		monsterPool->DeactivateMonster(mon);
+		monsterPool->DeactivateMonster(monsterList[i]);
 	}
 
 	monsterList.clear();
@@ -43,9 +44,10 @@ vector<Monster*> DungeonStage::GetMonsters()
 
 bool DungeonStage::isCleared() const
 {
-	for (Monster* mon : monsterList)
+	for (size_t i = 0; i < monsterList.size(); ++i)
 	{
-		if (mon->GetCharacterInfo().iCurrentHealth > 0)
+		Monster* pMonster = monsterList[i];
+		if (pMonster->GetCharacterInfo().iCurrentHealth > 0)
 			return false;
 	}
 	return true;
@@ -62,13 +64,6 @@ void DungeonStage::OnMonsterDefeat(Monster* monster)
 
 DungeonStage::~DungeonStage()
 {
-	/*for (const Monster* monster : monsterList)
-	{
-		delete monster;
-		monster = nullptr;
-	}
-	monsterInfoList.clear();
-	monsterList.clear();*/
 	ExitStage();
 	delete monsterPool;
 	monsterPool = nullptr;

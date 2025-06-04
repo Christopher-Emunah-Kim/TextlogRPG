@@ -4,7 +4,7 @@
 class Merchant : public NonPlayerCharacter {
 private:
     //vector<Item*> items;
-    map<string, uint32> itemLists; //item, price
+    unordered_map<string, uint32> itemLists; //item, price
 
 public:
     explicit Merchant(const string& name)
