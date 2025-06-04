@@ -33,14 +33,12 @@ Monster* MonsterPool::ActivateMonster(const string& name)
 
 void MonsterPool::DeactivateMonster(Monster* monster)
 {
-	monster->GetCharacterInfo().iCurrentHealth = 0;
+	monster->SetCurrentHealth(0);
 }
 
 void MonsterPool::ReviveMonster(Monster* monster)
 {
-	uint32& iCurrentHealth = monster->GetCharacterInfo().iCurrentHealth;
-	uint32& iMaxHealth = monster->GetCharacterInfo().iMaxHealth;
-	iCurrentHealth = iMaxHealth;
+	monster->SetCurrentHealth(monster->GetCharacterInfo().iMaxHealth);
 }
 
 MonsterPool::~MonsterPool()

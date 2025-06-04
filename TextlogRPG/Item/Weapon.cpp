@@ -23,7 +23,7 @@ void Weapon::EquippedBy(Player* player)
 		GetItemInfo().agility
 	);
 
-	player->GetCharacterInfo().characterStats = status.NewStatus(status);
+	player->GetCharacterInfo().characterStats = status.AddStatus(status);
 
 	string strUseWeapon = "[System] " + GetItemInfo().itemName + "을(를) 장착합니다.\n";
 	Common::PrintSystemMsg(strUseWeapon);

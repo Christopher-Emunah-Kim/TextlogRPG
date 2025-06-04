@@ -10,11 +10,11 @@
 Player* Player::CreateCharacter(const string& characterName)
 {
 	//TODO : 임시_이후 LevelData 연결
-	FCharacterInfo characterInfo = { CharacterStatus::NewStatus(10, 5, 3), 5, 5, 1, characterName };
+	FCharacterInfo fTempCharacterInfo = { CharacterStatus::NewStatus(10, 5, 3), 5, 5, 1, characterName };
 
 	FPlayerData playerData;
 
-	Player* player = new Player(playerData, characterInfo);
+	Player* player = new Player(playerData, fTempCharacterInfo);
 
 	return player;
 }
@@ -22,12 +22,16 @@ Player* Player::CreateCharacter(const string& characterName)
 void Player::TakeDamage(BaseCharacter& target)
 {
 	//플레이어의 TakeDamage함수 내에서 몬스터와 플레이어의 데미지 계산 및 출력메시지 대부분 처리
-	uint32 damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
+	const FCharacterInfo& fTargetCharacterInfo = target.GetCharacterInfo();
+
+	uint32 iCalculatedDamage = characterInfo.characterStats.CalculateDamage(fTargetCharacterInfo.characterStats);
+
 	//무한루프 막기위해 최소데미지 1보장.
-	if (damage <= 0)
-		damage = 1;
+	if (iCalculatedDamage <= 0)
+		iCalculatedDamage = 1;
 	
-	characterInfo.iCurrentHealth -= damage;
+	characterInfo.iCurrentHealth -= iCalculatedDamage;
+
 	if (characterInfo.iCurrentHealth <= 0)
 	{
 		Common::PrintSystemMsg("당신은 여신의 곁으로 돌아갑니다..");
@@ -35,7 +39,7 @@ void Player::TakeDamage(BaseCharacter& target)
 	}
 	else
 	{
-		string strDamageText = "[System] " + target.GetCharacterInfo().strCharacterName + "에게 " + to_string(damage) + "의 데미지를 입었습니다.";
+		string strDamageText = "[System] " + target.GetCharacterInfo().strCharacterName + "에게 " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.";
 		Common::PrintSystemMsg(strDamageText);
 	}
 	Common::PauseAndClearScreen();
@@ -47,6 +51,7 @@ void Player::Attack(BaseCharacter* target)
 	
 	string strAttackText = "[System] 당신은 " + target->GetCharacterInfo().strCharacterName + "을(를) 공격합니다.";
 	Common::PrintSystemMsg(strAttackText);
+	Common::PauseAndClearScreen();
 
 	target->TakeDamage(*this);
 	

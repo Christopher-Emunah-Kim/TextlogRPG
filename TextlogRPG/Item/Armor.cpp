@@ -23,7 +23,7 @@ void Armor::EquippedBy(Player* player)
 		GetItemInfo().defense,
 		GetItemInfo().agility
 	);
-	player->GetCharacterInfo().characterStats = status.NewStatus(status);
+	player->GetCharacterInfo().characterStats = status.AddStatus(status);
 
 	string strUseArmor = "[System] " + GetItemInfo().itemName + "을(를) 장착합니다.\n";
 	Common::PrintSystemMsg(strUseArmor);

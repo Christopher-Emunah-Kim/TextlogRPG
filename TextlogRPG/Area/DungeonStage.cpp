@@ -19,7 +19,7 @@ void DungeonStage::EnterStage()
 			//Exception 
 			mon = new Monster(info);
 
-			mon->GetCharacterInfo().iCurrentHealth = mon->GetCharacterInfo().iMaxHealth;
+			mon->SetCurrentHealth(mon->GetCharacterInfo().iMaxHealth);
 		}
 		monsterList.push_back(mon);
 		//monsterList.emplace_back(new Monster(info));

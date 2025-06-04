@@ -17,17 +17,22 @@ Monster::Monster(const FMonsterInfo& info)
 
 void Monster::TakeDamage(BaseCharacter& target)
 {
-	uint32 damage = GetCharacterInfo().characterStats.GetDamage(target.GetCharacterInfo().characterStats);
-	damage <= 0 ? damage = 0 : damage;
-	FCharacterInfo& info = characterInfo;
-	info.iCurrentHealth -= damage;
-	if (info.iCurrentHealth <= 0)
+	const FCharacterInfo& fTragetCharacterInfo = target.GetCharacterInfo();
+
+	uint32 iCalculatedDamage = characterInfo.characterStats.CalculateDamage(fTragetCharacterInfo.characterStats);
+
+	//무한루프 막기위해 최소데미지 1보장.
+	if (iCalculatedDamage <= 0)
+		iCalculatedDamage = 1;
+
+	characterInfo.iCurrentHealth -= iCalculatedDamage;
+	if (characterInfo.iCurrentHealth <= 0)
 	{
-		
-		cout << "\n===========================================\n";
-		cout << "\n[System] " << info.strCharacterName << "이(가) 쓰러졌습니다.\n";
-		cout << "\n===========================================\n" << endl;
-		info.iCurrentHealth = 0; 
+		//print msg
+		string strMonsterDefeatMesg = "몬스터 " + characterInfo.strCharacterName + "이(가) 쓰러졌습니다.";
+		Common::PrintSystemMsg(strMonsterDefeatMesg);
+
+		characterInfo.iCurrentHealth = 0;
 
 		// 몬스터가 쓰러졌을 때 플레이어에게 경험치와 아이템 드랍
 		Player* playerTarget = static_cast<Player*>(&target);
@@ -36,17 +41,16 @@ void Monster::TakeDamage(BaseCharacter& target)
 			// TODO : dropItems중에 랜덤드랍
 			srand(static_cast<unsigned int>(time(NULL)));
 			size_t randomIndex = rand() % dropItemList.size();
-			string randomItemName = dropItemList[randomIndex];
-			Item* randomDropItem = ItemManager::GetInstance().CreateItem(randomItemName);
+
+			string strRandomItemName = dropItemList[randomIndex];
+			Item* randomDropItem = ItemManager::GetInstance().CreateItem(strRandomItemName);
 
 			if (randomDropItem)
 			{
-				cout << "\n===========================================\n";
-				cout << "\n[System] 전리품을 획득했습니다!!!\n";
+				Common::PrintSystemMsg("전리품을 획득했습니다!");
 				randomDropItem->ShowItemInfo();
-				cout << "\n[System] 이 아이템을 장착하시겠습니까?\n";
-				cout << "\n-> 1. 새로운 장비를 장착한다.  2. 기존의 장비를 사용한다.\n";
-				cout << "\n===========================================\n" << endl;
+				Common::PrintSystemMsg("이 아이템을 장착하시겠습니까?\n-> 1. 새로운 장비를 장착한다.  2. 기존의 장비를 사용한다.");
+				
 				char equipChoice;
 				cin >> equipChoice;
 				cin.ignore(1024, '\n');
@@ -59,23 +63,20 @@ void Monster::TakeDamage(BaseCharacter& target)
 				else if (equipChoice == '2')
 				{
 					playerTarget->AddToInventory(randomDropItem);
-					cout << "\n===========================================\n";
-					cout << "\n[System] 아이템을 인벤토리에 보관했습니다\n";
-					cout << "\n===========================================\n" << endl;
+					Common::PrintSystemMsg("아이템을 인벤토리에 보관했습니다.");
 				}
 				else
 				{
-					cout << "\n===========================================\n";
-					cout << "[System] 잘못된 입력입니다. 아이템을 획득하지 못했습니다." << endl;
-					cout << "\n===========================================\n" << endl;
+					Common::PrintSystemMsg("잘못된 입력입니다. 아이템을 획득하지 못했습니다.");
 					return;
 				}
 			
 				
 				const_cast<Player*>(playerTarget)->GainLoot(dropExperience, dropGold, randomDropItem);
 			}
-			else {
-				cout << "[System] 아이템 드랍에 실패했습니다." << endl;
+			else 
+			{
+				Common::PrintSystemMsg("아이템 드랍을 실패했습니다.");
 			}
 
 		};
@@ -83,9 +84,8 @@ void Monster::TakeDamage(BaseCharacter& target)
 	}
 	else
 	{
-		cout << "\n===========================================\n" << endl;
-		cout << "[System] "<< info.strCharacterName <<"은(는) "<< damage << "의 데미지를 입었습니다.\n현재 체력: " << info.iCurrentHealth << endl;
-		cout << "\n===========================================\n" << endl;
+		string strMonsterMsg = characterInfo.strCharacterName + "은(는) " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.\n현재 체력: " + to_string(characterInfo.iCurrentHealth);
+		Common::PrintSystemMsg(strMonsterMsg);
 		
 	}
 	
@@ -95,13 +95,19 @@ void Monster::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
+	
 	cout << "\n===========================================\n";
-	cout << "\n[System] " << GetCharacterInfo().strCharacterName << "가(이) 당신을 공격합니다.\n";
+	cout << "\n[System] " << characterInfo.strCharacterName << "가(이) 당신을 공격합니다.\n";
 	cout << "\n===========================================\n" << endl;
 	
 
 	target->TakeDamage(*this);
 	
+}
+
+void Monster::SetCurrentHealth(uint32 health)
+{
+	characterInfo.iCurrentHealth = health;
 }
 
 Monster::~Monster()

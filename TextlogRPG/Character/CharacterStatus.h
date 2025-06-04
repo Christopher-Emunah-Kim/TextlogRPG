@@ -21,9 +21,9 @@ public:
 
 	static CharacterStatus NewStatus(uint16 atk, uint16 def, uint16 agi);  
 
-	CharacterStatus NewStatus(const CharacterStatus& other) const;  
+	CharacterStatus AddStatus(const CharacterStatus& other) const;  
 
-	uint32 GetDamage(const CharacterStatus& other) const;  
+	uint32 CalculateDamage(const CharacterStatus& other) const;  
 
 	//Get Status Info
 	uint16 GetAttack() const { return attack; }

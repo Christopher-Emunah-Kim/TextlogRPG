@@ -20,6 +20,8 @@ public:
 	void TakeDamage(BaseCharacter& target) override;
 	void Attack(BaseCharacter* target) override;
 
+	void SetCurrentHealth(uint32 health);
+
 	// Destructor
 	~Monster();
 
