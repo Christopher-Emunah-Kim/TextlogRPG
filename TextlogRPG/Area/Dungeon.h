@@ -9,7 +9,7 @@ class Dungeon : public Area
 private:
     vector<Monster*> monsters;
 	vector<DungeonStage*> stages;
-	uint16 currentStageIndex;
+	int16 currentStageIndex;
 
 public:
 	Dungeon();

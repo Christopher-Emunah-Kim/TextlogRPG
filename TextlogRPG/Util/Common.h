@@ -58,7 +58,7 @@ public:
 		cout << "\n===========================================\n" <<endl;
 	}
 	
-	static void PauseAndClearScreen(uint32 milliseconds=1500) {
+	static void PauseAndClearScreen(int32 milliseconds=1500) {
 		Sleep(milliseconds);
 		system("cls");
 	}

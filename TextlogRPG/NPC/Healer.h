@@ -3,15 +3,15 @@
 
 class Healer : public NonPlayerCharacter {
 private:
-    uint32 healCost;
+    int32 healCost;
 
 public:
-	explicit Healer(const string& name, uint32 cost)
+	explicit Healer(const string& name, int32 cost)
 		: NonPlayerCharacter(), healCost(cost) { SetName(name);	}
 
-    uint32 GetHealCost() const { return healCost; }
+    int32 GetHealCost() const { return healCost; }
 
-    void HealPlayer(Player* player, uint32 cost);
+    void HealPlayer(Player* player, int32 cost);
 
     // Interact with Player
     void Interact(Player* player) override;

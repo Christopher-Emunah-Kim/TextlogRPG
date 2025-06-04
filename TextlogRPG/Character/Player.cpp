@@ -189,7 +189,7 @@ void Player::LoseItem(Item* item)
 
 }
 
-void Player::Heal(uint32 healAmount)
+void Player::Heal(int32 healAmount)
 {
 	if (healAmount <= 0) return;
 	playerData.iCurrentHealth += healAmount;
@@ -199,7 +199,7 @@ void Player::Heal(uint32 healAmount)
 	}
 }
 
-void Player::UseGold(uint32 cost)
+void Player::UseGold(int32 cost)
 {
 	if (cost <= 0) return;
 	if (playerData.playerGold >= cost)
@@ -212,7 +212,7 @@ void Player::UseGold(uint32 cost)
 	}
 }
 
-void Player::EarnGold(uint32 earnGold)
+void Player::EarnGold(int32 earnGold)
 {
 	if (earnGold <= 0) return;
 
@@ -221,7 +221,7 @@ void Player::EarnGold(uint32 earnGold)
 	Common::PrintSystemMsg(strEarnGoldMsg);
 }
 
-void Player::GainLoot(uint32 experience, uint32 gold, Item* item)
+void Player::GainLoot(int32 experience, int32 gold, Item* item)
 {
 	if (experience < 0 || gold < 0) return;
 

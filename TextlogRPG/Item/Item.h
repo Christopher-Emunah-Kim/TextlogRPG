@@ -10,10 +10,10 @@ class Player;
 struct FItemInfo
 {
 	EItemType itemType = EItemType::NONE; 
-	uint32 itemCost = 0;              
-	uint16 attack = 0;                  
-	uint16 defense = 0;               
-	uint16 agility = 0;            
+	int32 itemCost = 0;              
+	int16 attack = 0;                  
+	int16 defense = 0;               
+	int16 agility = 0;            
 	string itemName = "UNKNOWN";
 
 };
@@ -40,7 +40,7 @@ public:
 
 	virtual FItemInfo GetItemInfo() const { return itemInfo; }
 
-	virtual Item& SetItem(EItemType type, uint32 cost, uint16 atk, uint16 def, uint16 agi, string name)
+	virtual Item& SetItem(EItemType type, int32 cost, int16 atk, int16 def, int16 agi, string name)
 	{
 		itemInfo.itemType = type;
 		itemInfo.itemCost = cost;

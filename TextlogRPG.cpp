@@ -7,7 +7,7 @@
 using namespace std;
 
 
-uint32 main()
+int32 main()
 {
 	//Game Start Settings
 	Player* player = Player::CreateCharacter("NONE");

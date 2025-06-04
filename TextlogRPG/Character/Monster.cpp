@@ -102,7 +102,7 @@ void Monster::Attack(BaseCharacter* target)
 	
 }
 
-void Monster::SetCurrentHealth(uint32 health)
+void Monster::SetCurrentHealth(int32 health)
 {
 	characterInfo.iCurrentHealth = health;
 }

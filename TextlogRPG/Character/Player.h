@@ -40,12 +40,12 @@ public:
 	void CaculateNewStatus(Item* item);
 	void LoseItem(class Item* item);
 	
-	void Heal(uint32 healAmount);
+	void Heal(int32 healAmount);
 	
-	void UseGold(uint32 cost);
-	void EarnGold(uint32 earnGold);
+	void UseGold(int32 cost);
+	void EarnGold(int32 earnGold);
 	
-	void GainLoot(uint32 experience, uint32 gold, class Item* item);
+	void GainLoot(int32 experience, int32 gold, class Item* item);
 	void UpdateFinalStatus();
 
 	BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class

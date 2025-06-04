@@ -1,10 +1,10 @@
 ﻿#include "Healer.h"
 
-void Healer::HealPlayer(Player* player, uint32 cost)
+void Healer::HealPlayer(Player* player, int32 cost)
 {
 	if (player->GetPlayerData().playerGold >= cost) 
 	{
-		uint32 healAmount = player->GetCharacterInfo().iMaxHealth - player->GetCharacterInfo().iCurrentHealth;
+		int32 healAmount = player->GetCharacterInfo().iMaxHealth - player->GetCharacterInfo().iCurrentHealth;
 		player->Heal(healAmount);
 		player->UseGold(cost);
 

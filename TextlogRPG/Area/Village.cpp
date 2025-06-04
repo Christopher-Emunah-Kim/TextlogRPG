@@ -27,7 +27,7 @@ vector<NonPlayerCharacter*>& Village::GetNPCList()
 
 void Village::InteractWithNPC(Player* player, NonPlayerCharacter* npc)
 {
-	//TODO : <uint32, vector<NonPlayerCharacter*>> map을 만들어서 입력한 num에 따라 필요한 interact를 발동하도록 하는게 나을듯.
+	//TODO : <int32, vector<NonPlayerCharacter*>> map을 만들어서 입력한 num에 따라 필요한 interact를 발동하도록 하는게 나을듯.
 	if (npc) 
 		npc->Interact(player);
 }

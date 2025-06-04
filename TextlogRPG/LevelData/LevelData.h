@@ -5,11 +5,11 @@ using namespace std;
 
 struct FLevelProperties
 {
-	uint32 maxExperiencePerLevel;
-	uint32 maxHealthPerLevel;
-	uint16 attackPerLevel;
-	uint16 defensePerLevel;
-	uint16 agilityPerLevel;
+	int32 maxExperiencePerLevel;
+	int32 maxHealthPerLevel;
+	int16 attackPerLevel;
+	int16 defensePerLevel;
+	int16 agilityPerLevel;
 };
 
 static FLevelProperties levelData[100]; // Array to hold level data for 100 levels
@@ -22,7 +22,7 @@ public:
 	//Constructor
 	LevelData();
 	
-	FLevelProperties GetLevelData(uint16 level);
+	FLevelProperties GetLevelData(int16 level);
 
 	//Destructor
 	~LevelData();

@@ -35,7 +35,7 @@ struct FPlayerData : public FCharacterInfo
 	FPlayerData() = default;
 
 	//User-Defined Constructor
-	FPlayerData(const CharacterStatus& stats, int32 maxHp, int32 hp, uint16 lvl, const string& name,
+	FPlayerData(const CharacterStatus& stats, int32 maxHp, int32 hp, int16 lvl, const string& name,
 		int32 exp = 0, int32 maxExp = 10, int32 gold = 10000,
 		Weapon* weapon = nullptr, Armor* armor = nullptr, MiscItem* misc = nullptr)
 		: FCharacterInfo(stats, maxHp, hp, lvl, name),
