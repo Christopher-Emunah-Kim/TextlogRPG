@@ -164,12 +164,13 @@ void GameManager::InitializeDungeon()
 	//Generate Monster Lists(info)
 	//FCharacterInfo(stats, maxHp, hp, lvl, name), dropExperience(exp), dropGold(gold)
 	vector<FMonsterInfo> stage1 = {
-		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 15, 15, 1, "평범한 고블린", 15, 8),
-		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 20, 20, 2, "평범한 스켈레톤", 25, 15),
-		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 25, 25, 3, "평범한 오크", 30, 20),
-		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 30, 30, 5, "평범한 드래곤", 50, 30)
+		FMonsterInfo(CharacterStatus::NewStatus(5, 5, 8), 10, 10, 3, "허약한 고블린", 30, 16),
+		FMonsterInfo(CharacterStatus::NewStatus(9, 7, 11), 25, 25, 5, "허약한 슬라임", 30, 10),
+		FMonsterInfo(CharacterStatus::NewStatus(9, 10, 12), 30, 30, 8, "허약한 스켈레톤", 50, 30),
 	};
 	vector<FMonsterInfo> stage2 = {
+		FMonsterInfo(CharacterStatus::NewStatus(14, 15, 15), 40, 40, 10, "허약한 오크", 60, 40),
+		FMonsterInfo(CharacterStatus::NewStatus(20, 18, 20), 50, 50, 15, "허약한 드래곤", 100, 60),
 		FMonsterInfo(CharacterStatus::NewStatus(9, 5, 8), 20, 20, 3, "강력한 고블린", 30, 16),
 		FMonsterInfo(CharacterStatus::NewStatus(9, 7, 11), 25, 25, 5, "강력한 슬라임", 30, 10),
 		FMonsterInfo(CharacterStatus::NewStatus(9, 10, 12), 30, 30, 8, "강력한 스켈레톤", 50, 30),
@@ -374,6 +375,9 @@ void GameManager::RunProcessDungeon()
 					{
 						Common::PrintSystemMsg("다음 스테이지로 진입합니다");
 						Common::PauseAndClearScreen();
+						stage = dungeonptr->GetCurrentStage();
+						stage->EnterStage();
+						stageMonsterList = stage->GetMonsters();
 						continue;
 					}
 					else
@@ -473,44 +477,7 @@ void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* 
 		}
 	}
 
-
-	////update the list of alive_monsters
-	//vector<Monster*> aliveMonsters;
-	//for (size_t i = 0; i < monsters.size(); ++i)
-	//{
-	//	Monster* mon = monsters[i];
-	//	if (mon->GetCharacterInfo().iCurrentHealth > 0)
-	//		aliveMonsters.push_back(mon);
-	//}
-
-	////if there are no monsters, return
-	//if (aliveMonsters.empty())
-	//	return;
-
-	////Set AliveMonsters
-	//for (size_t i = 0; i < aliveMonsters.size(); ++i)
-	//{
-	//	Monster* monster;
-
-	//	//if the monster dead, skip the battle
-	//	if (monster->GetCharacterInfo().iCurrentHealth <= 0) 
-	//		continue;
-
-	//	bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, monster);
-	//	Common::PauseAndClearScreen();
-
-	//	//if the player dead, game over
-	//	if (!isPlayerAlive)
-	//	{
-	//		GameOverProcess();
-	//		return;
-	//	}
-
-
-	//}
-
-
-
+	//TODO : 랜덤 로직은 나중에.
 	//srand(static_cast<unsigned int>(time(NULL))); // 현재 시간을 시드로 사용
 	//size_t listSize;
 	//if (!aliveMonsters.empty())
@@ -525,45 +492,6 @@ void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* 
 	//bool isPlayerAlive = dungeonptr->EncounterMonster(playerPtr, randomMonster);
 	//Common::PauseAndClearScreen();
 
-	//if (isPlayerAlive == false)
-	//{
-	//	GameOverProcess();
-	//	return;
-	//}
-
-	//if (randomMonster->GetCharacterInfo().iCurrentHealth <= 0)
-	//{
-	//	stage->OnMonsterDefeat(randomMonster);
-	//}
-
-	////Check if there are any monsters left in the dungeon
-	//if (aliveMonsters.empty()) 
-	//{
-	//	//enter to next stage
-	//	if (dungeonptr->IsMoreStageLeft())
-	//	{
-	//		Common::PrintSystemMsg("다음 스테이지로 이동합니다.");
-	//		Common::PauseAndClearScreen();
-	//		DungeonStage* nextStage = dungeonptr->GetCurrentStage();
-	//		if (nextStage)
-	//		{
-	//			vector<Monster*> nextStageMonsterList = nextStage->GetMonsters();
-	//			if (nextStageMonsterList.empty())
-	//			{
-	//				nextStage->EnterStage();
-	//			}
-	//		}
-	//	}
-	//	else
-	//	{
-	//		Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다!\n마을로 돌아갑니다.");
-	//		Common::PauseAndClearScreen();
-	//		SetGameState(EGameState::VILLAGE);
-	//		return;
-	//	}
-	//
-	//	
-	//}
 }
 
 

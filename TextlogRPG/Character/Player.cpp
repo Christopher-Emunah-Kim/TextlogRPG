@@ -21,10 +21,6 @@ void Player::ReceiveDamageFrom(BaseCharacter& target)
 	const FCharacterInfo& fTargetCharacterInfo = target.GetCharacterInfo();
 
 	int32 iCalculatedDamage = playerInfo.characterStats.CalculateDamage(fTargetCharacterInfo.characterStats);
-
-	//무한루프 막기위해 최소데미지 1보장.
-	if (iCalculatedDamage <= 0)
-		iCalculatedDamage = 1;
 	
 	playerInfo.iCurrentHealth -= iCalculatedDamage;
 
@@ -268,6 +264,7 @@ BaseCharacter& Player::CharacterLevelUp()
 	FLevelProperties levelData = levelDataInstance.GetLevelData(characterInfo.iCurrentLevel);
 
 	playerInfo.iMaxHealth += levelData.maxHealthPerLevel;
+	playerInfo.playerMaxExperience += levelData.maxExperiencePerLevel;
 	playerInfo.iCurrentHealth = playerInfo.iMaxHealth; // 레벨업 시 체력을 최대치로 회복
 
 	// 레벨업 시 공격력, 방어력, 민첩성 증가
