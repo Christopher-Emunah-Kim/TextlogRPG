@@ -7,9 +7,9 @@
 struct FCharacterInfo
 {
 	CharacterStatus characterStats;
+	int16 iCurrentLevel = 1;
 	int32 iMaxHealth = 100;
 	int32 iCurrentHealth = 100;
-	int16 iCurrentLevel = 1;
 	string strCharacterName = "UNKNOWN";
 
 

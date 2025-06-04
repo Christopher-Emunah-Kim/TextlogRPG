@@ -53,10 +53,11 @@ GameManager::~GameManager()
 		delete dungeonptr;
 		dungeonptr = nullptr;
 	}
-	for (const pair<EGameState, Area*>& map : mapList)
+	for (unordered_map<EGameState, Area*>::iterator i = mapList.begin(); i != mapList.end(); ++i)
 	{
-		if(map.second)
-		delete map.second; 
+		pair<EGameState, Area*> map = *i;
+		if (map.second)
+			delete map.second;
 	}
 	mapList.clear();
 }
