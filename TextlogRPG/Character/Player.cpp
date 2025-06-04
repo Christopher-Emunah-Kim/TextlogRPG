@@ -45,7 +45,7 @@ void Player::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
-	string strAttackText = "[System] 당신은 " + target->GetCharacterInfo().strCharacterName + "을(를) 공격합니다.";
+	string strAttackText = "당신은 " + target->GetCharacterInfo().strCharacterName + "을(를) 공격합니다.";
 	Common::PrintSystemMsg(strAttackText);
 	Common::PauseAndClearScreen();
 
@@ -274,10 +274,10 @@ BaseCharacter& Player::CharacterLevelUp()
 
 	UpdateFinalStatus();
 
-	string strLevelUpMsg = "레벨업!\n현재 레벨 : " + to_string(playerInfo.iCurrentLevel)
-		+ "체력 : " + to_string(playerInfo.iCurrentHealth) + "/" + to_string(playerInfo.iMaxHealth)
-		+ "공격력 : " + to_string(playerInfo.characterStats.GetAttack())
-		+ "방어력 : " + to_string(playerInfo.characterStats.GetDefense())
+	string strLevelUpMsg = "레벨업!\n현재 레벨 : " + to_string(playerInfo.iCurrentLevel) + "\n"
+		+ "체력 : " + to_string(playerInfo.iCurrentHealth) + "/" + to_string(playerInfo.iMaxHealth) + "\n"
+		+ "공격력 : " + to_string(playerInfo.characterStats.GetAttack()) + "\n"
+		+ "방어력 : " + to_string(playerInfo.characterStats.GetDefense()) + "\n"
 		+ "민첩성 : " + to_string(playerInfo.characterStats.GetAgility());
 
 	Common::PrintSystemMsg(strLevelUpMsg);

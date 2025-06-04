@@ -98,12 +98,6 @@
     <ClInclude Include="TextlogRPG\Util\Common.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TextlogRPG\Util\Option.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="TextlogRPG\Util\Dialog.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="TextlogRPG\Core\GameManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>

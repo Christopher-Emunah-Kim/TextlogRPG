@@ -2,6 +2,15 @@
 #include "Area.h"
 #include "DungeonStage.h"
 
+enum class EBattleResult 
+{
+	PLAYER_WIN,
+	PLAYER_DEAD,
+	PLAYER_RUN,
+	_ERROR
+};
+
+
 class Monster;
 
 class Dungeon : public Area 
@@ -17,7 +26,7 @@ public:
 
 	DungeonStage* GetCurrentStage();
 
-	bool NextStage();
+	bool IsMoreStageLeft();
 
     string GetAreaName() const override { return "Dungeon"; }
 
@@ -29,7 +38,7 @@ public:
 
 	vector<Monster*>& GetMonsterList();
 
-    bool EncounterMonster(Player* player, Monster* monster);
+    EBattleResult EncounterMonster(Player* player, Monster* monster);
 
 	~Dungeon();
 };

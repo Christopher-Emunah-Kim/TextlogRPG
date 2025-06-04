@@ -7,8 +7,7 @@
 using namespace std;
 
 
-int32 main()
-{
+int32 main(){
 	//Game Start Settings
 	Player* player = Player::CreateCharacter("NONE");
 	EGameState initialState = EGameState::TITLE;

@@ -160,8 +160,6 @@
     <ClInclude Include="TextlogRPG\NPC\NonPlayerCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\Player.h" />
     <ClInclude Include="TextlogRPG\Core\GameManager.h" />
-    <ClInclude Include="TextlogRPG\Util\Dialog.h" />
-    <ClInclude Include="TextlogRPG\Util\Option.h" />
     <ClInclude Include="TextlogRPG\Item\Armor.h" />
     <ClInclude Include="TextlogRPG\Item\Item.h" />
     <ClInclude Include="TextlogRPG\Item\ItemManager.h" />

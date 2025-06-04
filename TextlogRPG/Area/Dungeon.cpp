@@ -12,9 +12,9 @@ Dungeon::Dungeon()
 
 Dungeon::Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo)
 {
-	for (const vector<FMonsterInfo>& monsterInfos : stageMonsterInfo)
+	for (size_t i = 0; i < stageMonsterInfo.size(); ++i)
 	{
-		//TODO FOR문 해체
+		const vector<FMonsterInfo>& monsterInfos = stageMonsterInfo[i];
 		stages.emplace_back(new DungeonStage(monsterInfos));
 	}
 	currentStageIndex = 0;
@@ -29,7 +29,7 @@ DungeonStage* Dungeon::GetCurrentStage()
 	return nullptr;
 }
 
-bool Dungeon::NextStage()
+bool Dungeon::IsMoreStageLeft()
 {
 	if (currentStageIndex + 1 < stages.size())
 	{
@@ -43,7 +43,7 @@ void Dungeon::Enter(Player* player)
 {
 	if (player == nullptr)
 	{
-		Common::PrintErrorMsg("플레이어 정보가 없습니다.  Enter Dungeon을 중단합니다.");
+		Common::PrintErrorMsg("플레이어 정보가 없습니다. EnterDungeon을 중단합니다.");
 		return;
 	}
 
@@ -79,7 +79,7 @@ vector<Monster*>& Dungeon::GetMonsterList()
 	return monsters;
 }
 
-bool Dungeon::EncounterMonster(Player* player, Monster* monster)
+EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 {
 	string strEncounterText = "[System] " + monster->GetCharacterInfo().strCharacterName + "과(와) 조우했습니다!";
 	Dialogue::ShowOption(strEncounterText);
@@ -87,7 +87,7 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 	if (!player || !monster)
 	{
 		Common::PrintErrorMsg("플레이어 또는 몬스터 정보가 없습니다. 전투를 종료합니다.");
-		return false;
+		return EBattleResult::_ERROR;
 	}
 
 	//TODO : 전투 로직 _ 둘의 Agility를 비교하여 먼저 공격하는 캐릭터 결정
@@ -95,16 +95,15 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 	int16 iMonsterAgility = monster->GetCharacterInfo().characterStats.GetAgility();
 
 	bool bIsPlayerTurn = iPlayerAgility >= iMonsterAgility;
-	bool bIsBattleOver = false;
+	//bool bIsBattleOver = false;
 
 	int32 iPlayerHealth = player->GetCharacterInfo().iCurrentHealth;
 	int32 iMonsterHealth = monster->GetCharacterInfo().iCurrentHealth;
-	while (iPlayerHealth > 0 && monster->GetCharacterInfo().iCurrentHealth > 0 && !bIsBattleOver)
+	while (iPlayerHealth > 0 && iMonsterHealth > 0)
 	{
 		if (bIsPlayerTurn)
 		{
-			string battleText = "1. " + monster->GetCharacterInfo().strCharacterName + "를(을) 공격한다!! \n2. 이대로는 위험하다. 도망가자..\n당신의 선택은??";
-			Dialogue::ShowOption(battleText);
+			Dialogue::ShowOption("1. " + monster->GetCharacterInfo().strCharacterName + "를(을) 공격한다!! \n2. 이대로는 위험하다. 도망가자..\n당신의 선택은??");
 			int battleChoice;
 			cin >> battleChoice;
 			if (battleChoice == 1)
@@ -119,9 +118,8 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 				if (rand() % 2 == 0)
 				{
 					Common::PrintSystemMsg("몬스터가 당신을 쫓아왔지만, 당신은 무사히 던전 입구로 도망쳤습니다.");
-					bIsBattleOver = true;
 					Common::PauseAndClearScreen();
-					break;
+					return EBattleResult::PLAYER_RUN;
 				}
 				else
 				{
@@ -141,22 +139,19 @@ bool Dungeon::EncounterMonster(Player* player, Monster* monster)
 	}
 
 	// 결과 출력
-	if (!bIsBattleOver)
+	if (player->GetCharacterInfo().iCurrentHealth <= 0)
 	{
-		if (player->GetCharacterInfo().iCurrentHealth <= 0)
-		{
-			string strGameOverText = player->GetCharacterInfo().strCharacterName + "이(가) 쓰러졌습니다.\n"
-				+ "[System] 당신은 여신의 가호 아래 마을로 돌아갑니다.";
-			Common::PrintSystemMsg(strGameOverText);
-			Common::PauseAndClearScreen();
-			return false;
-		}
-		else if (monster->GetCharacterInfo().iCurrentHealth <= 0)
-		{
-			//TODO :몬스터 처치시 출력되는 내용 옮기기
-		}
+		Common::PrintSystemMsg(player->GetCharacterInfo().strCharacterName + "이(가) 쓰러졌습니다.\n[System] 당신은 여신의 가호 아래 마을로 돌아갑니다.");
+		Common::PauseAndClearScreen();
+		return EBattleResult::PLAYER_DEAD;
 	}
-	return true;
+	else if (monster->GetCharacterInfo().iCurrentHealth <= 0)
+	{
+		Common::PrintSystemMsg(monster->GetCharacterInfo().strCharacterName + "을(를) 처치했습니다!");
+		Common::PauseAndClearScreen();
+		return EBattleResult::PLAYER_WIN;
+	}
+	return EBattleResult::_ERROR;
 }
 
 Dungeon::~Dungeon()
