@@ -7,9 +7,9 @@
 struct FCharacterInfo
 {
 	CharacterStatus characterStats;
-	uint32 iMaxHealth = 100;
-	uint32 iCurrentHealth = 100;
-	uint16 iCurrentLevel = 1;
+	int32 iMaxHealth = 100;
+	int32 iCurrentHealth = 100;
+	int16 iCurrentLevel = 1;
 	string strCharacterName = "UNKNOWN";
 
 
@@ -17,16 +17,16 @@ struct FCharacterInfo
 	FCharacterInfo() = default;
 
 	//User-Defined Constructor
-	FCharacterInfo(const CharacterStatus& stats, uint32 maxHp, uint32 hp, uint16 lvl, const string& name)
+	FCharacterInfo(const CharacterStatus& stats, int32 maxHp, int32 hp, int16 lvl, const string& name)
 		: characterStats(stats), iMaxHealth(maxHp), iCurrentHealth(hp), iCurrentLevel(lvl), strCharacterName(name) {
 	}
 };
 
 struct FPlayerData : public FCharacterInfo
 {
-	uint32 playerExperience = 0;
-	uint32 playerMaxExperience = 15;
-	uint32 playerGold = 10000;
+	int32 playerExperience = 0;
+	int32 playerMaxExperience = 15;
+	int32 playerGold = 10000;
 	class Weapon* weaponEquipped = nullptr;
 	class Armor* armorEquipped = nullptr;
 	class MiscItem* miscOwned = nullptr;
@@ -35,8 +35,8 @@ struct FPlayerData : public FCharacterInfo
 	FPlayerData() = default;
 
 	//User-Defined Constructor
-	FPlayerData(const CharacterStatus& stats, uint32 maxHp, uint32 hp, uint16 lvl, const string& name,
-		uint32 exp = 0, uint32 maxExp = 10, uint32 gold = 10000,
+	FPlayerData(const CharacterStatus& stats, int32 maxHp, int32 hp, uint16 lvl, const string& name,
+		int32 exp = 0, int32 maxExp = 10, int32 gold = 10000,
 		Weapon* weapon = nullptr, Armor* armor = nullptr, MiscItem* misc = nullptr)
 		: FCharacterInfo(stats, maxHp, hp, lvl, name),
 		playerExperience(exp), playerMaxExperience(maxExp), playerGold(gold),
@@ -47,14 +47,14 @@ struct FPlayerData : public FCharacterInfo
 
 struct FMonsterInfo : public FCharacterInfo
 {
-	uint32 dropExperience = 0;
-	uint32 dropGold = 0;
+	int32 dropExperience = 0;
+	int32 dropGold = 0;
 
 	//Default Constructor
 	FMonsterInfo() = default;
 
 	//User-Defined Constructor
-	FMonsterInfo(const CharacterStatus& stats, uint32 maxHp, uint32 hp, uint16 lvl, const string& name, uint32 exp, uint32 gold)
+	FMonsterInfo(const CharacterStatus& stats, int32 maxHp, int32 hp, int16 lvl, const string& name, int32 exp, int32 gold)
 		: FCharacterInfo(stats, maxHp, hp, lvl, name), dropExperience(exp), dropGold(gold) {
 	}
 };

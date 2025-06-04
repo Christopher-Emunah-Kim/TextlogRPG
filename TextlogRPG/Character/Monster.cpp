@@ -95,11 +95,8 @@ void Monster::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
-	
-	cout << "\n===========================================\n";
-	cout << "\n[System] " << characterInfo.strCharacterName << "가(이) 당신을 공격합니다.\n";
-	cout << "\n===========================================\n" << endl;
-	
+	string strMonsterAttackMsg = characterInfo.strCharacterName + "가(이) 당신을 공격합니다.\n";
+	Common::PrintSystemMsg(strMonsterAttackMsg);
 
 	target->TakeDamage(*this);
 	
