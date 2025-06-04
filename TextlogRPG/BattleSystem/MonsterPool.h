@@ -5,13 +5,17 @@
 
 using namespace std;
 
-class MonsterPool {
+class MonsterPool 
+{
+public:
+	MonsterPool() {}
+	~MonsterPool();
+
 private:
 	unordered_map<string, vector<Monster*>> monsterPool;
 
 public:
-	MonsterPool() {}
-	~MonsterPool();
+	
 
 	void Initialize(const vector<FMonsterInfo>& monsterInfos, size_t countPerType);
 

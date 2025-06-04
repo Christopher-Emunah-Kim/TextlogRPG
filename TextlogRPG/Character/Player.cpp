@@ -10,12 +10,12 @@
 Player* Player::CreateCharacter(const string& characterName)
 {
 	//TODO : 임시_이후 LevelData 연결
-	FPlayerInfo fTempCharacterInfo = { CharacterStatus::NewStatus(10, 5, 3), 5, 5, 1, characterName };
+	FPlayerInfo fTempCharacterInfo = { CharacterStatus::NewStatus(10, 5, 3), 10, 10, 1, characterName };
 
 	return new Player(fTempCharacterInfo);
 }
 
-void Player::TakeDamage(BaseCharacter& target)
+void Player::ReceiveDamageFrom(BaseCharacter& target)
 {
 	//플레이어의 TakeDamage함수 내에서 몬스터와 플레이어의 데미지 계산 및 출력메시지 대부분 처리
 	const FCharacterInfo& fTargetCharacterInfo = target.GetCharacterInfo();
@@ -35,10 +35,10 @@ void Player::TakeDamage(BaseCharacter& target)
 	}
 	else
 	{
-		string strDamageText = "[System] " + target.GetCharacterInfo().strCharacterName + "에게 " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.";
+		string strDamageText = target.GetCharacterInfo().strCharacterName + "에게 " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.\n당신의 현재 체력 : " + to_string(playerInfo.iCurrentHealth);
 		Common::PrintSystemMsg(strDamageText);
 	}
-	Common::PauseAndClearScreen();
+	Common::PauseAndClearScreen(2000);
 }
 
 void Player::Attack(BaseCharacter* target)
@@ -47,9 +47,9 @@ void Player::Attack(BaseCharacter* target)
 	
 	string strAttackText = "당신은 " + target->GetCharacterInfo().strCharacterName + "을(를) 공격합니다.";
 	Common::PrintSystemMsg(strAttackText);
-	Common::PauseAndClearScreen();
+	Common::PauseAndClearScreen(3000);
 
-	target->TakeDamage(*this);
+	target->ReceiveDamageFrom(*this);
 	
 }
 
@@ -94,18 +94,14 @@ vector<Item*> Player::GetInventoryItems(EItemType type) const
 void Player::EquipItem(Item* item)
 {
 	if (item == nullptr) return;
-	//TODO : 아이템 착용 후 캐릭터 스탯 이상하게 덮어씌워지는 문제 확인
+
 	// remove status of former equipment(Weapon)
 	CaculateNewStatus(item);
 
 	UpdateFinalStatus(); // update status
 
-	// update the equipment change
-	//item->EquippedBy(this);
-
-	string strUseWeapon = item->GetItemInfo().itemName + "을(를) 장착합니다.\n";
-	Common::PrintSystemMsg(strUseWeapon);
-	Common::PauseAndClearScreen();
+	Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 장착합니다.");
+	Common::PauseAndClearScreen(2000);
 
 	ShowPlayerStatus();
 
@@ -135,6 +131,10 @@ void Player::CaculateNewStatus(Item* item)
 	}
 	if (item->GetItemInfo().itemType == EItemType::ARMOR) {
 		playerInfo.armorEquipped = static_cast<Armor*>(item);
+	}
+	if (item->GetItemInfo().itemType == EItemType::MISC)
+	{
+		playerInfo.miscOwned = static_cast<MiscItem*>(item);
 	}
 
 	// update status of new equipment
@@ -213,7 +213,7 @@ void Player::EarnGold(int32 earnGold)
 	if (earnGold <= 0) return;
 
 	playerInfo.playerGold += earnGold;
-	string strEarnGoldMsg = "[System] " + to_string(earnGold) + " 골드를 획득했습니다. 현재 골드: " + to_string(playerInfo.playerGold);
+	string strEarnGoldMsg = to_string(earnGold) + " 골드를 획득했습니다. 현재 골드: " + to_string(playerInfo.playerGold);
 	Common::PrintSystemMsg(strEarnGoldMsg);
 }
 
@@ -225,15 +225,16 @@ void Player::GainLoot(int32 experience, int32 gold, Item* item)
 	playerInfo.playerGold += gold;
 
 	Common::PrintLine();
-	cout << "\n[System] 최종 전투 결과입니다!!\n";
-	cout << "\n[System] " << experience << " 경험치와 " << gold << " 골드를 획득했습니다.\n";
+	Common::PrintSystemMsg("최종 전투 결과입니다!!\n당신은 "+ to_string(experience) + " 경험치와 " + to_string(gold) + " 골드를 획득했습니다.");
 	if (item != nullptr)
 	{
 		AddToInventory(item);
-		cout << "\n[System] 아이템 " << item->GetItemInfo().itemName << "을(를) 획득했습니다.\n";
+		Common::PrintSystemMsg("아이템 " + item->GetItemInfo().itemName + "을(를) 획득했습니다.");
 	}
 	Common::PrintLine();
 
+
+	Common::PauseAndClearScreen();
 	ShowPlayerStatus();
 
 	//TODO : 레벨업 로직 구현
@@ -267,7 +268,7 @@ BaseCharacter& Player::CharacterLevelUp()
 	FLevelProperties levelData = levelDataInstance.GetLevelData(characterInfo.iCurrentLevel);
 
 	playerInfo.iMaxHealth += levelData.maxHealthPerLevel;
-	playerInfo.iCurrentHealth = characterInfo.iMaxHealth; // 레벨업 시 체력을 최대치로 회복
+	playerInfo.iCurrentHealth = playerInfo.iMaxHealth; // 레벨업 시 체력을 최대치로 회복
 
 	// 레벨업 시 공격력, 방어력, 민첩성 증가
 	playerInfo.characterStats = CharacterStatus::NewStatus(levelData.attackPerLevel, levelData.defensePerLevel,levelData.agilityPerLevel	);
@@ -329,7 +330,7 @@ void Player::ShowPlayerStatus()
 
 	Common::PrintSystemMsg(strPlayerStatus);
 
-	Common::PauseAndClearScreen(3000);
+	Common::PauseAndClearScreen(3500);
 }
 
 

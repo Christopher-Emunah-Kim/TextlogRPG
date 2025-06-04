@@ -13,6 +13,8 @@ class Player : public BaseCharacter
 public:
 	//Default Constructor
 	Player(const FPlayerInfo& data) : BaseCharacter(data), playerInfo(data) {}
+	//Destructor
+	~Player();
 
 private:
 	FPlayerInfo playerInfo;
@@ -22,9 +24,9 @@ private:
 
 
 public:
-	virtual void TakeDamage(BaseCharacter& target) override;
+	virtual void ReceiveDamageFrom(BaseCharacter& target) override;
 	virtual void Attack(BaseCharacter* target) override;
-
+	const FPlayerInfo& GetCharacterInfo() const override { return playerInfo; }
 	
 	static Player* CreateCharacter(const string& characterName);
 	
@@ -51,7 +53,6 @@ public:
 	
 	void ShowPlayerStatus();
 
-	////Destructor
-	~Player();
+	
 };
 

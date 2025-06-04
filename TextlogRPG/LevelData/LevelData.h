@@ -16,14 +16,12 @@ static FLevelProperties levelData[100]; // Array to hold level data for 100 leve
 
 class LevelData  
 {  
-private:  
 
 public:
-	//Constructor
 	LevelData();
-	
+	~LevelData();
+
 	FLevelProperties GetLevelData(int16 level);
 
-	//Destructor
-	~LevelData();
+	
 };

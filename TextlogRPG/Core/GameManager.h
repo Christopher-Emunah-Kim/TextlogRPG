@@ -8,6 +8,12 @@ using namespace std;
 
 class GameManager 
 {
+public:
+	GameManager(EGameState initialState, class Player* player, class Dungeon* dungeon);
+
+	~GameManager();
+
+
 private:
 	EGameState gameState;
     class Player* playerPtr;
@@ -15,10 +21,6 @@ private:
 	unordered_map<EGameState, class Area*> mapList;
     
 public:
-	GameManager(EGameState initialState, class Player* player, class Dungeon* dungeon);
-        
-	~GameManager();
-
 	void SetGameState(const EGameState& gs_in)	{ gameState = gs_in; }
 	inline EGameState GetGameState() const 	{return gameState;	}
 

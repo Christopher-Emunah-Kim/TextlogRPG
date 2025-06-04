@@ -18,24 +18,30 @@ struct FNpcInfo
 	string npcName = "Default NPC";
 };
 
+
+
+
 class NonPlayerCharacter abstract 
 {
-protected:
-	FNpcInfo npcInfo;
-
 public:
 	explicit NonPlayerCharacter()
 		: npcInfo{ FNpcInfo{} } {
 	}
 
-    explicit NonPlayerCharacter(const FNpcInfo& info)
-        : npcInfo(info) {}
+	explicit NonPlayerCharacter(const FNpcInfo& info)
+		: npcInfo(info) {
+	}
 
-    virtual ~NonPlayerCharacter() = default;
+	virtual ~NonPlayerCharacter() = default;
 
-    virtual string GetName() const { return npcInfo.npcName; }
-    virtual ENpcType GetType() const { return npcInfo.type; }
-    virtual void SetName(const string& name) { npcInfo.npcName = name; }
+protected:
+	FNpcInfo npcInfo;
+
+public:
+	
+    inline virtual string GetName() const { return npcInfo.npcName; }
+    inline virtual ENpcType GetType() const { return npcInfo.type; }
+    inline virtual void SetName(const string& name) { npcInfo.npcName = name; }
 
     // Interaction Func Interface
     virtual void Interact(Player* player) = 0;

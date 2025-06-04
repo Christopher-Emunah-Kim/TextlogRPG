@@ -14,6 +14,8 @@ private:
 	ItemManager() {}
 	//delete copy constructor
 	ItemManager(const ItemManager&) = delete;
+	//Destructor
+	~ItemManager();
 
 public:
 	void InitializeItems();
@@ -34,7 +36,6 @@ public:
 	//Use Static Instance
 	static ItemManager& GetInstance();
 
-	//Destructor
-	~ItemManager();
+	
 };
 

@@ -3,8 +3,6 @@
 
 class Armor : public Item
 {
-private:
-
 public:
 	//Default Constructor from Item class
 	Armor()

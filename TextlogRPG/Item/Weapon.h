@@ -3,13 +3,11 @@
 
 class Weapon : public Item
 {
-private:
-
-
 public:
-	//Default Constructor from Item class
 	Weapon()
 		: Item() 	{	}
+	~Weapon() {}
+
 
 	//overrided functions
 	Weapon* CloneItem() const override
@@ -19,7 +17,6 @@ public:
 	void EquippedBy(Player* player) override;
 
 
-	//Destructor
-	~Weapon() { }
+	
 };
 

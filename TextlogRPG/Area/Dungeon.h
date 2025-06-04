@@ -15,15 +15,18 @@ class Monster;
 
 class Dungeon : public Area 
 {
+public:
+	Dungeon();
+	Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo);
+	~Dungeon();
+
 private:
     vector<Monster*> monsters;
 	vector<DungeonStage*> stages;
 	int16 currentStageIndex;
 
 public:
-	Dungeon();
-	Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo);
-
+	
 	DungeonStage* GetCurrentStage();
 
 	bool IsMoreStageLeft();
@@ -40,5 +43,5 @@ public:
 
     EBattleResult EncounterMonster(Player* player, Monster* monster);
 
-	~Dungeon();
+	
 };

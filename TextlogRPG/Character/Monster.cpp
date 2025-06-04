@@ -14,15 +14,11 @@ Monster::Monster(const FMonsterInfo& info)
 }
 
 
-void Monster::TakeDamage(BaseCharacter& target)
+void Monster::ReceiveDamageFrom(BaseCharacter& target)
 {
 	const FCharacterInfo& fTragetCharacterInfo = target.GetCharacterInfo();
 
 	int32 iCalculatedDamage = fMonsterInfo.characterStats.CalculateDamage(fTragetCharacterInfo.characterStats);
-
-	//무한루프 막기위해 최소데미지 1보장.
-	if (iCalculatedDamage <= 0)
-		iCalculatedDamage = 1;
 
 	fMonsterInfo.iCurrentHealth -= iCalculatedDamage;
 	if (fMonsterInfo.iCurrentHealth <= 0)
@@ -69,6 +65,7 @@ void Monster::TakeDamage(BaseCharacter& target)
 					Common::PrintSystemMsg("잘못된 입력입니다. 아이템을 획득하지 못했습니다.");
 					return;
 				}
+
 			
 				
 				const_cast<Player*>(playerTarget)->GainLoot(dropExperience, dropGold, randomDropItem);
@@ -79,7 +76,7 @@ void Monster::TakeDamage(BaseCharacter& target)
 			}
 
 		};
-		Common::PauseAndClearScreen();
+		Common::PauseAndClearScreen(2000);
 	}
 	else
 	{
@@ -94,16 +91,35 @@ void Monster::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
-	string strMonsterAttackMsg = fMonsterInfo.strCharacterName + "가(이) 당신을 공격합니다.\n";
+	string strMonsterAttackMsg = fMonsterInfo.strCharacterName + "가(이) 당신을 공격합니다.";
 	Common::PrintSystemMsg(strMonsterAttackMsg);
 
-	target->TakeDamage(*this);
+	Common::PauseAndClearScreen(3000);
+
+	target->ReceiveDamageFrom(*this);
 	
 }
 
 void Monster::SetCurrentHealth(int32 health)
 {
 	fMonsterInfo.iCurrentHealth = health;
+}
+
+void Monster::ShowMonsterStatus()
+{
+	string strMonsterStatus = "[도감]" + fMonsterInfo.strCharacterName + " (상세보기)\n"
+		+ "몬스터 레벨 : " + to_string(fMonsterInfo.iCurrentLevel) + "\n"
+		+ "체력 : " + to_string(fMonsterInfo.iCurrentHealth) + "/" + to_string(fMonsterInfo.iMaxHealth) + "\n\n"
+		+ "공격력 : " + to_string(fMonsterInfo.characterStats.GetAttack()) + "\n"
+		+ "방어력 : " + to_string(fMonsterInfo.characterStats.GetDefense()) + "\n"
+		+ "민첩성 : " + to_string(fMonsterInfo.characterStats.GetAgility());
+
+	Common::ShowOption(strMonsterStatus);
+
+	cout << "Enter 키를 눌러 계속 진행하세요.\n" << endl;
+	cin.ignore(1024, '\n');
+
+	Common::PauseAndClearScreen(3000);
 }
 
 Monster::~Monster()

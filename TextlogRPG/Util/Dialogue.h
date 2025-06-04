@@ -42,10 +42,5 @@ public:
 		Common::PauseAndClearScreen();
 	}
 
-	static void ShowOption(const string& text)
-	{
-		cout << "\n===========================================\n\n";
-		cout << text << "\n";
-		cout << "\n==========================================="<<endl;
-	}
+	
 };

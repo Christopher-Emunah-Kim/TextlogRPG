@@ -49,9 +49,9 @@ void Dungeon::Enter(Player* player)
 
 	Common::PrintSystemMsg("던전 탐험을 시작합니다.");
 	Common::PrintSystemMsg("기억하십시오. 심연을 들여다볼수록,\n 당신 또한 심연에 물들 것입니다.");
-	Common::PauseAndClearScreen();
+	Common::PauseAndClearScreen(2500);
 
-	Dialogue::ShowOption("[System] 던전의 입구에 도착했습니다. 도전하시겠습니까?\n\n1. 인생은 모험이지!\n2. 아니 지금은 아닌것 같아.(마을로 돌아간다)");
+	Common::ShowOption("[System] 던전의 입구에 도착했습니다. 도전하시겠습니까?\n\n1. 인생은 모험이지!\n2. 아니 지금은 아닌것 같아.(마을로 돌아간다)");
 }
 
 void Dungeon::AddMonster(Monster* monster) 
@@ -81,8 +81,10 @@ vector<Monster*>& Dungeon::GetMonsterList()
 
 EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 {
-	string strEncounterText = "[System] " + monster->GetCharacterInfo().strCharacterName + "과(와) 조우했습니다!";
-	Dialogue::ShowOption(strEncounterText);
+	
+	Common::PrintSystemMsg(monster->GetCharacterInfo().strCharacterName + "과(와) 조우했습니다!");
+	monster->ShowMonsterStatus();
+
 
 	if (!player || !monster)
 	{
@@ -97,19 +99,27 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 	bool bIsPlayerTurn = iPlayerAgility >= iMonsterAgility;
 	//bool bIsBattleOver = false;
 
-	int32 iPlayerHealth = player->GetCharacterInfo().iCurrentHealth;
-	int32 iMonsterHealth = monster->GetCharacterInfo().iCurrentHealth;
-	while (iPlayerHealth > 0 && iMonsterHealth > 0)
+	
+	while (true)
 	{
+		const int32& iPlayerHealth = player->GetCharacterInfo().iCurrentHealth;
+		const int32& iMonsterHealth = monster->GetCharacterInfo().iCurrentHealth;
+		if (iPlayerHealth <= 0 || iMonsterHealth <= 0)
+		{
+			break;
+		}
+
+		Common::PauseAndClearScreen(1500);
 		if (bIsPlayerTurn)
 		{
-			Dialogue::ShowOption("1. " + monster->GetCharacterInfo().strCharacterName + "를(을) 공격한다!! \n2. 이대로는 위험하다. 도망가자..\n당신의 선택은??");
+			Common::ShowOption("1. " + monster->GetCharacterInfo().strCharacterName + "를(을) 공격한다!! \n2. 이대로는 위험하다. 도망가자..\n당신의 선택은??");
 			int battleChoice;
 			cin >> battleChoice;
 			if (battleChoice == 1)
 			{
 				Common::PauseAndClearScreen();
-				//TODO : WARNING : 플레이어가 몬스터를 공격하는 로직
+
+				Common::PrintSystemMsg(player->GetCharacterInfo().strCharacterName + "이(가) 공격할 차례입니다.");
 				player->Attack(monster);
 			}
 			else if (battleChoice == 2)
@@ -130,6 +140,7 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 		}
 		else
 		{
+			Common::PrintSystemMsg(monster->GetCharacterInfo().strCharacterName + "이(가) 공격할 차례입니다.");
 			monster->Attack(player);
 		}
 

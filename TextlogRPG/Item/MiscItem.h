@@ -4,8 +4,6 @@
 
 class MiscItem : public Item
 {
-private:
-
 public:
 	//Default Constructor from Item class
 	MiscItem()

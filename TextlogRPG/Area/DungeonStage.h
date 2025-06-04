@@ -7,14 +7,17 @@
 
 class DungeonStage
 {
+public:
+	DungeonStage(const vector<FMonsterInfo>& monsterInfos);
+	~DungeonStage();
+
 private:
 	vector<FMonsterInfo> monsterInfoList;
 	vector<class Monster*> monsterList;
 	class MonsterPool* monsterPool;
 
 public:
-	DungeonStage(const vector<FMonsterInfo>& monsterInfos);
-	~DungeonStage();
+	
 	
 	void EnterStage();
 	void ExitStage();

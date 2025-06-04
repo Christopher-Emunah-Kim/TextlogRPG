@@ -3,21 +3,25 @@
 
 class CharacterStatus  
 {  
+public:
+	CharacterStatus()
+		: attack{ 10 }, defense{ 10 }, agility{ 10 }
+	{
+	}
+
+	CharacterStatus(int16 atk, int16 def, int16 agi)
+		: attack{ atk }, defense{ def }, agility{ agi }
+	{
+	}
+
 private:  
 	const int16 attack;  
 	const int16 defense;  
 	const int16 agility;  
 
-public:  
-	CharacterStatus()  
-		: attack{10}, defense{10}, agility{10}  
-	{  
-	}  
 
-	CharacterStatus(int16 atk, int16 def, int16 agi)  
-		: attack{atk}, defense{def}, agility{agi}  
-	{  
-	}  
+
+public:
 
 	static CharacterStatus NewStatus(int16 atk, int16 def, int16 agi);  
 

@@ -22,9 +22,12 @@ private:
 
 public:
 	// Override functions
-	void TakeDamage(BaseCharacter& target) override;
-	void Attack(BaseCharacter* target) override;
+	const FCharacterInfo& GetCharacterInfo() const override { return fMonsterInfo; }
+	virtual void ReceiveDamageFrom(BaseCharacter& target) override;
+	virtual void Attack(BaseCharacter* target) override;
+
 
 	void SetCurrentHealth(int32 health);
+	void ShowMonsterStatus();
 
 };

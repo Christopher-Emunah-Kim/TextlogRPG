@@ -53,13 +53,17 @@ public:
 		cout << "[System] " << systemMessage;
 		cout << "\n\n===========================================\n" << endl;
 	}
-
 	static void PrintLine() {
 		cout << "\n===========================================\n" <<endl;
 	}
-	
 	static void PauseAndClearScreen(int32 milliseconds=1500) {
 		Sleep(milliseconds);
 		system("cls");
+	}
+	static void ShowOption(const string& text)
+	{
+		cout << "\n===========================================\n\n";
+		cout << text << "\n";
+		cout << "\n===========================================" << endl;
 	}
 };

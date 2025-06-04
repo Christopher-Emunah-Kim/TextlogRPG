@@ -7,14 +7,11 @@ using namespace std;
 
 class BaseCharacter abstract
 {
-protected:
-	FCharacterInfo characterInfo;
-
 public:
-	
-    //Default Constructor
+	//Default Constructor
 	explicit BaseCharacter()
-    : characterInfo{ FCharacterInfo{} } { }
+		: characterInfo{ FCharacterInfo{} } {
+	}
 
 	//User-Defined Constructor
 	explicit BaseCharacter(const FCharacterInfo& info) : characterInfo(info) {}
@@ -22,11 +19,16 @@ public:
 	//virtual destructor
 	virtual ~BaseCharacter() = default;
 
-	virtual FCharacterInfo GetCharacterInfo() const { return characterInfo; }
-	//virtual FCharacterInfo& GetCharacterInfo() { return characterInfo; }
+protected:
+	FCharacterInfo characterInfo;
+
+public:
+	
+	virtual const FCharacterInfo& GetCharacterInfo() const { return characterInfo; }
+	//virtual FCharacterInfo& GetCharacterInfoRef() { return characterInfo; }
 
 	//Pure virtual functions
-	virtual void TakeDamage(BaseCharacter& target) = 0;
+	virtual void ReceiveDamageFrom(BaseCharacter& target) = 0;
 	virtual void Attack(BaseCharacter* target) = 0;
 
 	BaseCharacter(const BaseCharacter&) = default;

@@ -112,7 +112,7 @@ void GameManager::WelcomMsg()
 }
 void GameManager::SetPlayerName()
 {
-	Dialogue::ShowOption("[System] 이해할 수 없는 곳이다. \n 당신의 선택은?\n1. 게임을 시작한다.\n2. 당장 도망친다.");
+	Common::ShowOption("[System] 이해할 수 없는 곳이다. \n 당신의 선택은?\n1. 게임을 시작한다.\n2. 당장 도망친다.");
 
 	char titleChoice;
 	cin >> titleChoice;
@@ -164,23 +164,24 @@ void GameManager::InitializeDungeon()
 	//Generate Monster Lists(info)
 	//FCharacterInfo(stats, maxHp, hp, lvl, name), dropExperience(exp), dropGold(gold)
 	vector<FMonsterInfo> stage1 = {
-		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "평범한 고블린", 15, 8),
-		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "평범한 스켈레톤", 25, 15),
-		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "평범한 오크", 30, 20),
-		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "평범한 드래곤", 50, 30)
+		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 15, 15, 1, "평범한 고블린", 15, 8),
+		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 20, 20, 2, "평범한 스켈레톤", 25, 15),
+		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 25, 25, 3, "평범한 오크", 30, 20),
+		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 30, 30, 5, "평범한 드래곤", 50, 30)
 	};
 	vector<FMonsterInfo> stage2 = {
-		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "평범한 고블린", 15, 8),
-		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "평범한 스켈레톤", 25, 15),
-		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "평범한 오크", 30, 20),
-		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "평범한 드래곤", 50, 30)
+		FMonsterInfo(CharacterStatus::NewStatus(9, 5, 8), 20, 20, 3, "강력한 고블린", 30, 16),
+		FMonsterInfo(CharacterStatus::NewStatus(9, 7, 11), 25, 25, 5, "강력한 슬라임", 30, 10),
+		FMonsterInfo(CharacterStatus::NewStatus(9, 10, 12), 30, 30, 8, "강력한 스켈레톤", 50, 30),
+		FMonsterInfo(CharacterStatus::NewStatus(14, 15, 15), 40, 40, 10, "강력한 오크", 60, 40),
+		FMonsterInfo(CharacterStatus::NewStatus(20, 18, 20), 50, 50, 15, "강력한 드래곤", 100, 60)
 	};
     vector<FMonsterInfo> stage3 = {
-		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "강력한 고블린", 15, 8),
-		FMonsterInfo(CharacterStatus::NewStatus(4, 2, 1), 8, 8, 2, "강력한 슬라임", 15, 5),
-		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "강력한 스켈레톤", 25, 15),
-		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "강력한 오크", 30, 20),
-		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "강력한 드래곤", 50, 30)
+		FMonsterInfo(CharacterStatus::NewStatus(5, 3, 5), 10, 10, 1, "완전 강력한 고블린", 15, 8),
+		FMonsterInfo(CharacterStatus::NewStatus(4, 2, 1), 8, 8, 2, "완전 강력한 슬라임", 15, 5),
+		FMonsterInfo(CharacterStatus::NewStatus(6, 4, 8), 12, 12, 4, "완전 강력한 스켈레톤", 25, 15),
+		FMonsterInfo(CharacterStatus::NewStatus(8, 5, 10), 15, 15, 3, "완전 강력한 오크", 30, 20),
+		FMonsterInfo(CharacterStatus::NewStatus(12, 8, 15), 20, 20, 5, "완전 강력한 드래곤", 50, 30)
 	};
 	
 	vector<vector<FMonsterInfo>> dungeonStages = { stage1, stage2, stage3 };
@@ -385,7 +386,7 @@ void GameManager::RunProcessDungeon()
 				}
 
 				// 도전/도망 선택
-				Common::PrintSystemMsg("이 스테이지에서 계속 도전하시겠습니까?\n1. 계속 도전\n2. 도망간다(마을로 복귀)");
+				Common::PrintSystemMsg("정말 이 스테이지를 도전하시겠습니까?\n\n1. 멈출 수 없다. 앞으로 나아가자.\n\n2. 목숨은 소중하니까, 도망간다(마을로 복귀)");
 				char stageChoice;
 				cin >> stageChoice;
 				cin.ignore(1024, '\n');
@@ -430,13 +431,16 @@ void GameManager::RunProcessDungeon()
 
 void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* stage)
 {
-	for (Monster* monster : monsters)
+	for (size_t i = 0; i < monsters.size(); ++i)
 	{
+		Monster* monster = monsters[i];
+
+
 		if (monster->GetCharacterInfo().iCurrentHealth <= 0)
 			continue;
 
 		EBattleResult result = dungeonptr->EncounterMonster(playerPtr, monster);
-		Common::PauseAndClearScreen();
+		
 
 		switch (result)
 		{
@@ -448,8 +452,7 @@ void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* 
 		break;
 		case EBattleResult::PLAYER_RUN:
 		{
-			/*Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
-			Common::PauseAndClearScreen();*/
+			
 			SetGameState(EGameState::VILLAGE);
 			return;
 		}

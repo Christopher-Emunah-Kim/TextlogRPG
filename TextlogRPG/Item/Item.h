@@ -21,12 +21,9 @@ struct FItemInfo
 
 class Item abstract
 {
-private:
-	FItemInfo itemInfo;
-
 public:
 	//Constructor
-	Item() {	}
+	Item() {}
 
 	Item(FItemInfo itemInfo)
 		: itemInfo(itemInfo) {
@@ -37,6 +34,15 @@ public:
 		itemInfo.agility = 1;
 		itemInfo.itemName = "NONE";
 	}
+
+	//Default Destructor
+	virtual ~Item() = default;
+
+private:
+	FItemInfo itemInfo;
+
+public:
+	
 
 	virtual FItemInfo GetItemInfo() const { return itemInfo; }
 
@@ -67,6 +73,4 @@ public:
 	virtual Item* CloneItem() const = 0;
 	virtual void EquippedBy(Player* player) = 0;
 
-	//Default Destructor
-	virtual ~Item() = default; 
 };
