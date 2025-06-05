@@ -1,13 +1,13 @@
 ﻿#pragma once
 
 typedef signed char			 int8;     //-128~127
-typedef short				     int16;   //-32768~32767
-typedef int						 int32;   //-2147483648~2147483647
-typedef long long			     int64;   //-9223372036854775808~9223372036854775807
+typedef short				 int16;   //-32768~32767
+typedef int					 int32;   //-2147483648~2147483647
+typedef long long			 int64;   //-9223372036854775808~9223372036854775807
 typedef unsigned char	     uint8;   //0~255
 typedef unsigned short       uint16;  //0~65535
-typedef unsigned int          uint32;  //0~4294967295
-typedef unsigned long long uint64;  //0~18446744073709551615
+typedef unsigned int         uint32;  //0~4294967295
+typedef unsigned long long	 uint64;  //0~18446744073709551615
 
 
 #include <iostream>

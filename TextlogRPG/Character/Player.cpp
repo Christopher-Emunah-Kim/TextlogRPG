@@ -112,14 +112,14 @@ void Player::EquipItem(Item* item)
 
 	// update new equipment
 	if (item->GetItemInfo().itemType == EItemType::WEAPON) {
-		fPlayerInfo.weaponEquipped = static_cast<Weapon*>(item);
+		fPlayerInfo.weaponEquipped = dynamic_cast<Weapon*>(item);
 	}
 	if (item->GetItemInfo().itemType == EItemType::ARMOR) {
-		fPlayerInfo.armorEquipped = static_cast<Armor*>(item);
+		fPlayerInfo.armorEquipped = dynamic_cast<Armor*>(item);
 	}
 	if (item->GetItemInfo().itemType == EItemType::MISC)
 	{
-		fPlayerInfo.miscOwned = static_cast<MiscItem*>(item);
+		fPlayerInfo.miscOwned = dynamic_cast<MiscItem*>(item);
 	}
 
 
@@ -198,7 +198,7 @@ void Player::LoseItem(Item* item)
 	}
 
 	UpdateEquipmentStatus();
-	UpdateFinalStatus();
+	UpdatePlayerStatus();
 
 }
 
