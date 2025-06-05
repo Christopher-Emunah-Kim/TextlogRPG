@@ -23,13 +23,12 @@ void Monster::ReceiveDamageFrom(BaseCharacter& target)
 	fMonsterInfo.iCurrentHealth -= iCalculatedDamage;
 	if (fMonsterInfo.iCurrentHealth <= 0)
 	{
-		//print msg
 		string strMonsterDefeatMesg = "몬스터 " + fMonsterInfo.strCharacterName + "이(가) 쓰러졌습니다.";
 		Common::PrintSystemMsg(strMonsterDefeatMesg);
 
 		fMonsterInfo.iCurrentHealth = 0;
 
-		// 몬스터가 쓰러졌을 때 플레이어에게 경험치와 아이템 드랍
+		
 		Player* playerTarget = static_cast<Player*>(&target);
 		if (playerTarget != nullptr && !dropItemList.empty())
 		{
@@ -51,7 +50,7 @@ void Monster::ReceiveDamageFrom(BaseCharacter& target)
 				if (equipChoice == '1')
 				{
 					playerTarget->EquipItem(randomDropItem);
-					playerTarget->AddToInventory(randomDropItem);
+					//playerTarget->AddToInventory(randomDropItem);
 				}
 				else if (equipChoice == '2')
 				{
@@ -105,7 +104,7 @@ void Monster::SetCurrentHealth(int32 health)
 
 void Monster::ShowMonsterStatus()
 {
-	string strMonsterStatus = "[도감]" + fMonsterInfo.strCharacterName + " (상세보기)\n"
+	string strMonsterStatus = " [몬스터 도감] " + fMonsterInfo.strCharacterName + " (상세보기)\n"
 		+ "몬스터 레벨 : " + to_string(fMonsterInfo.iCurrentLevel) + "\n"
 		+ "체력 : " + to_string(fMonsterInfo.iCurrentHealth) + "/" + to_string(fMonsterInfo.iMaxHealth) + "\n\n"
 		+ "공격력 : " + to_string(fMonsterInfo.characterStats.GetAttack()) + "\n"

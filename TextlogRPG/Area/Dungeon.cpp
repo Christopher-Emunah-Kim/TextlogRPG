@@ -112,22 +112,27 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 		Common::PauseAndClearScreen(1500);
 		if (bIsPlayerTurn)
 		{
-			Common::ShowOption("1. " + monster->GetCharacterInfo().strCharacterName + "를(을) 공격한다!! \n\n2. 내 상태가 어떤지 확인한다..\n\n3. 이대로는 위험하다. 도망가자..\n\n당신의 선택은??");
+			Common::ShowOption("1. " + monster->GetCharacterInfo().strCharacterName + "를(을) 공격한다!! \n\n2. 내 상태가 어떤지 확인해보자\n\n3. 이대로는 위험하다. 도망가자..\n\n당신의 선택은??");
 			char battleChoice = Common::GetCharInput();
 
-			if (battleChoice == '1')
+			switch (battleChoice)
+			{
+			case '1':
 			{
 				Common::PauseAndClearScreen();
 
 				Common::PrintSystemMsg(player->GetCharacterInfo().strCharacterName + "이(가) 공격할 차례입니다.");
 				player->Attack(monster);
 			}
-			else if (battleChoice == '2')
+			break;
+			case '2':
 			{
 				Common::PauseAndClearScreen(500);
 				player->ShowPlayerStatus();
-			}
-			else if (battleChoice == '3')
+				continue;
+			} 
+			break;
+			case '3':
 			{
 				// 도망 확률 계산 (예: 50% 확률)
 				if (rand() % 2 == 0)
@@ -141,6 +146,14 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 					Common::PrintSystemMsg("당신은 필사적으로 도망쳤지만, 몬스터가 뛰어올라 당신의 앞을 가로막습니다.");
 					Common::PauseAndClearScreen();
 				}
+			}
+			break;
+
+			default :
+			{
+				Common::PrintSystemMsg("어이쿠 손이 미끄러졌네!\n" + monster->GetCharacterInfo().strCharacterName + "를(을) 공격한다!!");
+				player->Attack(monster);
+			}
 			}
 		}
 		else

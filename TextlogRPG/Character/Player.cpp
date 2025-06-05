@@ -10,7 +10,7 @@
 Player* Player::CreateCharacter(const string& characterName)
 {
 	//TODO : 임시_이후 LevelData 연결
-	FPlayerInfo fTempCharacterInfo = { CharacterStatus::NewStatus(10, 5, 3), 10, 10, 1, characterName };
+	FPlayerInfo fTempCharacterInfo = { CharacterStatus::NewStatus(12, 9, 8), 25, 25, 1, characterName };
 
 	return new Player(fTempCharacterInfo);
 }
@@ -66,7 +66,16 @@ FPlayerInfo Player::GetPlayerData() const
 
 void Player::AddToInventory(Item* item)
 {
-	inventory.push_back(item);
+	if (item == nullptr)
+		return;
+
+	vector<Item*>::iterator it = find(inventory.begin(), inventory.end(), item);
+	if (it == inventory.end()) {
+		inventory.push_back(item);
+	}
+	else {
+		Common::PrintSystemMsg("이미 보유 중인 아이템입니다.");
+	}
 }
 
 vector<Item*> Player::GetInventoryItems(EItemType type) const
@@ -88,7 +97,18 @@ vector<Item*> Player::GetInventoryItems(EItemType type) const
 
 void Player::EquipItem(Item* item)
 {
-	if (item == nullptr) return;
+	if (item == nullptr) 
+		return;
+
+	// add previous item to inventory 
+	if(item->GetItemInfo().itemType== EItemType::WEAPON && playerInfo.weaponEquipped != nullptr) 
+	{
+		AddToInventory(playerInfo.weaponEquipped);
+	}
+	if (item->GetItemInfo().itemType == EItemType::ARMOR && playerInfo.armorEquipped != nullptr)
+	{
+		AddToInventory(playerInfo.armorEquipped);
+	}
 
 	// remove status of former equipment(Weapon)
 	CaculateNewStatus(item);
@@ -223,7 +243,7 @@ void Player::GainLoot(int32 experience, int32 gold, Item* item)
 	Common::PrintSystemMsg("최종 전투 결과입니다!!\n당신은 "+ to_string(experience) + " 경험치와 " + to_string(gold) + " 골드를 획득했습니다.");
 	if (item != nullptr)
 	{
-		AddToInventory(item);
+		//AddToInventory(item);
 		Common::PrintSystemMsg("아이템 " + item->GetItemInfo().itemName + "을(를) 획득했습니다.");
 	}
 	Common::PrintLine();
@@ -264,8 +284,31 @@ BaseCharacter& Player::CharacterLevelUp()
 	playerInfo.playerMaxExperience += levelData.maxExperiencePerLevel;
 	playerInfo.iCurrentHealth = playerInfo.iMaxHealth; // Reset current health to max health after level up
 
+	// additional status reward
+	Common::PrintSystemMsg("추가로 올릴 능력치를 선택하세요 : \n\n1.공격력을 추가로 획득한다.\n2.방어력을 추가로 획득한다.\n3.민첩성을 추가로 획득한다.");
+	char statusChoice = Common::GetCharInput();
+	int16 playerAtk = levelData.attackPerLevel;
+	int16 playerDef = levelData.defensePerLevel;
+	int16 playerAgi = levelData.agilityPerLevel;
+	switch (statusChoice)
+	{
+	case '1':
+		playerAtk += 2;
+		break;
+	case '2':
+		playerDef += 2;
+		break;
+	case '3':
+		playerAgi += 2;
+		break;
+
+	default :
+		break;
+	}
+
+
 	// Update character stats based on level data
-	playerInfo.characterStats = CharacterStatus::NewStatus(levelData.attackPerLevel, levelData.defensePerLevel,levelData.agilityPerLevel	);
+	playerInfo.characterStats = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
 
 	UpdateFinalStatus();
 

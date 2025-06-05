@@ -9,8 +9,8 @@ LevelData::LevelData()
 	for (int i = 0; i < 100; ++i)
 	{
 		levelData[i].maxExperiencePerLevel = 100 + (i * 50); // Example formula
-		levelData[i].maxHealthPerLevel = 100 + (i * 10); // Example formula
-		levelData[i].attackPerLevel = 5 + (i * 2); // Example formula
+		levelData[i].maxHealthPerLevel = 50 + (i * 10); // Example formula
+		levelData[i].attackPerLevel = 5 + (i * 1); // Example formula
 		levelData[i].defensePerLevel = 3 + (i * 1); // Example formula
 		levelData[i].agilityPerLevel = 2 + (i * 1); // Example formula
 	}
