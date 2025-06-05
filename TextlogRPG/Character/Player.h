@@ -4,6 +4,7 @@
 #include "../Util/Common.h"
 #include "../Item/EItemType.h"
 #include "InventoryManager.h"
+#include "EquipmentManager.h"
 #include <vector>
 
 using namespace std;
@@ -23,6 +24,7 @@ private:
 	CharacterStatus m_BaseStatus;
 	CharacterStatus m_EquipmentStatus;
 	InventoryManager m_inventoryManager;
+	//EquipmentManager m_EquipmentManager;
 
 
 public:
