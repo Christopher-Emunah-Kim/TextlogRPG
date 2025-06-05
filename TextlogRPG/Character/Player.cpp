@@ -306,9 +306,10 @@ BaseCharacter& Player::CharacterLevelUp()
 		break;
 	}
 
-
 	// Update character stats based on level data
-	fPlayerInfo.characterStats = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
+	baseStatus = CharacterStatus::NewStatus(baseStatus.GetAttack() + playerAtk,	baseStatus.GetDefense() + playerDef, baseStatus.GetAgility() + playerAgi	);
+
+	//fPlayerInfo.characterStats = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
 
 	UpdateFinalStatus();
 
