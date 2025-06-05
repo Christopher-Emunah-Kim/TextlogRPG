@@ -12,12 +12,12 @@ class Player : public BaseCharacter
 {
 public:
 	//Default Constructor
-	Player(const FPlayerInfo& data) : BaseCharacter(data), playerInfo(data) {}
+	Player(const FPlayerInfo& data) : fPlayerInfo(data) {}
 	//Destructor
 	~Player();
 
 private:
-	FPlayerInfo playerInfo;
+	FPlayerInfo fPlayerInfo;
 	vector<class Item*> inventory; 
 	CharacterStatus baseStatus;
 	CharacterStatus equipmentStatus;
@@ -26,7 +26,7 @@ private:
 public:
 	virtual void ReceiveDamageFrom(BaseCharacter& target) override;
 	virtual void Attack(BaseCharacter* target) override;
-	const FPlayerInfo& GetCharacterInfo() const override { return playerInfo; }
+	const FPlayerInfo& GetCharacterInfo() const override { return fPlayerInfo; }
 	
 	static Player* CreateCharacter(const string& characterName);
 	

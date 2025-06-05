@@ -7,7 +7,7 @@
 
 //Constructor
 Monster::Monster(const FMonsterInfo& info)
-	: BaseCharacter(info), fMonsterInfo(info), dropExperience(info.dropExperience), dropGold(info.dropGold)
+	: fMonsterInfo(info), dropExperience(info.dropExperience), dropGold(info.dropGold)
 {
 	//setting the dropItemList of Monster
 	dropItemList = ItemManager::GetInstance().GetItemList();
