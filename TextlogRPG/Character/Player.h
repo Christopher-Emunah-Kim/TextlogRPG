@@ -19,7 +19,7 @@ public:
 
 private:
 	FPlayerInfo fPlayerInfo;
-	vector<class Item*> inventory; 
+	vector<class Item*> m_playerInventory; 
 	CharacterStatus m_BaseStatus;
 	CharacterStatus m_EquipmentStatus;
 	InventoryManager m_inventoryManager;

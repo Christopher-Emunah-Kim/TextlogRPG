@@ -29,7 +29,7 @@ void Monster::ReceiveDamageFrom(BaseCharacter& target)
 		fMonsterInfo.iCurrentHealth = 0;
 
 		
-		Player* playerTarget = static_cast<Player*>(&target);
+		Player* playerTarget = dynamic_cast<Player*>(&target);
 		if (playerTarget != nullptr && !dropItemList.empty())
 		{
 			// TODO : dropItems중에 랜덤드랍
@@ -38,7 +38,7 @@ void Monster::ReceiveDamageFrom(BaseCharacter& target)
 
 			string strRandomItemName = dropItemList[randomIndex];
 			Item* randomDropItem = ItemManager::GetInstance().CreateItem(strRandomItemName);
-
+			 
 			if (randomDropItem)
 			{
 				Common::PrintSystemMsg("전리품을 획득했습니다!");

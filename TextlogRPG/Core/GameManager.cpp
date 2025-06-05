@@ -171,10 +171,11 @@ void GameManager::InitializeDungeon()
 		FMonsterInfo(CharacterStatus::NewStatus(14, 15, 15), 40, 40, 10, "허약한 오크", 60, 40),
 		FMonsterInfo(CharacterStatus::NewStatus(20, 18, 20), 50, 50, 15, "허약한 드래곤", 100, 60),
 		FMonsterInfo(CharacterStatus::NewStatus(27, 27, 27), 20, 20, 3, "강력한 고블린", 30, 16),
-		FMonsterInfo(CharacterStatus::NewStatus(25, 25, 25), 25, 25, 5, "강력한 슬라임", 30, 10),
-		FMonsterInfo(CharacterStatus::NewStatus(28, 28, 28), 30, 30, 8, "강력한 스켈레톤", 50, 30)
+		FMonsterInfo(CharacterStatus::NewStatus(25, 25, 25), 25, 25, 5, "강력한 슬라임", 30, 10)
 	};
     vector<FMonsterInfo> stage3 = {
+
+		FMonsterInfo(CharacterStatus::NewStatus(28, 28, 28), 30, 30, 8, "강력한 스켈레톤", 50, 30),
 		FMonsterInfo(CharacterStatus::NewStatus(30, 30, 30), 40, 40, 10, "강력한 오크", 60, 40),
 		FMonsterInfo(CharacterStatus::NewStatus(35, 35, 35), 50, 50, 15, "완전 강력한 스켈레톤", 100, 60),
 		FMonsterInfo(CharacterStatus::NewStatus(50, 50, 50), 100, 100, 21, "완전 강력한 고블린", 150, 80),

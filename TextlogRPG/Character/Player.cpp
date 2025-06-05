@@ -66,31 +66,35 @@ FPlayerInfo Player::GetPlayerData() const
 
 void Player::AddToInventory(Item* item)
 {
-	if (item == nullptr)
+	m_inventoryManager.AddItem(item);
+
+	/*if (item == nullptr)
 		return;
 
-	vector<Item*>::iterator it = find(inventory.begin(), inventory.end(), item);
-	if (it == inventory.end()) {
-		inventory.push_back(item);
+	vector<Item*>::iterator it = find(m_playerInventory.begin(), m_playerInventory.end(), item);
+	if (it == m_playerInventory.end()) {
+		m_playerInventory.push_back(item);
 	}
 	else {
 		Common::PrintSystemMsg("이미 보유 중인 아이템입니다.");
-	}
+	}*/
 }
 
 vector<Item*> Player::GetInventoryItems(EItemType type) const
 {
-	vector<Item*> itemListByType;
+	return m_inventoryManager.GetItemsByType(type);
 
-	for (size_t i = 0; i < inventory.size(); ++i) 
+	/*vector<Item*> itemListByType;
+
+	for (size_t i = 0; i < m_playerInventory.size(); ++i) 
 	{
-		Item* item = inventory[i];
+		Item* item = m_playerInventory[i];
 		if (item->GetItemInfo().itemType == type)
 		{
 			itemListByType.push_back(item);
 		}
 	}
-	return itemListByType;
+	return itemListByType;*/
 }
 
 
@@ -155,7 +159,7 @@ void Player::UpdateEquipmentStatus()
 		def += fPlayerInfo.miscOwned->GetItemInfo().defense;
 		agi += fPlayerInfo.miscOwned->GetItemInfo().agility;
 	}
-	equipmentStatus = CharacterStatus::NewStatus(atk, def, agi);
+	m_EquipmentStatus = CharacterStatus::NewStatus(atk, def, agi);
 }
 
 void Player::LoseItem(Item* item)
@@ -163,11 +167,13 @@ void Player::LoseItem(Item* item)
 	if (item == nullptr) 
 		return;
 	
-	vector<Item*>::iterator it = find(inventory.begin(), inventory.end(), item);
-	if (it != inventory.end())
+	m_inventoryManager.RemoveItem(item);
+
+	/*vector<Item*>::iterator it = find(m_playerInventory.begin(), m_playerInventory.end(), item);
+	if (it != m_playerInventory.end())
 	{
-		inventory.erase(it);
-	}
+		m_playerInventory.erase(it);
+	}*/
 
 	switch (item->GetItemInfo().itemType)
 	{
@@ -263,9 +269,9 @@ void Player::GainLoot(int32 experience, int32 gold, Item* item)
 void Player::UpdatePlayerStatus()
 {
 	fPlayerInfo.characterStats = CharacterStatus::NewStatus(
-		baseStatus.GetAttack() + equipmentStatus.GetAttack(),
-		baseStatus.GetDefense() + equipmentStatus.GetDefense(),
-		baseStatus.GetAgility() + equipmentStatus.GetAgility()
+		m_BaseStatus.GetAttack() + m_EquipmentStatus.GetAttack(),
+		m_BaseStatus.GetDefense() + m_EquipmentStatus.GetDefense(),
+		m_BaseStatus.GetAgility() + m_EquipmentStatus.GetAgility()
 	);
 }
 
@@ -309,7 +315,7 @@ BaseCharacter& Player::CharacterLevelUp()
 	}
 
 	// Update character stats based on level data
-	baseStatus = CharacterStatus::NewStatus(baseStatus.GetAttack() + playerAtk,	baseStatus.GetDefense() + playerDef, baseStatus.GetAgility() + playerAgi	);
+	m_BaseStatus = CharacterStatus::NewStatus(m_BaseStatus.GetAttack() + playerAtk,	m_BaseStatus.GetDefense() + playerDef, m_BaseStatus.GetAgility() + playerAgi	);
 
 	//fPlayerInfo.characterStats = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
 
@@ -391,11 +397,11 @@ Player::~Player()
 		delete fPlayerInfo.miscOwned;
 		fPlayerInfo.miscOwned = nullptr;
 	}
-	for (size_t i = 0; i<inventory.size(); ++i)
+	for (size_t i = 0; i<m_playerInventory.size(); ++i)
 	{
-		Item* item = inventory[i];
+		Item* item = m_playerInventory[i];
 		delete item;
 	}
-	inventory.clear();
+	m_playerInventory.clear();
 	
 }
