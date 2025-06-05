@@ -397,11 +397,11 @@ Player::~Player()
 		delete fPlayerInfo.miscOwned;
 		fPlayerInfo.miscOwned = nullptr;
 	}
-	for (size_t i = 0; i<m_playerInventory.size(); ++i)
+	/*for (size_t i = 0; i<m_playerInventory.size(); ++i)
 	{
 		Item* item = m_playerInventory[i];
 		delete item;
 	}
-	m_playerInventory.clear();
+	m_playerInventory.clear();*/
 	
 }
