@@ -246,7 +246,7 @@ void GameManager::RunProcessTitle()
 void GameManager::RunProcessVillage()
 {
 	//Choice in Village
-	Village* pVilalgeArea = static_cast<Village*>(mapList[EGameState::VILLAGE]);
+	Village* pVilalgeArea = dynamic_cast<Village*>(mapList[EGameState::VILLAGE]);
 
 	Healer* healer = new Healer("앤더슨", 15);
     Merchant* merchant = new Merchant("토니");

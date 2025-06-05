@@ -3,6 +3,7 @@
 #include "../Character/CharacterInfo.h"
 #include "../Util/Common.h"
 #include "../Item/EItemType.h"
+#include "InventoryManager.h"
 #include <vector>
 
 using namespace std;
@@ -19,8 +20,9 @@ public:
 private:
 	FPlayerInfo fPlayerInfo;
 	vector<class Item*> inventory; 
-	CharacterStatus baseStatus;
-	CharacterStatus equipmentStatus;
+	CharacterStatus m_BaseStatus;
+	CharacterStatus m_EquipmentStatus;
+	InventoryManager m_inventoryManager;
 
 
 public:
@@ -38,7 +40,7 @@ public:
 	vector<Item*> GetInventoryItems(EItemType type) const;
 	
 	void EquipItem(class Item* item);
-	void CaculateNewStatus(Item* item);
+	void UpdateEquipmentStatus();
 	void LoseItem(class Item* item);
 	
 	void Heal(int32 healAmount);
@@ -47,7 +49,7 @@ public:
 	void EarnGold(int32 earnGold);
 	
 	void GainLoot(int32 experience, int32 gold, class Item* item);
-	void UpdateFinalStatus();
+	void UpdatePlayerStatus();
 
 	BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class
 	
