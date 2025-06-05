@@ -110,36 +110,6 @@ void Player::EquipItem(Item* item)
 		AddToInventory(fPlayerInfo.armorEquipped);
 	}
 
-	// remove status of former equipment(Weapon)
-	CaculateNewStatus(item);
-
-	UpdateFinalStatus(); // update status
-
-	Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 장착합니다.");
-	Common::PauseAndClearScreen(2000);
-
-	ShowPlayerStatus();
-
-}
-
-void Player::CaculateNewStatus(Item* item)
-{
-	if (item->GetItemInfo().itemType == EItemType::WEAPON && fPlayerInfo.weaponEquipped != nullptr) {
-		equipmentStatus = CharacterStatus::NewStatus(
-			equipmentStatus.GetAttack() - fPlayerInfo.weaponEquipped->GetItemInfo().attack,
-			equipmentStatus.GetDefense() - fPlayerInfo.weaponEquipped->GetItemInfo().defense,
-			equipmentStatus.GetAgility() - fPlayerInfo.weaponEquipped->GetItemInfo().agility
-		);
-	}
-	// remove status of former equipment(Armor)
-	if (item->GetItemInfo().itemType == EItemType::ARMOR && fPlayerInfo.armorEquipped != nullptr) {
-		equipmentStatus = CharacterStatus::NewStatus(
-			equipmentStatus.GetAttack() - fPlayerInfo.armorEquipped->GetItemInfo().attack,
-			equipmentStatus.GetDefense() - fPlayerInfo.armorEquipped->GetItemInfo().defense,
-			equipmentStatus.GetAgility() - fPlayerInfo.armorEquipped->GetItemInfo().agility
-		);
-	}
-
 	// update new equipment
 	if (item->GetItemInfo().itemType == EItemType::WEAPON) {
 		fPlayerInfo.weaponEquipped = static_cast<Weapon*>(item);
@@ -152,12 +122,40 @@ void Player::CaculateNewStatus(Item* item)
 		fPlayerInfo.miscOwned = static_cast<MiscItem*>(item);
 	}
 
-	// update status of new equipment
-	equipmentStatus = CharacterStatus::NewStatus(
-		equipmentStatus.GetAttack() + item->GetItemInfo().attack,
-		equipmentStatus.GetDefense() + item->GetItemInfo().defense,
-		equipmentStatus.GetAgility() + item->GetItemInfo().agility
-	);
+
+	UpdateEquipmentStatus();
+
+	UpdatePlayerStatus(); // update status
+
+	Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 장착합니다.");
+	Common::PauseAndClearScreen(2000);
+
+	ShowPlayerStatus();
+
+}
+
+void Player::UpdateEquipmentStatus()
+{
+	int atk = 0, def = 0, agi = 0;
+	if (fPlayerInfo.weaponEquipped)
+	{
+		atk += fPlayerInfo.weaponEquipped->GetItemInfo().attack;
+		def += fPlayerInfo.weaponEquipped->GetItemInfo().defense;
+		agi += fPlayerInfo.weaponEquipped->GetItemInfo().agility;
+	}
+	if (fPlayerInfo.armorEquipped)
+	{
+		atk += fPlayerInfo.armorEquipped->GetItemInfo().attack;
+		def += fPlayerInfo.armorEquipped->GetItemInfo().defense;
+		agi += fPlayerInfo.armorEquipped->GetItemInfo().agility;
+	}
+	if (fPlayerInfo.miscOwned)
+	{
+		atk += fPlayerInfo.miscOwned->GetItemInfo().attack;
+		def += fPlayerInfo.miscOwned->GetItemInfo().defense;
+		agi += fPlayerInfo.miscOwned->GetItemInfo().agility;
+	}
+	equipmentStatus = CharacterStatus::NewStatus(atk, def, agi);
 }
 
 void Player::LoseItem(Item* item)
@@ -170,6 +168,7 @@ void Player::LoseItem(Item* item)
 	{
 		inventory.erase(it);
 	}
+
 	switch (item->GetItemInfo().itemType)
 	{
 	case EItemType::WEAPON:
@@ -197,6 +196,9 @@ void Player::LoseItem(Item* item)
 	}
 	break;
 	}
+
+	UpdateEquipmentStatus();
+	UpdateFinalStatus();
 
 }
 
@@ -258,7 +260,7 @@ void Player::GainLoot(int32 experience, int32 gold, Item* item)
 	}
 }
 
-void Player::UpdateFinalStatus()
+void Player::UpdatePlayerStatus()
 {
 	fPlayerInfo.characterStats = CharacterStatus::NewStatus(
 		baseStatus.GetAttack() + equipmentStatus.GetAttack(),
@@ -311,7 +313,7 @@ BaseCharacter& Player::CharacterLevelUp()
 
 	//fPlayerInfo.characterStats = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
 
-	UpdateFinalStatus();
+	UpdatePlayerStatus();
 
 	string strLevelUpMsg = "레벨업!\n현재 레벨 : " + to_string(fPlayerInfo.iCurrentLevel) + "\n"
 		+ "체력 : " + to_string(fPlayerInfo.iCurrentHealth) + "/" + to_string(fPlayerInfo.iMaxHealth) + "\n"

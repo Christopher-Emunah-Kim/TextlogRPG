@@ -41,7 +41,7 @@ void Merchant::SellItem(Player* player, const string& itemName)
 	Common::PauseAndClearScreen();
 
 	player->EquipItem(item); 
-	player->AddToInventory(item); 
+	//player->AddToInventory(item); 
 
 	Interact(player);
 

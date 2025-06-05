@@ -468,49 +468,6 @@ void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* 
 		}
 	}
 
-	//for (size_t i = 0; i < monsters.size(); ++i)
-	//{
-	//	Monster* monster = monsters[i];
-
-
-	//	if (monster->GetCharacterInfo().iCurrentHealth <= 0)
-	//		continue;
-
-	//	EBattleResult result = dungeonptr->EncounterMonster(playerPtr, monster);
-	//	
-
-	//	switch (result)
-	//	{
-	//	case EBattleResult::PLAYER_DEAD :
-	//	{
-	//		GameOverProcess();
-	//		return;
-	//	}
-	//	break;
-	//	case EBattleResult::PLAYER_RUN:
-	//	{
-	//		
-	//		SetGameState(EGameState::VILLAGE);
-	//		return;
-	//	}
-	//	break;
-	//	case EBattleResult::PLAYER_WIN:
-	//	{
-	//		stage->OnMonsterDefeat(monster);
-	//		// 경험치, 골드 등 보상 지급 로직 추가 가능
-	//	}
-	//	break;
-	//	
-	//	default:
-	//	{
-	//		Common::PrintErrorMsg("전투 중 알 수 없는 오류가 발생했습니다.");
-	//		return;
-	//	}
-	//	break;
-	//	}
-	//}
-
-
 }
 
 
