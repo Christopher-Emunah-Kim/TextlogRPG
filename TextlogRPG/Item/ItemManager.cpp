@@ -64,9 +64,9 @@ void ItemManager::ShowItemInfo(const string& name)
 vector<string> ItemManager::GetItemList() const
 {
 	vector<string> list;
-	for (const pair<const string, Item*>& pair : itemTable)
+	for (unordered_map<string, Item*>::const_iterator it = itemTable.begin(); it != itemTable.end(); ++it)
 	{
-		//TODO FOR문 해체
+		const pair<const string, Item*>& pair = *it;
 		list.push_back(pair.first);
 	}
 	return list;
@@ -86,9 +86,11 @@ ItemManager& ItemManager::GetInstance()
 
 ItemManager::~ItemManager()
 {
-	for (pair<const string, Item*>& pair : itemTable)
+	for (unordered_map<string, Item*>::const_iterator it = itemTable.begin(); it != itemTable.end(); ++it)
 	{
-		delete pair.second;
+		const pair<const string, Item*>& pair = *it;
+		delete pair.second; 
 	}
+
 	itemTable.clear();
 }

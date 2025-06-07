@@ -9,7 +9,10 @@ public:
 	MiscItem()
 		:Item()
 	{ }
+	//Destructor
+	~MiscItem() {}
 
+public:
 	//overrided functions
 	MiscItem* CloneItem() const override
 	{
@@ -18,7 +21,6 @@ public:
 
 	void EquippedBy(Player* player) override;
 
-	//Destructor
-	~MiscItem() { }
+	
 };
 

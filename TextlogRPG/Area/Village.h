@@ -7,6 +7,7 @@ class Village : public Area
 {
 private:
     vector<NonPlayerCharacter*> npcCharacters;
+
 public:
     string GetAreaName() const override { return "Village"; }
 

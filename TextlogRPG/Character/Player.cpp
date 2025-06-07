@@ -67,34 +67,12 @@ FPlayerInfo Player::GetPlayerData() const
 void Player::AddToInventory(Item* item)
 {
 	m_inventoryManager.AddItem(item);
-
-	/*if (item == nullptr)
-		return;
-
-	vector<Item*>::iterator it = find(m_playerInventory.begin(), m_playerInventory.end(), item);
-	if (it == m_playerInventory.end()) {
-		m_playerInventory.push_back(item);
-	}
-	else {
-		Common::PrintSystemMsg("이미 보유 중인 아이템입니다.");
-	}*/
 }
 
 vector<Item*> Player::GetInventoryItems(EItemType type) const
 {
 	return m_inventoryManager.GetItemsByType(type);
 
-	/*vector<Item*> itemListByType;
-
-	for (size_t i = 0; i < m_playerInventory.size(); ++i) 
-	{
-		Item* item = m_playerInventory[i];
-		if (item->GetItemInfo().itemType == type)
-		{
-			itemListByType.push_back(item);
-		}
-	}
-	return itemListByType;*/
 }
 
 
@@ -397,11 +375,5 @@ Player::~Player()
 		delete fPlayerInfo.miscOwned;
 		fPlayerInfo.miscOwned = nullptr;
 	}
-	/*for (size_t i = 0; i<m_playerInventory.size(); ++i)
-	{
-		Item* item = m_playerInventory[i];
-		delete item;
-	}
-	m_playerInventory.clear();*/
 	
 }

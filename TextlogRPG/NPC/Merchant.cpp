@@ -121,8 +121,9 @@ void Merchant::Interact(Player* player)
 		case '1':
 		{
 			//Selling Weapons
-			for (const pair<string, int32>& pair : itemLists)
+			for (unordered_map<string, int32>::iterator it = itemLists.begin(); it != itemLists.end(); ++it)
 			{
+				const pair<string, int32>& pair = *it;
 				Item* item = ItemManager::GetInstance().GetItem(pair.first);
 				if (item && item->GetItemInfo().itemType == EItemType::WEAPON)
 				{

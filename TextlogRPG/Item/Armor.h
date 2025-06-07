@@ -8,6 +8,10 @@ public:
 	Armor()
 		: Item()
 	{	}
+	//Destructor
+	~Armor() {}
+
+public:
 
 	//overrided function
 	Armor* CloneItem() const override
@@ -16,7 +20,6 @@ public:
 	}
 	void EquippedBy(Player* player) override;
 
-	//Destructor
-	~Armor() { }
+	
 };
 

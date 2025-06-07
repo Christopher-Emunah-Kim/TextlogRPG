@@ -20,7 +20,8 @@ class LevelData
 public:
 	LevelData();
 	~LevelData();
-
+	
+public:
 	FLevelProperties GetLevelData(int16 level);
 
 	

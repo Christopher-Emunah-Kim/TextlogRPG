@@ -6,19 +6,26 @@
 
 using namespace std;
 
+class Player;
+class Monster;
+class Area;
+class Dungeon;
+class DungeonStage;
+
+
 class GameManager 
 {
 public:
-	GameManager(EGameState initialState, class Player* player, class Dungeon* dungeon);
+	GameManager(EGameState initialState, Player* player, Dungeon* dungeon);
 
 	~GameManager();
 
 
 private:
 	EGameState gameState;
-    class Player* playerPtr;
-	class Dungeon* dungeonptr;
-	unordered_map<EGameState, class Area*> mapList;
+    Player* playerPtr;
+	Dungeon* dungeonptr;
+	unordered_map<EGameState, Area*> mapList;
     
 public:
 	void SetGameState(const EGameState& gs_in)	{ gameState = gs_in; }
@@ -40,7 +47,7 @@ private:
 	void RunProcessVillage();
 	void RunProcessDungeon();
 
-	void BattleInDungeonStage(vector<class Monster*> monsters, class DungeonStage* stage);
+	void BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* stage);
 	
 
 	void GameOverProcess();

@@ -12,8 +12,6 @@ typedef unsigned __int64     uint64;  //0~18446744073709551615
 
 #include <iostream>
 #include <string>
-//#include <sstream>
-//#include <functional>
 
 #include <array>
 #include <vector>
@@ -23,6 +21,8 @@ typedef unsigned __int64     uint64;  //0~18446744073709551615
 #include <algorithm>
 
 #include <Windows.h>
+
+
 
 
 using namespace std;

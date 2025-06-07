@@ -351,8 +351,9 @@ void GameManager::RunProcessDungeon()
 			{
 				// 스테이지 내 모든 몬스터가 죽었는지 확인
 				bool allMonstersDead = true;
-				for (Monster* mon : stageMonsterList)
+				for (size_t i = 0; i <stageMonsterList.size(); ++i)
 				{
+					Monster* mon = stageMonsterList[i];
 					if (mon->GetCharacterInfo().iCurrentHealth > 0)
 					{
 						allMonstersDead = false;

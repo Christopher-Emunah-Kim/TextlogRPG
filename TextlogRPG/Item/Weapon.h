@@ -9,6 +9,7 @@ public:
 	~Weapon() {}
 
 
+public:
 	//overrided functions
 	Weapon* CloneItem() const override
 	{

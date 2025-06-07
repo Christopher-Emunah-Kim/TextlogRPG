@@ -3,7 +3,8 @@
 #include "../Character/Monster.h"
 #include "../Util/Common.h"
 
-
+class MonsterPool;
+class Monster;
 
 class DungeonStage
 {
@@ -13,8 +14,8 @@ public:
 
 private:
 	vector<FMonsterInfo> monsterInfoList;
-	vector<class Monster*> monsterList;
-	class MonsterPool* monsterPool;
+	vector<Monster*> monsterList;
+	MonsterPool* monsterPool;
 
 public:
 	
