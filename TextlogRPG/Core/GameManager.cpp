@@ -257,10 +257,30 @@ void GameManager::RunProcessVillage()
 	
 	//TODO : 아이템 리스트 정보를 csv에서 불러와 배열 push해주는 메서드 추가
 	//TODO : 반복되는기능 함수로 묶기
-	merchant->AddItemForSale("초보자의 검", 50);
+	ItemManager& itemManager = ItemManager::GetInstance();
+	vector<string> items = itemManager.GetItemList();
+
+	for (size_t i = 0; i <  items.size(); ++i)
+	{
+		const string& itemName = items[i];
+		Item* item = itemManager.GetItem(itemName);
+		if (item == nullptr)
+			continue;
+		
+		EItemType itemType = item->GetItemInfo().itemType;
+		int32 itemPrice = item->GetItemInfo().itemCost;
+
+		if (itemType == EItemType::WEAPON || itemType == EItemType::ARMOR || itemType == EItemType::MISC)
+		{
+			merchant->AddItemForSale(itemName, itemPrice);
+		}
+	}
+
+
+	/*merchant->AddItemForSale("초보자의 검", 50);
 	merchant->AddItemForSale("철검", 80);
 	merchant->AddItemForSale("초보자의 갑옷", 60);
-	merchant->AddItemForSale("가죽갑옷", 100);
+	merchant->AddItemForSale("가죽갑옷", 100);*/
 
 	
 	pVilalgeArea->Enter(playerPtr);

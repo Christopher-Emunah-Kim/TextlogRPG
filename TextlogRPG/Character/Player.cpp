@@ -10,7 +10,7 @@
 Player* Player::CreateCharacter(const string& characterName)
 {
 	//TODO : 임시_이후 LevelData 연결
-	FPlayerInfo fTempCharacterInfo = { CharacterStatus::NewStatus(8, 8, 8), 25, 25, 1, characterName };
+	FPlayerInfo fTempCharacterInfo = { CharacterStatus::NewStatus(10, 10, 10), 25, 25, 1, characterName };
 
 	return new Player(fTempCharacterInfo);
 }

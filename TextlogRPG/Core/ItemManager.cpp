@@ -8,13 +8,17 @@ void ItemManager::InitializeItems()
 {
 	//TODO : 몬스터의 드랍아이템 pool_ csv에서 불러오기 구현
 	Weapon* basicSword = new Weapon();
-	basicSword->SetItem(EItemType::WEAPON, 50, 10, 0, 0, "초보자의 검");
+	basicSword->SetItem(EItemType::WEAPON, 50, 3, 0, 0, "초보자의 검");
 	Weapon* ironSword = new Weapon();
-	ironSword->SetItem(EItemType::WEAPON, 80, 15, 0, 0, "철검");
+	ironSword->SetItem(EItemType::WEAPON, 80, 5, 0, 0, "철검");
+	Weapon* woodenSword = new Weapon();
+	woodenSword->SetItem(EItemType::WEAPON, 30, 2, 0, 0, "나무검");
 	Armor* basicArmor = new Armor();
-	basicArmor->SetItem(EItemType::ARMOR, 60, 0, 10, 0, "초보자의 갑옷");
+	basicArmor->SetItem(EItemType::ARMOR, 40, 0, 3, 0, "초보자의 갑옷");
 	Armor* leatherArmor = new Armor();
-	leatherArmor->SetItem(EItemType::ARMOR, 100, 0, 15, 2, "가죽갑옷");
+	leatherArmor->SetItem(EItemType::ARMOR, 70, 0, 5, 2, "가죽갑옷");
+	Armor* ironArmor = new Armor();
+	ironArmor->SetItem(EItemType::ARMOR, 90, 0, 7, 1, "철갑옷");
 	MiscItem* brokenCoin = new MiscItem();
 	brokenCoin->SetItem(EItemType::MISC, 25, 0, 0, 0, "조각난 금화");
 	MiscItem* littleBread = new MiscItem();
@@ -22,8 +26,10 @@ void ItemManager::InitializeItems()
 
 	RegisterItem(basicSword);
 	RegisterItem(ironSword);
+	RegisterItem(woodenSword);
 	RegisterItem(basicArmor);
 	RegisterItem(leatherArmor);
+	RegisterItem(ironArmor);
 	RegisterItem(brokenCoin);
 	RegisterItem(littleBread);
 
