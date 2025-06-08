@@ -3,7 +3,7 @@
 #include "../Character/CharacterInfo.h"
 #include "../Util/Common.h"
 #include "../Item/EItemType.h"
-#include "InventoryManager.h"
+#include "../Core/InventoryManager.h"
 #include "EquipmentManager.h"
 #include <vector>
 

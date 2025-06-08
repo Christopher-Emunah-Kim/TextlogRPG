@@ -130,13 +130,13 @@
     <ClCompile Include="TextlogRPG\Area\Village.cpp" />
     <ClCompile Include="TextlogRPG\BattleSystem\MonsterPool.cpp" />
     <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
-    <ClCompile Include="TextlogRPG\Character\InventoryManager.cpp" />
+    <ClCompile Include="TextlogRPG\Core\InventoryManager.cpp" />
     <ClCompile Include="TextlogRPG\Character\Monster.cpp" />
     <ClCompile Include="TextlogRPG\NPC\Merchant.cpp" />
     <ClCompile Include="TextlogRPG\Character\Player.cpp" />
     <ClCompile Include="TextlogRPG\Core\GameManager.cpp" />
     <ClCompile Include="TextlogRPG\Item\Armor.cpp" />
-    <ClCompile Include="TextlogRPG\Item\ItemManager.cpp" />
+    <ClCompile Include="TextlogRPG\Core\ItemManager.cpp" />
     <ClCompile Include="TextlogRPG\Item\MiscItem.cpp" />
     <ClCompile Include="TextlogRPG\LevelData\LevelData.cpp" />
     <ClCompile Include="TextlogRPG.cpp" />
@@ -153,7 +153,7 @@
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterInfo.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
-    <ClInclude Include="TextlogRPG\Character\InventoryManager.h" />
+    <ClInclude Include="TextlogRPG\Core\InventoryManager.h" />
     <ClInclude Include="TextlogRPG\Character\Monster.h" />
     <ClInclude Include="TextlogRPG\Util\EGameState.h" />
     <ClInclude Include="TextlogRPG\Item\EItemType.h" />
@@ -164,7 +164,7 @@
     <ClInclude Include="TextlogRPG\Core\GameManager.h" />
     <ClInclude Include="TextlogRPG\Item\Armor.h" />
     <ClInclude Include="TextlogRPG\Item\Item.h" />
-    <ClInclude Include="TextlogRPG\Item\ItemManager.h" />
+    <ClInclude Include="TextlogRPG\Core\ItemManager.h" />
     <ClInclude Include="TextlogRPG\Item\MiscItem.h" />
     <ClInclude Include="TextlogRPG\Item\Weapon.h" />
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h" />

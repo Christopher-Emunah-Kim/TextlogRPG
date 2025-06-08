@@ -1,7 +1,7 @@
 ﻿#include "ItemManager.h"
-#include "Weapon.h"
-#include "Armor.h"
-#include "MiscItem.h"
+#include "../Item/Weapon.h"
+#include "../Item/Armor.h"
+#include "../Item/MiscItem.h"
 
 
 void ItemManager::InitializeItems()

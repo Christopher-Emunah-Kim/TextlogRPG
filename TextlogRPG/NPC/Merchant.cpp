@@ -1,6 +1,6 @@
 ﻿#include "Merchant.h"
 #include "../Item/Item.h"
-#include "../Item/ItemManager.h"
+#include "../Core/ItemManager.h"
 
 void Merchant::AddItemForSale(const string& itemName, int32 price)
 {

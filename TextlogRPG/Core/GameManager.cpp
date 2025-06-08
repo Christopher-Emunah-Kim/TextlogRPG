@@ -11,7 +11,7 @@
 #include "../Item/Weapon.h"
 #include "../Item/Armor.h"
 #include "../Item/MiscItem.h"
-#include "../Item/ItemManager.h"
+#include "../Core/ItemManager.h"
 
 #include "../Area/Area.h"
 #include "../Area/Title.h"

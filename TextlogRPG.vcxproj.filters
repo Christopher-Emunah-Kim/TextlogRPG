@@ -27,7 +27,7 @@
     <ClCompile Include="TextlogRPG\Character\Player.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TextlogRPG\Item\ItemManager.cpp">
+    <ClCompile Include="TextlogRPG\Core\ItemManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="TextlogRPG\Item\Armor.cpp">
@@ -66,7 +66,7 @@
     <ClCompile Include="TextlogRPG\BattleSystem\MonsterPool.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TextlogRPG\Character\InventoryManager.cpp">
+    <ClCompile Include="TextlogRPG\Core\InventoryManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -86,7 +86,7 @@
     <ClInclude Include="TextlogRPG\Character\Player.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TextlogRPG\Item\ItemManager.h">
+    <ClInclude Include="TextlogRPG\Core\ItemManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextlogRPG\Item\Armor.h">
@@ -146,7 +146,7 @@
     <ClInclude Include="TextlogRPG\Util\Dialogue.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TextlogRPG\Character\InventoryManager.h">
+    <ClInclude Include="TextlogRPG\Core\InventoryManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
