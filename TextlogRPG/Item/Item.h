@@ -6,14 +6,19 @@
 using namespace std;
 class Player;
 
+constexpr __int32 DEFAULT_ITEM_COST = 10;
+constexpr __int16 DEFAULT_ITEM_ATTACK = 1;
+constexpr __int16 DEFAULT_ITEM_DEFENSE = 1;
+constexpr __int16 DEFAULT_ITEM_AGILITY = 1;
+
 
 struct FItemInfo
 {
 	EItemType itemType = EItemType::NONE; 
-	int32 itemCost = 0;              
-	int16 attack = 0;                  
-	int16 defense = 0;               
-	int16 agility = 0;            
+	int32 itemCost = DEFAULT_ITEM_COST;
+	int16 attack = DEFAULT_ITEM_ATTACK;
+	int16 defense = DEFAULT_ITEM_DEFENSE;
+	int16 agility = DEFAULT_ITEM_AGILITY;
 	string itemName = "UNKNOWN";
 
 };
@@ -26,14 +31,7 @@ public:
 	Item() {}
 
 	Item(FItemInfo itemInfo)
-		: itemInfo(itemInfo) {
-		itemInfo.itemType = EItemType::NONE;
-		itemInfo.itemCost = 10;
-		itemInfo.attack = 1;
-		itemInfo.defense = 1;
-		itemInfo.agility = 1;
-		itemInfo.itemName = "NONE";
-	}
+		: itemInfo(itemInfo) {	}
 
 	//Default Destructor
 	virtual ~Item() = default;

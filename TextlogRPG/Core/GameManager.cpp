@@ -147,9 +147,9 @@ void GameManager::SetPlayerName()
 			continue;
 		}
 
-		if (inputName.length() > 20)
+		if (inputName.length() > DEFAULT_NAMING_LENGTH)
 		{
-			inputName = inputName.substr(0, 20);
+			inputName = inputName.substr(0, DEFAULT_NAMING_LENGTH);
 		}
 		break;
 	}
@@ -249,7 +249,7 @@ void GameManager::RunProcessVillage()
 	//Choice in Village
 	Village* pVilalgeArea = dynamic_cast<Village*>(mapList[EGameState::VILLAGE]);
 
-	Healer* healer = new Healer("앤더슨", 15);
+	Healer* healer = new Healer("앤더슨", DEFAULT_HEAL_COST);
     Merchant* merchant = new Merchant("토니");
 	
 	pVilalgeArea->AddNPC(healer);

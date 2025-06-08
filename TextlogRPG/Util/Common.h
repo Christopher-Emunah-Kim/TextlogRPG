@@ -22,7 +22,7 @@ typedef unsigned __int64     uint64;  //0~18446744073709551615
 
 #include <Windows.h>
 
-
+constexpr __int16 DEFAULT_SLEEP_TIME = 1500; 
 
 
 using namespace std;
@@ -56,7 +56,7 @@ public:
 	static void PrintLine() {
 		cout << "\n===========================================\n" <<endl;
 	}
-	static void PauseAndClearScreen(int32 milliseconds=1500) {
+	static void PauseAndClearScreen(int32 milliseconds= DEFAULT_SLEEP_TIME) {
 		Sleep(milliseconds);
 		system("cls");
 	}

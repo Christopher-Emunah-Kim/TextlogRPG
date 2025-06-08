@@ -10,7 +10,7 @@
 Player* Player::CreateCharacter(const string& characterName)
 {
 	//TODO : 임시_이후 LevelData 연결
-	FPlayerInfo fTempCharacterInfo = { CharacterStatus::NewStatus(12, 9, 8), 25, 25, 1, characterName };
+	FPlayerInfo fTempCharacterInfo = { CharacterStatus::NewStatus(8, 8, 8), 25, 25, 1, characterName };
 
 	return new Player(fTempCharacterInfo);
 }
@@ -257,9 +257,9 @@ BaseCharacter& Player::CharacterLevelUp()
 {
 	//Update Player's level and status based on LevelData Array
 	fPlayerInfo.iCurrentLevel++;
-	if (fPlayerInfo.iCurrentLevel > 100)
+	if (fPlayerInfo.iCurrentLevel > DEFAULT_CHARACTER_MAX_LEVEL)
 	{
-		fPlayerInfo.iCurrentLevel = 100; // MAX LEVEL
+		fPlayerInfo.iCurrentLevel = DEFAULT_CHARACTER_MAX_LEVEL; 
 		return *this;
 	}
 
@@ -279,13 +279,13 @@ BaseCharacter& Player::CharacterLevelUp()
 	switch (statusChoice)
 	{
 	case '1':
-		playerAtk += 2;
+		playerAtk += LEVELUP_BONUS;
 		break;
 	case '2':
-		playerDef += 2;
+		playerDef += LEVELUP_BONUS;
 		break;
 	case '3':
-		playerAgi += 2;
+		playerAgi += LEVELUP_BONUS;
 		break;
 
 	default :

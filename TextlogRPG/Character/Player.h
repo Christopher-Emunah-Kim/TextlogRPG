@@ -7,6 +7,9 @@
 #include "EquipmentManager.h"
 #include <vector>
 
+
+constexpr __int8 LEVELUP_BONUS = 2;
+
 using namespace std;
 
 class Item;

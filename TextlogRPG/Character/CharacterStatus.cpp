@@ -12,7 +12,7 @@ CharacterStatus CharacterStatus::AddStatus(const CharacterStatus& other) const
 
 int32 CharacterStatus::CalculateDamage(const CharacterStatus& other) const
 {
-	int32 damage = other.GetAttack() - this->GetDefense();
+	int32 damage = other.GetAttack() - GetDefense();
 	if (damage <= 0)
 	{
 		return 10;

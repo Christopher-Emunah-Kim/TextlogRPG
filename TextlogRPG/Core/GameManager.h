@@ -3,6 +3,8 @@
 #include <unordered_map>
 #include <string>
 
+constexpr __int32 DEFAULT_HEAL_COST = 15;
+constexpr __int8   DEFAULT_NAMING_LENGTH = 20;
 
 using namespace std;
 

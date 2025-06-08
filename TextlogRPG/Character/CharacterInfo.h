@@ -5,6 +5,18 @@
 #include "../Item/Armor.h"
 #include "../Item/MiscItem.h"
 
+
+constexpr __int16 DEFAULT_CHARACTER_LEVEL = 1;
+constexpr __int16 DEFAULT_CHARACTER_MAX_LEVEL = 100; 
+constexpr __int32 DEFAULT_CHARACTER_MAX_HEALTH = 100;
+constexpr __int32 DEFAULT_CHARACTER_CURRENT_HEALTH = 100;
+constexpr __int32 DEFAULT_PLAYER_EXPERIENCE = 0;
+constexpr __int32 DEFAULT_PLAYER_MAX_EXPERIENCE = 15;
+constexpr __int32 DEFAULT_PLAYER_GOLD = 1000;
+constexpr __int32 DEFAULT_MONSTER_DROP_EXPERIENCE = 10;
+constexpr __int32 DEFAULT_MONSTER_DROP_GOLD = 10;
+
+
 class Weapon;
 class Armor;
 class MistItem;
@@ -22,9 +34,9 @@ public:
 
 public:
 	CharacterStatus characterStats;
-	int16 iCurrentLevel = 1;
-	int32 iMaxHealth = 100;
-	int32 iCurrentHealth = 100;
+	int16 iCurrentLevel = DEFAULT_CHARACTER_LEVEL;
+	int32 iMaxHealth = DEFAULT_CHARACTER_MAX_HEALTH;
+	int32 iCurrentHealth = DEFAULT_CHARACTER_CURRENT_HEALTH;
 	string strCharacterName = "UNKNOWN";
 };
 
@@ -37,7 +49,7 @@ public:
 
 	//User-Defined Constructor
 	FPlayerInfo(const CharacterStatus& stats, int32 maxHp, int32 hp, int16 lvl, const string& name,
-		int32 exp = 0, int32 maxExp = 10, int32 gold = 10000,
+		int32 exp = DEFAULT_PLAYER_EXPERIENCE, int32 maxExp = DEFAULT_PLAYER_MAX_EXPERIENCE, int32 gold = DEFAULT_PLAYER_GOLD,
 		Weapon* weapon = nullptr, Armor* armor = nullptr, MiscItem* misc = nullptr)
 		: FCharacterInfo(stats, maxHp, hp, lvl, name),
 		playerExperience(exp), playerMaxExperience(maxExp), playerGold(gold),
@@ -45,9 +57,9 @@ public:
 	}
 
 public:
-	int32 playerExperience = 0;
-	int32 playerMaxExperience = 15;
-	int32 playerGold = 10000;
+	int32 playerExperience = DEFAULT_PLAYER_EXPERIENCE;
+	int32 playerMaxExperience = DEFAULT_PLAYER_MAX_EXPERIENCE;
+	int32 playerGold = DEFAULT_PLAYER_GOLD;
 	Weapon* weaponEquipped = nullptr;
 	Armor* armorEquipped = nullptr;
 	MiscItem* miscOwned = nullptr;
@@ -67,8 +79,8 @@ public:
 	}
 
 public:
-	int32 dropExperience = 0;
-	int32 dropGold = 0;
+	int32 dropExperience = DEFAULT_MONSTER_DROP_EXPERIENCE;
+	int32 dropGold = DEFAULT_MONSTER_DROP_GOLD;
 
 	
 };

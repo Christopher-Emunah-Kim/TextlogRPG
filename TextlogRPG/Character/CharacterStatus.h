@@ -1,11 +1,16 @@
 ﻿#pragma once
 #include "../Util/Common.h"
 
+constexpr __int16 DEFAULT_ATTACK = 10;
+constexpr __int16 DEFAULT_DEFENSE = 10;
+constexpr __int16 DEFAULT_AGILITY = 10;
+
+
 class CharacterStatus  
 {  
 public:
 	CharacterStatus()
-		: attack{ 10 }, defense{ 10 }, agility{ 10 }
+		: attack{ DEFAULT_ATTACK }, defense{ DEFAULT_DEFENSE }, agility{ DEFAULT_AGILITY }
 	{
 	}
 
