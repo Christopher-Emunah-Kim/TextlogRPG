@@ -6,7 +6,7 @@ class NonPlayerCharacter;
 class Village : public Area 
 {
 private:
-    vector<NonPlayerCharacter*> npcCharacters;
+    vector<NonPlayerCharacter*> vecNpcCharacters;
 
 public:
     string GetAreaName() const override { return "Village"; }

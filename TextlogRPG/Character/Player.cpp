@@ -147,12 +147,6 @@ void Player::LoseItem(Item* item)
 	
 	m_inventoryManager.RemoveItem(item);
 
-	/*vector<Item*>::iterator it = find(m_playerInventory.begin(), m_playerInventory.end(), item);
-	if (it != m_playerInventory.end())
-	{
-		m_playerInventory.erase(it);
-	}*/
-
 	switch (item->GetItemInfo().itemType)
 	{
 	case EItemType::WEAPON:
@@ -349,8 +343,23 @@ void Player::ShowPlayerStatus()
 		+ "민첩성 : " + to_string(fPlayerInfo.characterStats.GetAgility()) + "\n\n"
 		+ "장착 중인 무기 : " + strWeaponName + "\n"
 		+ "장착 중인 방어구 : " + strArmorName + "\n"
-		+ "보유 중인 아이템 : " + strMiscItemName + "\n\n"
+		+ "보유 중인 잡템 : " + strMiscItemName + "\n\n"
 		+ "보유 금화 : " + to_string(fPlayerInfo.playerGold) + "\n";
+
+	const vector<Item*>& inventoryItems = m_inventoryManager.GetAllItems();
+	strPlayerStatus += "\n인벤토리 아이템 목록 : ";
+	if (inventoryItems.empty())
+	{
+		strPlayerStatus += "(비어있음)\n";
+	}
+	else
+	{
+		for (size_t i = 0; i < inventoryItems.size(); ++i) 
+		{
+			strPlayerStatus += " [ " + inventoryItems[i]->GetItemInfo().itemName + " ], ";
+		}
+	}
+
 
 	Common::PrintSystemMsg(strPlayerStatus);
 

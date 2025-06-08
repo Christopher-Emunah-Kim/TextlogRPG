@@ -37,13 +37,13 @@ void ItemManager::InitializeItems()
 
 void ItemManager::RegisterItem(Item* item)
 {
-	itemTable[item->GetItemInfo().itemName] = item;
+	itemTableMap[item->GetItemInfo().itemName] = item;
 }
 
 Item* ItemManager::CreateItem(const string& name)
 {
-	unordered_map<string, Item*>::iterator it = itemTable.find(name);
-	if (it != itemTable.end())
+	unordered_map<string, Item*>::iterator it = itemTableMap.find(name);
+	if (it != itemTableMap.end())
 	{
 		return it->second->CloneItem();
 	}
@@ -56,8 +56,8 @@ Item* ItemManager::CreateItem(const string& name)
 
 void ItemManager::ShowItemInfo(const string& name)
 {
-	unordered_map<string, Item*>::iterator it = itemTable.find(name);
-	if (it != itemTable.end())
+	unordered_map<string, Item*>::iterator it = itemTableMap.find(name);
+	if (it != itemTableMap.end())
 	{
 		it->second->ShowItemInfo();
 	}
@@ -70,7 +70,7 @@ void ItemManager::ShowItemInfo(const string& name)
 vector<string> ItemManager::GetItemList() const
 {
 	vector<string> list;
-	for (unordered_map<string, Item*>::const_iterator it = itemTable.begin(); it != itemTable.end(); ++it)
+	for (unordered_map<string, Item*>::const_iterator it = itemTableMap.begin(); it != itemTableMap.end(); ++it)
 	{
 		const pair<const string, Item*>& pair = *it;
 		list.push_back(pair.first);
@@ -80,8 +80,8 @@ vector<string> ItemManager::GetItemList() const
 
 Item* ItemManager::GetItem(const string& name)
 {
-	unordered_map<string, Item*>::iterator it = itemTable.find(name); 
-	return (it != itemTable.end()) ? it->second : nullptr;
+	unordered_map<string, Item*>::iterator it = itemTableMap.find(name); 
+	return (it != itemTableMap.end()) ? it->second : nullptr;
 }
 
 ItemManager& ItemManager::GetInstance()
@@ -92,11 +92,11 @@ ItemManager& ItemManager::GetInstance()
 
 ItemManager::~ItemManager()
 {
-	for (unordered_map<string, Item*>::const_iterator it = itemTable.begin(); it != itemTable.end(); ++it)
+	for (unordered_map<string, Item*>::const_iterator it = itemTableMap.begin(); it != itemTableMap.end(); ++it)
 	{
 		const pair<const string, Item*>& pair = *it;
 		delete pair.second; 
 	}
 
-	itemTable.clear();
+	itemTableMap.clear();
 }

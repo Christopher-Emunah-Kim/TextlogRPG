@@ -13,8 +13,8 @@ public:
 	~DungeonStage();
 
 private:
-	vector<FMonsterInfo> monsterInfoList;
-	vector<Monster*> monsterList;
+	vector<FMonsterInfo> vecMonsterInfos;
+	vector<Monster*> vecStageMonsters;
 	MonsterPool* monsterPool;
 
 public:

@@ -8,7 +8,7 @@ class ItemManager
 {
 private:
 	//item table : <name, item*>
-	unordered_map<string, Item*> itemTable;
+	unordered_map<string, Item*> itemTableMap;
 
 	//private constructor
 	ItemManager() {}

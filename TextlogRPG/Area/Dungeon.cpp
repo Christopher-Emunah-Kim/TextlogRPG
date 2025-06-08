@@ -5,8 +5,8 @@
 
 Dungeon::Dungeon()
 {
-	monsters.clear();
-	stages.clear();
+	vecDungeonMonsters.clear();
+	vecDungeonStages.clear();
 	currentStageIndex = 0;
 }
 
@@ -15,23 +15,23 @@ Dungeon::Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo)
 	for (size_t i = 0; i < stageMonsterInfo.size(); ++i)
 	{
 		const vector<FMonsterInfo>& monsterInfos = stageMonsterInfo[i];
-		stages.emplace_back(new DungeonStage(monsterInfos));
+		vecDungeonStages.emplace_back(new DungeonStage(monsterInfos));
 	}
 	currentStageIndex = 0;
 }
 
 DungeonStage* Dungeon::GetCurrentStage()
 {
-	if (currentStageIndex < stages.size())
+	if (currentStageIndex < vecDungeonStages.size())
 	{
-		return stages[currentStageIndex];
+		return vecDungeonStages[currentStageIndex];
 	}
 	return nullptr;
 }
 
 bool Dungeon::IsMoreStageLeft()
 {
-	if (currentStageIndex + 1 < stages.size())
+	if (currentStageIndex + 1 < vecDungeonStages.size())
 	{
 		++currentStageIndex;
 		return true;
@@ -61,7 +61,7 @@ void Dungeon::AddMonster(Monster* monster)
 		Common::PrintErrorMsg("몬스터 정보가 없습니다. AddMonster를 중단합니다.");
 		return;
 	}
-	monsters.push_back(monster);
+	vecDungeonMonsters.push_back(monster);
 }
 
 void Dungeon::RemoveMonster(Monster* monster) 
@@ -71,12 +71,12 @@ void Dungeon::RemoveMonster(Monster* monster)
 		Common::PrintErrorMsg("몬스터 정보가 없습니다. RemoveMonster를 중단합니다.");
 		return;
 	}
-	monsters.erase(remove(monsters.begin(), monsters.end(), monster), monsters.end());
+	vecDungeonMonsters.erase(remove(vecDungeonMonsters.begin(), vecDungeonMonsters.end(), monster), vecDungeonMonsters.end());
 }
 
 vector<Monster*>& Dungeon::GetMonsterList() 
 {
-	return monsters;
+	return vecDungeonMonsters;
 }
 
 EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
@@ -185,5 +185,5 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 
 Dungeon::~Dungeon()
 {
-	stages.clear();
+	vecDungeonStages.clear();
 }

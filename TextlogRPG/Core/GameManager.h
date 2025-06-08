@@ -27,7 +27,7 @@ private:
 	EGameState gameState;
     Player* playerPtr;
 	Dungeon* dungeonptr;
-	unordered_map<EGameState, Area*> mapList;
+	unordered_map<EGameState, Area*> gameAreaMap;
     
 public:
 	void SetGameState(const EGameState& gs_in)	{ gameState = gs_in; }
@@ -49,7 +49,7 @@ private:
 	void RunProcessVillage();
 	void RunProcessDungeon();
 
-	void BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* stage);
+	void BattleInDungeonStage(const vector<Monster*>& monsters, DungeonStage* stage);
 	
 
 	void GameOverProcess();

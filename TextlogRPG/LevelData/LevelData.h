@@ -18,7 +18,7 @@ struct FLevelProperties
 	int16 agilityPerLevel;
 };
 
-static FLevelProperties levelData[100]; // Array to hold level data for 100 levels
+static FLevelProperties levelDataArray[100]; // Array to hold level data for 100 levels
 
 class LevelData  
 {  

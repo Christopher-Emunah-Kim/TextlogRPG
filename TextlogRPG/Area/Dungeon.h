@@ -21,8 +21,8 @@ public:
 	~Dungeon();
 
 private:
-    vector<Monster*> monsters;
-	vector<DungeonStage*> stages;
+    vector<Monster*> vecDungeonMonsters;
+	vector<DungeonStage*> vecDungeonStages;
 	int16 currentStageIndex;
 
 public:

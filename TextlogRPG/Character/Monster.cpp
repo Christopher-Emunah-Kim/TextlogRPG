@@ -10,7 +10,7 @@ Monster::Monster(const FMonsterInfo& info)
 	: fMonsterInfo(info), dropExperience(info.dropExperience), dropGold(info.dropGold)
 {
 	//setting the dropItemList of Monster
-	dropItemList = ItemManager::GetInstance().GetItemList();
+	dropItemNames = ItemManager::GetInstance().GetItemList();
 }
 
 
@@ -23,6 +23,9 @@ void Monster::ReceiveDamageFrom(BaseCharacter& target)
 	fMonsterInfo.iCurrentHealth -= iCalculatedDamage;
 	if (fMonsterInfo.iCurrentHealth <= 0)
 	{
+		string strMonsterDefeatMsg = fMonsterInfo.strCharacterName + "은(는) " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.";
+		Common::PrintSystemMsg(strMonsterDefeatMsg);
+
 		string strMonsterDefeatMesg = "몬스터 " + fMonsterInfo.strCharacterName + "이(가) 쓰러졌습니다.";
 		Common::PrintSystemMsg(strMonsterDefeatMesg);
 
@@ -30,13 +33,13 @@ void Monster::ReceiveDamageFrom(BaseCharacter& target)
 
 		
 		Player* playerTarget = dynamic_cast<Player*>(&target);
-		if (playerTarget != nullptr && !dropItemList.empty())
+		if (playerTarget != nullptr && !dropItemNames.empty())
 		{
 			// TODO : dropItems중에 랜덤드랍
 			srand(static_cast<unsigned int>(time(NULL)));
-			size_t randomIndex = rand() % dropItemList.size();
+			size_t randomIndex = rand() % dropItemNames.size();
 
-			string strRandomItemName = dropItemList[randomIndex];
+			string strRandomItemName = dropItemNames[randomIndex];
 			Item* randomDropItem = ItemManager::GetInstance().CreateItem(strRandomItemName);
 			 
 			if (randomDropItem)

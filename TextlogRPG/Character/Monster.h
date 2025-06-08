@@ -16,7 +16,7 @@ private:
 	int32 dropExperience;
 	int32 dropGold;
 	//vector<Item*> dropItems; // weapon, armor, misc items
-	vector<string> dropItemList;
+	vector<string> dropItemNames;
 	FMonsterInfo fMonsterInfo;
 
 

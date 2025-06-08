@@ -4,13 +4,13 @@
 
 void Merchant::AddItemForSale(const string& itemName, int32 price)
 {
-    itemLists[itemName] = price;
+    merchantSellingItemMap[itemName] = price;
 }
 
 void Merchant::SellItem(Player* player, const string& itemName)
 {
-	unordered_map<string, int32>::iterator it = itemLists.find(itemName);
-	if (it == itemLists.end())
+	unordered_map<string, int32>::iterator it = merchantSellingItemMap.find(itemName);
+	if (it == merchantSellingItemMap.end())
 	{
 		Common::PrintErrorMsg("판매하지 않는 아이템입니다. 아이템 이름을 확인하세요.");
 		Common::PauseAndClearScreen();
@@ -121,7 +121,7 @@ void Merchant::Interact(Player* player)
 		case '1':
 		{
 			//Selling Weapons
-			for (unordered_map<string, int32>::iterator it = itemLists.begin(); it != itemLists.end(); ++it)
+			for (unordered_map<string, int32>::iterator it = merchantSellingItemMap.begin(); it != merchantSellingItemMap.end(); ++it)
 			{
 				const pair<string, int32>& pair = *it;
 				Item* item = ItemManager::GetInstance().GetItem(pair.first);
@@ -146,7 +146,7 @@ void Merchant::Interact(Player* player)
 				if (item) {
 					cout << (i + 1) << ". ";
 					item->ShowItemInfo();
-					cout << "-> 가격: " << itemLists[availableWeapons[i]] << " 골드\n\n";
+					cout << "-> 가격: " << merchantSellingItemMap[availableWeapons[i]] << " 골드\n\n";
 				}
 			}
 			cout << (availableWeapons.size() + 1) << ". 뒤로 가기\n";
@@ -168,7 +168,7 @@ void Merchant::Interact(Player* player)
 		case '2':
 		{
 			//Selling Armors
-			for (unordered_map<string, int32>::iterator it = itemLists.begin(); it != itemLists.end(); ++it)
+			for (unordered_map<string, int32>::iterator it = merchantSellingItemMap.begin(); it != merchantSellingItemMap.end(); ++it)
 			{
 				Item* item = ItemManager::GetInstance().GetItem(it->first);
 				if (item && item->GetItemInfo().itemType == EItemType::ARMOR)
@@ -192,7 +192,7 @@ void Merchant::Interact(Player* player)
 				if (item) {
 					cout << (i + 1) << ". ";
 					item->ShowItemInfo();
-					cout << "-> 가격: " << itemLists[availableArmors[i]] << " 골드\n\n";
+					cout << "-> 가격: " << merchantSellingItemMap[availableArmors[i]] << " 골드\n\n";
 				}
 			}
 			cout << (availableArmors.size() + 1) << ". 뒤로 가기\n";

@@ -10,11 +10,11 @@ LevelData::LevelData()
 	// Initialize level data for 100 levels
 	for (int i = 0; i < 100; ++i)
 	{
-		levelData[i].maxExperiencePerLevel = DEFAULT_PLAYER_MAX_EXPERIENCE + (i * ADDITIONAL_EXPERIENCE_PER_LEVEL); // Example formula
-		levelData[i].maxHealthPerLevel = DEFAULT_CHARACTER_MAX_HEALTH + (i * ADDITIONAL_HEALTH_PER_LEVEL); // Example formula
-		levelData[i].attackPerLevel = DEFAULT_ATTACK + (i * ADDITIONAL_ATTACK_PER_LEVEL); // Example formula
-		levelData[i].defensePerLevel = DEFAULT_DEFENSE + (i * ADDITIONAL_DEFENSE_PER_LEVEL); // Example formula
-		levelData[i].agilityPerLevel = DEFAULT_AGILITY + (i * ADDITIONAL_AGILITY_PER_LEVEL); // Example formula
+		levelDataArray[i].maxExperiencePerLevel = DEFAULT_PLAYER_MAX_EXPERIENCE + (i * ADDITIONAL_EXPERIENCE_PER_LEVEL); // Example formula
+		levelDataArray[i].maxHealthPerLevel = DEFAULT_CHARACTER_MAX_HEALTH + (i * ADDITIONAL_HEALTH_PER_LEVEL); // Example formula
+		levelDataArray[i].attackPerLevel = DEFAULT_ATTACK + (i * ADDITIONAL_ATTACK_PER_LEVEL); // Example formula
+		levelDataArray[i].defensePerLevel = DEFAULT_DEFENSE + (i * ADDITIONAL_DEFENSE_PER_LEVEL); // Example formula
+		levelDataArray[i].agilityPerLevel = DEFAULT_AGILITY + (i * ADDITIONAL_AGILITY_PER_LEVEL); // Example formula
 	}
 	//TODO : 레벨데이터 csv파일에서 값 가져와 세팅하기
 }
@@ -32,7 +32,7 @@ FLevelProperties LevelData::GetLevelData(int16 level)
 			DEFAULT_DEFENSE, 
 			DEFAULT_AGILITY };
 	}
-	return levelData[level - 1];
+	return levelDataArray[level - 1];
 }
 
 LevelData::~LevelData() { }

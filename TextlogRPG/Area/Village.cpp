@@ -12,22 +12,21 @@ void Village::Enter(Player* player)
 void Village::AddNPC(NonPlayerCharacter* npc) 
 {
 	npc = nullptr;
-	npcCharacters.push_back(npc);
+	vecNpcCharacters.push_back(npc);
 }
 
 void Village::RemoveNPC(NonPlayerCharacter* npc) 
 {
-	npcCharacters.erase(remove(npcCharacters.begin(), npcCharacters.end(), npc), npcCharacters.end());
+	vecNpcCharacters.erase(remove(vecNpcCharacters.begin(), vecNpcCharacters.end(), npc), vecNpcCharacters.end());
 }
 
 vector<NonPlayerCharacter*>& Village::GetNPCList()
 {
-	return npcCharacters;
+	return vecNpcCharacters;
 }
 
 void Village::InteractWithNPC(Player* player, NonPlayerCharacter* npc)
 {
-	//TODO : <int32, vector<NonPlayerCharacter*>> map을 만들어서 입력한 num에 따라 필요한 interact를 발동하도록 하는게 나을듯.
 	if (npc) 
 		npc->Interact(player);
 }

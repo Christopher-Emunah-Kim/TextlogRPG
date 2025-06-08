@@ -11,8 +11,7 @@ public:
 	}
 
 private:
-    //vector<Item*> items;
-    unordered_map<string, int32> itemLists; //item, price
+    unordered_map<string, int32> merchantSellingItemMap; //item, price
 
 public:
     void AddItemForSale(const string& itemName, int32 price);

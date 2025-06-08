@@ -25,9 +25,9 @@ GameManager::GameManager(EGameState initialState, Player* player, Dungeon* dunge
 	: gameState(initialState), playerPtr(player), dungeonptr(dungeon)
 {
 	//manage dynamic memory allocation for maps
-	mapList.insert(make_pair(EGameState::TITLE, new Title()));
-	mapList.insert(make_pair(EGameState::VILLAGE, new Village()));
-	mapList.insert(make_pair(EGameState::DUNGEON, new Dungeon()));
+	gameAreaMap.insert(make_pair(EGameState::TITLE, new Title()));
+	gameAreaMap.insert(make_pair(EGameState::VILLAGE, new Village()));
+	gameAreaMap.insert(make_pair(EGameState::DUNGEON, new Dungeon()));
 	
 	ItemManager::GetInstance().InitializeItems();
 
@@ -53,13 +53,13 @@ GameManager::~GameManager()
 		delete dungeonptr;
 		dungeonptr = nullptr;
 	}
-	for (unordered_map<EGameState, Area*>::iterator i = mapList.begin(); i != mapList.end(); ++i)
+	for (unordered_map<EGameState, Area*>::iterator i = gameAreaMap.begin(); i != gameAreaMap.end(); ++i)
 	{
 		pair<EGameState, Area*> map = *i;
 		if (map.second)
 			delete map.second;
 	}
-	mapList.clear();
+	gameAreaMap.clear();
 }
 
 
@@ -198,7 +198,7 @@ void GameManager::InitializeDungeon()
 
 void GameManager::RunProcessTitle() 
 {
-	Area* ptrTitleArea = mapList[EGameState::TITLE];
+	Area* ptrTitleArea = gameAreaMap[EGameState::TITLE];
 	if (ptrTitleArea)
 	{
 		ptrTitleArea->Enter(playerPtr);
@@ -247,7 +247,7 @@ void GameManager::RunProcessTitle()
 void GameManager::RunProcessVillage()
 {
 	//Choice in Village
-	Village* pVilalgeArea = dynamic_cast<Village*>(mapList[EGameState::VILLAGE]);
+	Village* pVilalgeArea = dynamic_cast<Village*>(gameAreaMap[EGameState::VILLAGE]);
 
 	Healer* healer = new Healer("앤더슨", DEFAULT_HEAL_COST);
     Merchant* merchant = new Merchant("토니");
@@ -276,11 +276,6 @@ void GameManager::RunProcessVillage()
 		}
 	}
 
-
-	/*merchant->AddItemForSale("초보자의 검", 50);
-	merchant->AddItemForSale("철검", 80);
-	merchant->AddItemForSale("초보자의 갑옷", 60);
-	merchant->AddItemForSale("가죽갑옷", 100);*/
 
 	
 	pVilalgeArea->Enter(playerPtr);
@@ -352,7 +347,7 @@ void GameManager::RunProcessDungeon()
 	{
 		while (true)
 		{
-			DungeonStage* stage = dungeonptr->GetCurrentStage();
+			 DungeonStage* stage = dungeonptr->GetCurrentStage();
 			if (stage == nullptr)
 			{
 				Common::PrintSystemMsg("유효한 던전 스테이지가 존재하지 않습니다.\n마을로 돌아갑니다.");
@@ -445,7 +440,7 @@ void GameManager::RunProcessDungeon()
 	
 }
 
-void GameManager::BattleInDungeonStage(vector<Monster*> monsters, DungeonStage* stage)
+void GameManager::BattleInDungeonStage(const vector<Monster*>& monsters, DungeonStage* stage)
 {
 	// 랜덤 시드 설정 (프로그램 전체에서 한 번만 호출하는 것이 더 좋음)
 	srand(static_cast<unsigned int>(time(NULL)));

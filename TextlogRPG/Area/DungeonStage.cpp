@@ -2,7 +2,7 @@
 #include "../BattleSystem/MonsterPool.h"
 
 DungeonStage::DungeonStage(const vector<FMonsterInfo>& monsterInfos)
-	: monsterInfoList(monsterInfos)
+	: vecMonsterInfos(monsterInfos)
 {
 	monsterPool = new MonsterPool();
 	monsterPool->Initialize(monsterInfos, 1);
@@ -10,10 +10,10 @@ DungeonStage::DungeonStage(const vector<FMonsterInfo>& monsterInfos)
 
 void DungeonStage::EnterStage()
 {
-	monsterList.clear();
-	for (size_t i = 0; i< monsterInfoList.size(); ++i) 
+	vecStageMonsters.clear();
+	for (size_t i = 0; i< vecMonsterInfos.size(); ++i) 
 	{
-		const FMonsterInfo& info = monsterInfoList[i];
+		const FMonsterInfo& info = vecMonsterInfos[i];
 		Monster* mon = monsterPool->ActivateMonster(info.strCharacterName);
 		if (!mon)
 		{
@@ -22,31 +22,31 @@ void DungeonStage::EnterStage()
 
 			mon->SetCurrentHealth(mon->GetCharacterInfo().iMaxHealth);
 		}
-		monsterList.push_back(mon);
+		vecStageMonsters.push_back(mon);
 		//monsterList.emplace_back(new Monster(info));
 	}
 }
 
 void DungeonStage::ExitStage()
 {
-	for (size_t i = 0; i  < monsterList.size(); ++i)
+	for (size_t i = 0; i  < vecStageMonsters.size(); ++i)
 	{
-		monsterPool->DeactivateMonster(monsterList[i]);
+		monsterPool->DeactivateMonster(vecStageMonsters[i]);
 	}
 
-	monsterList.clear();
+	vecStageMonsters.clear();
 }
 
 vector<Monster*> DungeonStage::GetMonsters()
 {
-	return monsterList;
+	return vecStageMonsters;
 }
 
 bool DungeonStage::isCleared() const
 {
-	for (size_t i = 0; i < monsterList.size(); ++i)
+	for (size_t i = 0; i < vecStageMonsters.size(); ++i)
 	{
-		Monster* pMonster = monsterList[i];
+		Monster* pMonster = vecStageMonsters[i];
 		if (pMonster->GetCharacterInfo().iCurrentHealth > 0)
 			return false;
 	}

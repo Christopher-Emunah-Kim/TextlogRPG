@@ -8,7 +8,7 @@ void MonsterPool::Initialize(const vector<FMonsterInfo>& monsterInfos, size_t co
 	for (size_t idx = 0; idx < monsterInfos.size(); ++idx)
 	{
 		const FMonsterInfo& info = monsterInfos[idx];
-		vector<Monster*>& vec = monsterPool[info.strCharacterName];
+		vector<Monster*>& vec = monsterPoolMap[info.strCharacterName];
 		for (size_t i = 0; i < countPerType; ++i)
 		{
 			Monster* pMonster = new Monster(info);
@@ -20,7 +20,7 @@ void MonsterPool::Initialize(const vector<FMonsterInfo>& monsterInfos, size_t co
 
 Monster* MonsterPool::ActivateMonster(const string& name)
 {
-	vector<Monster*>& vec = monsterPool[name];
+	const vector<Monster*>& vec = monsterPoolMap[name];
 	for (size_t i = 0; i < vec.size(); ++i) 
 	{
 		Monster* pMonster = vec[i];
@@ -45,7 +45,7 @@ void MonsterPool::ReviveMonster(Monster* pMonster)
 
 MonsterPool::~MonsterPool()
 {
-	for (unordered_map<string, vector<Monster*>>::iterator it = monsterPool.begin(); it != monsterPool.end();++it)
+	for (unordered_map<string, vector<Monster*>>::iterator it = monsterPoolMap.begin(); it != monsterPoolMap.end();++it)
 	{
 		vector<Monster*>& monsterList = it->second;
 		for (size_t i = 0; i < monsterList.size(); ++i)
@@ -54,5 +54,5 @@ MonsterPool::~MonsterPool()
 		}
 		it->second.clear();
 	}
-	monsterPool.clear();
+	monsterPoolMap.clear();
 }

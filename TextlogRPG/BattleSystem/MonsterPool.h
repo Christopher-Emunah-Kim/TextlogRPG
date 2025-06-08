@@ -12,7 +12,7 @@ public:
 	~MonsterPool();
 
 private:
-	unordered_map<string, vector<Monster*>> monsterPool;
+	unordered_map<string, vector<Monster*>> monsterPoolMap;
 
 public:
 	
