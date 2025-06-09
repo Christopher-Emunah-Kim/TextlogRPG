@@ -4,7 +4,7 @@
 #include "../Util/Common.h"
 #include "../Item/EItemType.h"
 #include "../Core/InventoryManager.h"
-#include "EquipmentManager.h"
+#include "../Core/EquipmentManager.h"
 #include <vector>
 
 
