@@ -69,10 +69,10 @@ void Player::AddToInventory(Item* item)
 	m_inventoryManager.AddItem(item);
 }
 
+
 vector<Item*> Player::GetInventoryItems(EItemType type) const
 {
 	return m_inventoryManager.GetItemsByType(type);
-
 }
 
 

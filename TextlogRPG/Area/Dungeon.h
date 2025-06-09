@@ -31,9 +31,9 @@ public:
 
 	bool IsMoreStageLeft();
 
-    string GetAreaName() const override { return "Dungeon"; }
+    virtual string GetAreaName() const override { return "Dungeon"; }
 
-    void Enter(Player* player) override;
+	virtual void Enter(Player* player) override;
 
     void AddMonster(Monster* monster);
 

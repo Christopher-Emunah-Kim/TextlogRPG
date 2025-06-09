@@ -1,4 +1,5 @@
 ﻿#include "Healer.h"
+#include "../Character/Player.h"
 
 void Healer::HealPlayer(Player* player, int32 cost)
 {

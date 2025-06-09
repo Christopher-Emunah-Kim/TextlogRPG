@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include "../Util/Common.h"
 #include "../Item/Item.h"
-#include "../Character/Player.h"
 
 using namespace std;
+
+class Player;
 
 enum class ENpcType 
 {
@@ -17,8 +18,6 @@ struct FNpcInfo
 	ENpcType type = ENpcType::NONE;
 	string npcName = "Default NPC";
 };
-
-
 
 
 class NonPlayerCharacter abstract 

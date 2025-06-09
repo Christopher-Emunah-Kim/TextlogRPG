@@ -14,12 +14,12 @@ public:
 
 public:
 	//overrided functions
-	MiscItem* CloneItem() const override
+	virtual MiscItem* CloneItem() const override
 	{
 		return new MiscItem(*this);
 	}
 
-	void EquippedBy(Player* player) override;
+	virtual void EquippedBy(Player* player) override;
 
 	
 };

@@ -20,5 +20,5 @@ public:
     void HealPlayer(Player* player, int32 cost);
 
     // Interact with Player
-    void Interact(Player* player) override;
+	virtual void Interact(Player* player) override;
 };

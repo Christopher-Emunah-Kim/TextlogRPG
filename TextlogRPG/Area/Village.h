@@ -9,9 +9,9 @@ private:
     vector<NonPlayerCharacter*> vecNpcCharacters;
 
 public:
-    string GetAreaName() const override { return "Village"; }
+	virtual string GetAreaName() const override { return "Village"; }
 
-    void Enter(Player* player) override;
+	virtual void Enter(Player* player) override;
 
     void AddNPC(NonPlayerCharacter* npc);
 

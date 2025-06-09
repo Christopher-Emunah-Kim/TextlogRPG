@@ -4,6 +4,6 @@
 class Title : public Area 
 {
 public:
-    string GetAreaName() const override { return "Title"; }
-    void Enter(Player* player) override;
+	virtual string GetAreaName() const override { return "Title"; }
+	virtual void Enter(Player* player) override;
 };

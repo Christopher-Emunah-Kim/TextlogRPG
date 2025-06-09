@@ -32,7 +32,7 @@ private:
 public:
 	virtual void ReceiveDamageFrom(BaseCharacter& target) override;
 	virtual void Attack(BaseCharacter* target) override;
-	const FPlayerInfo& GetCharacterInfo() const override { return fPlayerInfo; }
+	virtual const FPlayerInfo& GetCharacterInfo() const override { return fPlayerInfo; }
 	
 	static Player* CreateCharacter(const string& characterName);
 	
