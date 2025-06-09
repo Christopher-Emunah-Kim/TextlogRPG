@@ -16,7 +16,6 @@ Player::Player(const FPlayerInfo& data)
 
 Player* Player::CreateCharacter(const string& characterName)
 {
-	//TODO : 임시_이후 LevelData 연결
 	FPlayerInfo fTempCharacterInfo;
 	return new Player(fTempCharacterInfo);
 }
@@ -134,29 +133,6 @@ void Player::EquipItem(Item* item)
 	m_EquipmentManager.Equip(item);
 
 
-	//// add previous item to inventory 
-	//if(item->GetItemInfo().itemType== EItemType::WEAPON && fPlayerInfo.weaponEquipped != nullptr) 
-	//{
-	//	AddToInventory(fPlayerInfo.weaponEquipped);
-	//}
-	//if (item->GetItemInfo().itemType == EItemType::ARMOR && fPlayerInfo.armorEquipped != nullptr)
-	//{
-	//	AddToInventory(fPlayerInfo.armorEquipped);
-	//}
-
-	//// update new equipment
-	//if (item->GetItemInfo().itemType == EItemType::WEAPON) {
-	//	fPlayerInfo.weaponEquipped = dynamic_cast<Weapon*>(item);
-	//}
-	//if (item->GetItemInfo().itemType == EItemType::ARMOR) {
-	//	fPlayerInfo.armorEquipped = dynamic_cast<Armor*>(item);
-	//}
-	//if (item->GetItemInfo().itemType == EItemType::MISC)
-	//{
-	//	fPlayerInfo.miscOwned = dynamic_cast<MiscItem*>(item);
-	//}
-
-
 	UpdateEquipmentStatus();
 
 	UpdatePlayerStatus(); // update status
@@ -196,24 +172,6 @@ void Player::UpdateEquipmentStatus()
 		agi += newMisc->GetItemInfo().agility;
 	}
 
-	/*if (fPlayerInfo.weaponEquipped)
-	{
-		atk += fPlayerInfo.weaponEquipped->GetItemInfo().attack;
-		def += fPlayerInfo.weaponEquipped->GetItemInfo().defense;
-		agi += fPlayerInfo.weaponEquipped->GetItemInfo().agility;
-	}
-	if (fPlayerInfo.armorEquipped)
-	{
-		atk += fPlayerInfo.armorEquipped->GetItemInfo().attack;
-		def += fPlayerInfo.armorEquipped->GetItemInfo().defense;
-		agi += fPlayerInfo.armorEquipped->GetItemInfo().agility;
-	}
-	if (fPlayerInfo.miscOwned)
-	{
-		atk += fPlayerInfo.miscOwned->GetItemInfo().attack;
-		def += fPlayerInfo.miscOwned->GetItemInfo().defense;
-		agi += fPlayerInfo.miscOwned->GetItemInfo().agility;
-	}*/
 	m_EquipmentStatus = CharacterStatus::NewStatus(atk, def, agi);
 }
 
@@ -259,33 +217,6 @@ void Player::LoseItem(Item* item)
 		break;
 	}
 
-	/*switch (item->GetItemInfo().itemType)
-	{
-	case EItemType::WEAPON:
-	{
-		if (fPlayerInfo.weaponEquipped == item)
-		{
-			fPlayerInfo.weaponEquipped = nullptr;
-		}
-	}
-	break;
-	case EItemType::ARMOR:
-	{
-		if (fPlayerInfo.armorEquipped == item)
-		{
-			fPlayerInfo.armorEquipped = nullptr;
-		}
-	}
-	break;
-	case EItemType::MISC:
-	{
-		if (fPlayerInfo.miscOwned == item)
-		{
-			fPlayerInfo.miscOwned = nullptr;
-		}
-	}
-	break;
-	}*/
 
 	UpdateEquipmentStatus();
 	UpdatePlayerStatus();
@@ -404,14 +335,13 @@ BaseCharacter& Player::CharacterLevelUp()
 	// Update character stats based on level data
 	m_BaseStatus = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
 	//m_BaseStatus = CharacterStatus::NewStatus(m_BaseStatus.GetAttack() + playerAtk,	m_BaseStatus.GetDefense() + playerDef, m_BaseStatus.GetAgility() + playerAgi	);
-
 	//fPlayerInfo.characterStats = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
 
 	UpdatePlayerStatus();
 
 	Common::PauseAndClearScreen(300);
 
-	string strLevelUpMsg = "레벨업!\n현재 레벨 : " + to_string(fPlayerInfo.iCurrentLevel) + "\n"
+	string strLevelUpMsg = "레벨업 결과 보기\n현재 레벨 : " + to_string(fPlayerInfo.iCurrentLevel) + "\n"
 		+ "체력 : " + to_string(fPlayerInfo.iCurrentHealth) + "/" + to_string(fPlayerInfo.iMaxHealth) + "\n"
 		+ "공격력 : " + to_string(fPlayerInfo.characterStats.GetAttack()) + "\n"
 		+ "방어력 : " + to_string(fPlayerInfo.characterStats.GetDefense()) + "\n"
@@ -455,34 +385,6 @@ void Player::ShowPlayerStatus()
 	{
 		strMiscItemName = "비어있음";
 	}
-
-
-	/*if (fPlayerInfo.weaponEquipped != nullptr)
-	{
-		strWeaponName = fPlayerInfo.weaponEquipped->GetItemName();
-	}
-	else
-	{
-		strWeaponName = "비어있음";
-	}
-	
-	if (fPlayerInfo.armorEquipped != nullptr)
-	{
-		strArmorName = fPlayerInfo.armorEquipped->GetItemName();
-	}
-	else
-	{
-		strArmorName = "비어있음";
-	}
-
-	if (fPlayerInfo.miscOwned != nullptr)
-	{
-		strMiscItemName = fPlayerInfo.miscOwned->GetItemName();
-	}
-	else
-	{
-		strMiscItemName = "비어있음";
-	}*/
 	
 
 	string strPlayerStatus = GetName() + " 용사의 스테이터스\n"
@@ -522,20 +424,5 @@ void Player::ShowPlayerStatus()
 
 Player::~Player()
 {
-	/*if (fPlayerInfo.weaponEquipped != nullptr)
-	{
-		delete fPlayerInfo.weaponEquipped;
-		fPlayerInfo.weaponEquipped = nullptr;
-	}
-	if (fPlayerInfo.armorEquipped != nullptr)
-	{
-		delete fPlayerInfo.armorEquipped;
-		fPlayerInfo.armorEquipped = nullptr;
-	}
-	if (fPlayerInfo.miscOwned != nullptr)
-	{
-		delete fPlayerInfo.miscOwned;
-		fPlayerInfo.miscOwned = nullptr;
-	}*/
 	
 }
