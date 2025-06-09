@@ -168,7 +168,6 @@ void Merchant::Interact(Player* player)
 	cin.ignore(1024, '\n');
 	Common::PauseAndClearScreen(1000);
 
-	//TODO : 아이템 레이블 정보 불러오기 구현
 
 	vector<string> availableWeapons;
 	vector<string> availableArmors;

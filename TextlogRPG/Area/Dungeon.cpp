@@ -93,12 +93,10 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 		return EBattleResult::_ERROR;
 	}
 
-	//TODO : 전투 로직 _ 둘의 Agility를 비교하여 먼저 공격하는 캐릭터 결정
 	int16 iPlayerAgility = player->GetCharacterInfo().characterStats.GetAgility();
 	int16 iMonsterAgility = monster->GetCharacterInfo().characterStats.GetAgility();
 
 	bool bIsPlayerTurn = iPlayerAgility >= iMonsterAgility;
-	//bool bIsBattleOver = false;
 
 	
 	while (true)

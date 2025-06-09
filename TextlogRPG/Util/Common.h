@@ -15,6 +15,9 @@ typedef unsigned __int64     uint64;  //0~18446744073709551615
 
 #include <array>
 #include <vector>
+
+#include <list>
+
 #include <map>
 #include <unordered_map>
 

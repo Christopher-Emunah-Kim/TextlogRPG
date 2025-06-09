@@ -35,7 +35,6 @@ void Monster::ApplyDamageFrom(BaseCharacter& target)
 		Player* playerTarget = dynamic_cast<Player*>(&target);
 		if (playerTarget != nullptr && !dropItemNames.empty())
 		{
-			// TODO : dropItems중에 랜덤드랍
 			srand(static_cast<unsigned int>(time(NULL)));
 			size_t randomIndex = rand() % dropItemNames.size();
 
@@ -53,7 +52,6 @@ void Monster::ApplyDamageFrom(BaseCharacter& target)
 				if (equipChoice == '1')
 				{
 					playerTarget->EquipItem(randomDropItem);
-					//playerTarget->AddToInventory(randomDropItem);
 				}
 				else if (equipChoice == '2')
 				{

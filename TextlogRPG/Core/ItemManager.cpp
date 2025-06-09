@@ -6,7 +6,7 @@
 
 void ItemManager::InitializeItems()
 {
-	//TODO : 몬스터의 드랍아이템 pool_ csv에서 불러오기 구현
+	//TODO : 드랍아이템 pool_ csv에서 불러오기 구현
 	Weapon* basicSword = new Weapon();
 	basicSword->SetItem(EItemType::WEAPON, 50, 3, 0, 0, "초보자의 검");
 	Weapon* ironSword = new Weapon();
