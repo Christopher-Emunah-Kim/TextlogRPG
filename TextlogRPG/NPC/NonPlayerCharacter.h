@@ -6,7 +6,7 @@ using namespace std;
 
 class Player;
 
-enum class ENpcType 
+enum class ENpcType : uint8
 {
 	NONE,
 	HEALER, 

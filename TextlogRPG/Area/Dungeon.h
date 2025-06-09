@@ -2,7 +2,7 @@
 #include "Area.h"
 #include "DungeonStage.h"
 
-enum class EBattleResult 
+enum class EBattleResult : uint8
 {
 	PLAYER_WIN,
 	PLAYER_DEAD,
