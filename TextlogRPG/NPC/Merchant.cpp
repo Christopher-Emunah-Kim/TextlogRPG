@@ -1,6 +1,7 @@
 ﻿#include "Merchant.h"
 #include "../Item/Item.h"
 #include "../Core/ItemManager.h"
+#include "../Character/Player.h"
 
 void Merchant::AddItemForSale(const string& itemName, int32 price)
 {
@@ -50,7 +51,21 @@ void Merchant::SellItem(Player* player, const string& itemName)
 void Merchant::BuyItem(Player* player, const string& itemName)
 {
 	//find item in player's inventory
-	vector<Item*> miscItems = player->GetInventoryItems(EItemType::MISC);
+	vector<Item*> sellableItems = GetSellableItems(*player);
+
+	Item* sellItem = nullptr;
+
+	for (size_t i = 0; i < sellableItems.size(); ++i)
+	{
+		Item* item = sellableItems[i];
+		if (item->GetItemInfo().itemName == itemName)
+		{
+			sellItem = item;
+			break;
+		}
+	}
+
+	/*vector<Item*> miscItems = player->GetInventoryItems(EItemType::MISC);
 	Item* sellItem = nullptr;
 	for (size_t i = 0; i<miscItems.size(); ++i)
 	{
@@ -60,13 +75,14 @@ void Merchant::BuyItem(Player* player, const string& itemName)
 			sellItem = item;
 			break;
 		}
-	}
+	}*/
 	if (sellItem == nullptr)
 	{
 		Common::PrintSystemMsg("판매할 아이템을 찾을 수 없습니다. 아이템 이름을 확인하세요.");
 		Common::PauseAndClearScreen();
 		return;
 	}
+
 	int32 sellPrice = sellItem->GetItemInfo().itemCost / 2; // sell price is half of the original cost
 
 	if (sellPrice <= 0)
@@ -86,6 +102,50 @@ void Merchant::BuyItem(Player* player, const string& itemName)
 	Interact(player);
 }
 
+vector<Item*> Merchant::GetSellableItems(const Player& player)
+{
+	vector<Item*> sellableItems;
+
+	vector<Item*> inventoryWeapons = player.GetInventoryItems(EItemType::WEAPON);
+	vector<Item*> inventoryArmors = player.GetInventoryItems(EItemType::ARMOR);
+	vector<Item*> inventoryMiscItems = player.GetInventoryItems(EItemType::MISC);
+
+	Item* equippedWeapon = player.GetEquipmentManager().GetWeapon();
+	Item* equippedArmor = player.GetEquipmentManager().GetArmor();
+	Item* ownedMisc = player.GetEquipmentManager().GetMisc();
+
+	for (size_t i = 0; i < inventoryWeapons.size(); ++i)
+	{
+		Item* item = inventoryWeapons[i];
+		if (item != equippedWeapon)
+		{
+			sellableItems.push_back(item);
+		}
+	}
+	for (size_t j = 0; j < inventoryArmors.size(); ++j)
+	{
+		Item* item = inventoryArmors[j];
+		if (item != equippedArmor)
+		{
+			sellableItems.push_back(item);
+		}
+	}
+	for (size_t k = 0; k < inventoryMiscItems.size(); ++k)
+	{
+		Item* item = inventoryMiscItems[k];
+		{
+			if (item != ownedMisc)
+			{
+				sellableItems.push_back(item);
+			}
+		}
+	}
+
+	return sellableItems;
+}
+
+
+
 void Merchant::Interact(Player* player) 
 {
 	if (player == nullptr)
@@ -100,7 +160,7 @@ void Merchant::Interact(Player* player)
 
 	string strMerchantMsg = "자네인가? 요즘 호구라 불리는 그 " + player->GetName() + "라는 용사가?\n"
 		+ "\n크흠흠.. 아니 됐네. 그래서 내게 뭘 원하나?\n" 
-		+"\n\n1. 무기를 구매한다.\n\n2. 방어구를 구매한다.\n\n3. 잡템을 판매한다.\n\n4. 마을로 돌아간다.\n" ;
+		+"\n\n1. 무기를 구매한다.\n\n2. 방어구를 구매한다.\n\n3. 인벤토리의 아이템들을 판매한다.\n\n4. 마을로 돌아간다.\n" ;
 	Common::PrintSystemMsg(strMerchantMsg);
 
 	char merchantChoice;
@@ -214,18 +274,66 @@ void Merchant::Interact(Player* player)
 			break;
 		case '3':
 		{
-			//Buying Misc Items
-			vector<Item*> miscItems = player->GetInventoryItems(EItemType::MISC);
-			if (miscItems.empty()) 
+			
+			vector<Item*> sellableItems = GetSellableItems(*player);
+			if (sellableItems.empty())
 			{
-				Common::PrintErrorMsg("판매할 잡템이 없습니다. 던전에서 몬스터를 처치하고 오세요");
+				Common::PrintSystemMsg("판매할 아이템이 없습니다. 던전에서 몬스터를 처치하고 오세요");
 				Common::PauseAndClearScreen();
 				Merchant::Interact(player);
 				break;
 			}
 
+			
+
 			Common::PrintLine();
-			cout << "\n[System] 판매 가능한 잡템 목록:\n\n";
+			cout << "\n[System] 판매 가능한 아이템 목록:\n\n";
+			for (size_t i = 0; i < sellableItems.size(); ++i) 
+			{
+				cout << (i + 1) << ". ";
+				sellableItems[i]->ShowItemInfo();
+				int32 sellPrice = sellableItems[i]->GetItemInfo().itemCost / 2;
+				cout << " -> 판매 가격: " << sellPrice << " 골드\n\n";
+			}
+			cout << (sellableItems.size() + 1) << ". 뒤로 가기\n";
+
+			Common::PrintLine();
+
+			
+			char sellChoice;
+			cin >> sellChoice;
+			cin.ignore(1024, '\n');
+
+			size_t sellChoiceCount = sellableItems.size();
+			if (sellChoice >= '1' && sellChoice <= '0'+sellChoiceCount)
+			{
+				size_t idx = sellChoice - '1';
+				string itemName = sellableItems[idx]->GetItemInfo().itemName;
+
+				BuyItem(player, itemName);
+			}
+			else if (sellChoice == '0'+sellChoiceCount + 1)
+			{
+				Merchant::Interact(player);
+			}
+			else
+			{
+				Common::PrintSystemMsg("잘못된 입력입니다.");
+				Common::PauseAndClearScreen(500);
+				Merchant::Interact(player);
+			}
+
+			/*vector<Item*> miscItems = player->GetInventoryItems(EItemType::MISC);
+			if (miscItems.empty())
+			{
+				Common::PrintErrorMsg("판매할 잡템이 없습니다. 던전에서 몬스터를 처치하고 오세요");
+				Common::PauseAndClearScreen();
+				Merchant::Interact(player);
+				break;
+			}*/
+
+			/*Common::PrintLine();
+			cout << "\n[System] 판매 가능한 아이템 목록:\n\n";
 			for (size_t i = 0; i < miscItems.size(); ++i) {
 				cout << (i + 1) << ". ";
 				miscItems[i]->ShowItemInfo();
@@ -233,9 +341,10 @@ void Merchant::Interact(Player* player)
 				cout << " -> 판매 가격: " << sellPrice << " 골드\n\n";
 			}
 			cout << (miscItems.size() + 1) << ". 뒤로 가기\n";
-			Common::PrintLine();
 
-			int8 miscChoice;
+			Common::PrintLine();*/
+
+			/*int8 miscChoice;
 			cin >> miscChoice;
 			cin.ignore(1024, '\n');
 			if (miscChoice > 0 && miscChoice <= miscItems.size())
@@ -245,7 +354,8 @@ void Merchant::Interact(Player* player)
 			else if (miscChoice == (miscItems.size() + 1))
 			{
 				Merchant::Interact(player);
-			}
+			}*/
+
 			Common::PauseAndClearScreen();
 
 		}

@@ -42,6 +42,7 @@ public:
 	
 	void AddToInventory(Item* item);
 	vector<Item*> GetInventoryItems(EItemType type) const;
+	const EquipmentManager& GetEquipmentManager() const;
 	
 	void EquipItem(Item* item);
 	void UpdateEquipmentStatus();

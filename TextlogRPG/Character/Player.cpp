@@ -75,6 +75,11 @@ vector<Item*> Player::GetInventoryItems(EItemType type) const
 	return m_inventoryManager.GetItemsByType(type);
 }
 
+const EquipmentManager& Player::GetEquipmentManager() const
+{
+	return m_EquipmentManager;
+}
+
 
 
 void Player::EquipItem(Item* item)

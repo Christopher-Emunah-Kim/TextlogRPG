@@ -18,5 +18,7 @@ public:
     void SellItem(Player* player, const string& itemName);
     void BuyItem(Player* player, const string& itemName);
 
-    void Interact(Player* player) override;
+	vector<Item*> GetSellableItems(const Player& player);
+
+    virtual void Interact(Player* player) override;
 };

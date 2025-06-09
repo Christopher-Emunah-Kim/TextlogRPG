@@ -3,8 +3,8 @@
 
 using namespace std;
 
-constexpr __int8 ADDITIONAL_EXPERIENCE_PER_LEVEL = 50; 
-constexpr __int8 ADDITIONAL_HEALTH_PER_LEVEL = 10;
+constexpr __int8 ADDITIONAL_EXPERIENCE_PER_LEVEL = 20; 
+constexpr __int8 ADDITIONAL_HEALTH_PER_LEVEL = 5;
 constexpr __int8 ADDITIONAL_ATTACK_PER_LEVEL = 1;
 constexpr __int8 ADDITIONAL_DEFENSE_PER_LEVEL = 1;
 constexpr __int8 ADDITIONAL_AGILITY_PER_LEVEL = 1;
