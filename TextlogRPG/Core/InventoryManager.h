@@ -5,16 +5,17 @@
 class InventoryManager 
 {
 private:
-	vector<Item*> inventory;
+	list<Item*> inventory;
+	//vector<Item*> inventory;
 
 public:
     void AddItem(Item* item);
 
     void RemoveItem(Item* item);
 
-    vector<Item*> GetItemsByType(EItemType type) const;
+    list<Item*> GetItemsByType(EItemType type) const;
 
-    const vector<Item*>& GetAllItems() const;
+    const list<Item*>& GetAllItems() const;
 
 
 };

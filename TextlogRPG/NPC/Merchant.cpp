@@ -51,13 +51,13 @@ void Merchant::SellItem(Player* player, const string& itemName)
 void Merchant::BuyItem(Player* player, const string& itemName)
 {
 	//find item in player's inventory
-	vector<Item*> sellableItems = GetSellableItems(*player);
+	list<Item*> sellableItems = GetSellableItems(*player);
 
 	Item* sellItem = nullptr;
 
-	for (size_t i = 0; i < sellableItems.size(); ++i)
+	for (list<Item*>::iterator it = sellableItems.begin(); it != sellableItems.end(); ++it)
 	{
-		Item* item = sellableItems[i];
+		Item* item = *it;
 		if (item->GetItemInfo().itemName == itemName)
 		{
 			sellItem = item;
@@ -76,6 +76,7 @@ void Merchant::BuyItem(Player* player, const string& itemName)
 			break;
 		}
 	}*/
+
 	if (sellItem == nullptr)
 	{
 		Common::PrintSystemMsg("판매할 아이템을 찾을 수 없습니다. 아이템 이름을 확인하세요.");
@@ -102,37 +103,40 @@ void Merchant::BuyItem(Player* player, const string& itemName)
 	Interact(player);
 }
 
-vector<Item*> Merchant::GetSellableItems(const Player& player)
+list<Item*> Merchant::GetSellableItems(const Player& player)
 {
-	vector<Item*> sellableItems;
+	list<Item*> sellableItems;
 
-	vector<Item*> inventoryWeapons = player.GetInventoryItems(EItemType::WEAPON);
-	vector<Item*> inventoryArmors = player.GetInventoryItems(EItemType::ARMOR);
-	vector<Item*> inventoryMiscItems = player.GetInventoryItems(EItemType::MISC);
+	list<Item*> inventoryWeapons = player.GetInventoryItems(EItemType::WEAPON);
+	list<Item*> inventoryArmors = player.GetInventoryItems(EItemType::ARMOR);
+	list<Item*> inventoryMiscItems = player.GetInventoryItems(EItemType::MISC);
 
 	Item* equippedWeapon = player.GetEquipmentManager().GetWeapon();
 	Item* equippedArmor = player.GetEquipmentManager().GetArmor();
 	Item* ownedMisc = player.GetEquipmentManager().GetMisc();
 
-	for (size_t i = 0; i < inventoryWeapons.size(); ++i)
+	list<Item*> result;
+
+
+	for (list<Item*>::const_iterator it = inventoryWeapons.begin(); it != inventoryWeapons.end(); ++it)
 	{
-		Item* item = inventoryWeapons[i];
+		Item* item = *it;
 		if (item != equippedWeapon)
 		{
 			sellableItems.push_back(item);
 		}
 	}
-	for (size_t j = 0; j < inventoryArmors.size(); ++j)
+	for (list<Item*>::const_iterator it = inventoryArmors.begin(); it != inventoryArmors.end(); ++it)
 	{
-		Item* item = inventoryArmors[j];
+		Item* item = *it;
 		if (item != equippedArmor)
 		{
 			sellableItems.push_back(item);
 		}
 	}
-	for (size_t k = 0; k < inventoryMiscItems.size(); ++k)
+	for (list<Item*>::const_iterator it = inventoryMiscItems.begin(); it != inventoryMiscItems.end(); ++it)
 	{
-		Item* item = inventoryMiscItems[k];
+		Item* item = *it;
 		{
 			if (item != ownedMisc)
 			{
@@ -274,7 +278,7 @@ void Merchant::Interact(Player* player)
 		case '3':
 		{
 			
-			vector<Item*> sellableItems = GetSellableItems(*player);
+			list<Item*> sellableItems = GetSellableItems(*player);
 			if (sellableItems.empty())
 			{
 				Common::PrintSystemMsg("판매할 아이템이 없습니다. 던전에서 몬스터를 처치하고 오세요");
@@ -283,15 +287,15 @@ void Merchant::Interact(Player* player)
 				break;
 			}
 
-			
-
 			Common::PrintLine();
-			cout << "\n[System] 판매 가능한 아이템 목록:\n\n";
-			for (size_t i = 0; i < sellableItems.size(); ++i) 
+			
+			size_t index = 0;
+			for (list<Item*>::const_iterator it = sellableItems.begin(); it != sellableItems.end(); ++it)
 			{
-				cout << (i + 1) << ". ";
-				sellableItems[i]->ShowItemInfo();
-				int32 sellPrice = sellableItems[i]->GetItemInfo().itemCost / 2;
+				Item* item = *it;
+				cout << (++index) << ". ";
+				item->ShowItemInfo();
+				int32 sellPrice = item->GetItemInfo().itemCost / 2;
 				cout << " -> 판매 가격: " << sellPrice << " 골드\n\n";
 			}
 			cout << (sellableItems.size() + 1) << ". 뒤로 가기\n";
@@ -307,7 +311,11 @@ void Merchant::Interact(Player* player)
 			if (sellChoice >= '1' && sellChoice <= '0'+sellChoiceCount)
 			{
 				size_t idx = sellChoice - '1';
-				string itemName = sellableItems[idx]->GetItemInfo().itemName;
+				//해당 idx에 해당하는 list 내의 아이템 이름 가져오기.
+				//string itemName = sellableItems[idx]->GetItemInfo().itemName;
+				list<Item*>::iterator it = sellableItems.begin();
+				advance(it, idx);
+				string itemName = (*it)->GetItemInfo().itemName;
 
 				BuyItem(player, itemName);
 			}

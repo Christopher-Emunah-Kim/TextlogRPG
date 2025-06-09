@@ -4,7 +4,7 @@
 void InventoryManager::AddItem(Item* item) 
 {
 
-	vector<Item*>::iterator it = find(inventory.begin(), inventory.end(), item);
+	list<Item*>::iterator it = find(inventory.begin(), inventory.end(), item);
 	if (item && it == inventory.end())
 	{
         inventory.push_back(item);
@@ -17,28 +17,30 @@ void InventoryManager::AddItem(Item* item)
 
 void InventoryManager::RemoveItem(Item* item) 
 {
-    vector<Item*>::iterator it = std::find(inventory.begin(), inventory.end(), item);
+    list<Item*>::iterator it = std::find(inventory.begin(), inventory.end(), item);
 
-    if (it != inventory.end()) 
+	if (it != inventory.end())
+	{
 		inventory.erase(it);
+	}
 }
 
-vector<Item*> InventoryManager::GetItemsByType(EItemType type) const 
+list<Item*> InventoryManager::GetItemsByType(EItemType type) const 
 {
-    vector<Item*> result;
+    list<Item*> result;
 
-	for (size_t i = 0; i < inventory.size(); ++i)
-	{
-		Item* item = inventory[i];
-		if (item->GetItemInfo().itemType == type)
-		{
-			result.push_back(item);
-		}
-	}
+    for (list<Item*>::const_iterator it = inventory.begin(); it != inventory.end(); ++it)
+    {
+        Item* item = *it;
+        if (item->GetItemInfo().itemType == type)
+        {
+            result.push_back(item);
+        }
+    }
     return result;
 }
 
-const vector<Item*>& InventoryManager::GetAllItems() const 
+const list<Item*>& InventoryManager::GetAllItems() const 
 { 
 	return inventory; 
 }

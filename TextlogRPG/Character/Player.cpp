@@ -13,6 +13,10 @@ Player::Player(const FPlayerInfo& data)
 }
 
 
+Player::~Player()
+{
+}
+
 
 Player* Player::CreateCharacter(const string& characterName)
 {
@@ -75,7 +79,7 @@ void Player::AddToInventory(Item* item)
 }
 
 
-vector<Item*> Player::GetInventoryItems(EItemType type) const
+list<Item*> Player::GetInventoryItems(EItemType type) const
 {
 	return m_inventoryManager.GetItemsByType(type);
 }
@@ -399,7 +403,7 @@ void Player::ShowPlayerStatus()
 		+ "보유 중인 잡템 : " + strMiscItemName + "\n\n"
 		+ "보유 금화 : " + to_string(fPlayerInfo.playerGold) + "\n";
 
-	const vector<Item*>& inventoryItems = m_inventoryManager.GetAllItems();
+	const list<Item*>& inventoryItems = m_inventoryManager.GetAllItems();
 	strPlayerStatus += "\n인벤토리 아이템 목록 : ";
 	if (inventoryItems.empty())
 	{
@@ -407,9 +411,10 @@ void Player::ShowPlayerStatus()
 	}
 	else
 	{
-		for (size_t i = 0; i < inventoryItems.size(); ++i) 
+		for (list<Item*>::const_iterator it = inventoryItems.begin(); it != inventoryItems.end(); ++it)
 		{
-			strPlayerStatus += " [ " + inventoryItems[i]->GetItemInfo().itemName + " ], ";
+			Item* item = *it;
+			strPlayerStatus += " [ " + item->GetItemInfo().itemName + " ], ";
 		}
 	}
 
@@ -419,10 +424,3 @@ void Player::ShowPlayerStatus()
 	Common::PauseAndClearScreen(3000);
 }
 
-
-
-
-Player::~Player()
-{
-	
-}
