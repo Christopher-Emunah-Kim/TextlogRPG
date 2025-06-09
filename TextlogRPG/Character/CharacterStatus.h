@@ -1,9 +1,10 @@
 ﻿#pragma once
 #include "../Util/Common.h"
 
-constexpr __int16 DEFAULT_ATTACK = 8;
-constexpr __int16 DEFAULT_DEFENSE = 8;
-constexpr __int16 DEFAULT_AGILITY = 8;
+constexpr __int16 DEFAULT_ATTACK = 12;
+constexpr __int16 DEFAULT_DEFENSE = 12;
+constexpr __int16 DEFAULT_AGILITY = 12;
+constexpr __int8 DEFAULT_LOWEST_DAMAGE = 5;
 
 
 class CharacterStatus  

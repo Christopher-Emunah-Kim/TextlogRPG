@@ -17,7 +17,7 @@ class Player : public BaseCharacter
 {
 public:
 	//Default Constructor
-	Player(const FPlayerInfo& data) : fPlayerInfo(data) {}
+	Player(const FPlayerInfo& data);
 	//Destructor
 	~Player();
 
@@ -30,7 +30,7 @@ private:
 
 
 public:
-	virtual void ReceiveDamageFrom(BaseCharacter& target) override;
+	virtual void ApplyDamageFrom(BaseCharacter& target) override;
 	virtual void Attack(BaseCharacter* target) override;
 	virtual const FPlayerInfo& GetCharacterInfo() const override { return fPlayerInfo; }
 	

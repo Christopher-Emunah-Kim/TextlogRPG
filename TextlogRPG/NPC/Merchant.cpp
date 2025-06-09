@@ -323,39 +323,6 @@ void Merchant::Interact(Player* player)
 				Merchant::Interact(player);
 			}
 
-			/*vector<Item*> miscItems = player->GetInventoryItems(EItemType::MISC);
-			if (miscItems.empty())
-			{
-				Common::PrintErrorMsg("판매할 잡템이 없습니다. 던전에서 몬스터를 처치하고 오세요");
-				Common::PauseAndClearScreen();
-				Merchant::Interact(player);
-				break;
-			}*/
-
-			/*Common::PrintLine();
-			cout << "\n[System] 판매 가능한 아이템 목록:\n\n";
-			for (size_t i = 0; i < miscItems.size(); ++i) {
-				cout << (i + 1) << ". ";
-				miscItems[i]->ShowItemInfo();
-				int32 sellPrice = miscItems[i]->GetItemInfo().itemCost / 2;
-				cout << " -> 판매 가격: " << sellPrice << " 골드\n\n";
-			}
-			cout << (miscItems.size() + 1) << ". 뒤로 가기\n";
-
-			Common::PrintLine();*/
-
-			/*int8 miscChoice;
-			cin >> miscChoice;
-			cin.ignore(1024, '\n');
-			if (miscChoice > 0 && miscChoice <= miscItems.size())
-			{
-				BuyItem(player, miscItems[miscChoice - 1]->GetItemInfo().itemName);
-			}
-			else if (miscChoice == (miscItems.size() + 1))
-			{
-				Merchant::Interact(player);
-			}*/
-
 			Common::PauseAndClearScreen();
 
 		}

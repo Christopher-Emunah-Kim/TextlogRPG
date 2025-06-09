@@ -23,7 +23,7 @@ private:
 public:
 	// Override functions
 	virtual const FCharacterInfo& GetCharacterInfo() const override { return fMonsterInfo; }
-	virtual void ReceiveDamageFrom(BaseCharacter& target) override;
+	virtual void ApplyDamageFrom(BaseCharacter& target) override;
 	virtual void Attack(BaseCharacter* target) override;
 
 

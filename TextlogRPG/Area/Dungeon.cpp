@@ -84,6 +84,7 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 	
 	Common::PrintSystemMsg(monster->GetCharacterInfo().strCharacterName + "과(와) 조우했습니다!");
 	monster->ShowMonsterStatus();
+	Common::PauseAndClearScreen(300);
 
 
 	if (!player || !monster)

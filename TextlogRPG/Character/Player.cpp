@@ -6,16 +6,22 @@
 #include "../Item/MiscItem.h"
 #include "../LevelData/LevelData.h"
 
+Player::Player(const FPlayerInfo& data)
+	: fPlayerInfo(data), m_BaseStatus(data.characterStats), m_EquipmentStatus(CharacterStatus::NewStatus(0, 0, 0))
+{
+	UpdatePlayerStatus();
+}
+
+
 
 Player* Player::CreateCharacter(const string& characterName)
 {
 	//TODO : 임시_이후 LevelData 연결
-	FPlayerInfo fTempCharacterInfo = { CharacterStatus::NewStatus(10, 10, 10), 25, 25, 1, characterName };
-
+	FPlayerInfo fTempCharacterInfo;
 	return new Player(fTempCharacterInfo);
 }
 
-void Player::ReceiveDamageFrom(BaseCharacter& target)
+void Player::ApplyDamageFrom(BaseCharacter& target)
 {
 	const FCharacterInfo& fTargetCharacterInfo = target.GetCharacterInfo();
 
@@ -44,7 +50,7 @@ void Player::Attack(BaseCharacter* target)
 	Common::PrintSystemMsg(strAttackText);
 	Common::PauseAndClearScreen(3000);
 
-	target->ReceiveDamageFrom(*this);
+	target->ApplyDamageFrom(*this);
 	
 }
 
@@ -336,10 +342,13 @@ void Player::GainLoot(int32 experience, int32 gold, Item* item)
 
 
 	Common::PauseAndClearScreen();
+
 	ShowPlayerStatus();
 
-	if (fPlayerInfo.playerExperience >= fPlayerInfo.playerMaxExperience)
+    while (fPlayerInfo.playerExperience >= fPlayerInfo.playerMaxExperience)
 	{
+		//experience carry-over delete
+		fPlayerInfo.playerExperience -= fPlayerInfo.playerMaxExperience;
 		CharacterLevelUp();
 	}
 }
@@ -366,12 +375,12 @@ BaseCharacter& Player::CharacterLevelUp()
 	LevelData levelDataInstance;
 	FLevelProperties levelData = levelDataInstance.GetLevelData(fPlayerInfo.iCurrentLevel);
 
-	fPlayerInfo.iMaxHealth += levelData.maxHealthPerLevel;
-	fPlayerInfo.playerMaxExperience += levelData.maxExperiencePerLevel;
+	fPlayerInfo.iMaxHealth = levelData.maxHealthPerLevel;
+	fPlayerInfo.playerMaxExperience = levelData.maxExperiencePerLevel;
 	fPlayerInfo.iCurrentHealth = fPlayerInfo.iMaxHealth; // Reset current health to max health after level up
 
 	// additional status reward
-	Common::PrintSystemMsg("추가로 올릴 능력치를 선택하세요 : \n\n1.공격력을 추가로 획득한다.\n2.방어력을 추가로 획득한다.\n3.민첩성을 추가로 획득한다.");
+	Common::PrintSystemMsg("레벨업!\n추가로 올릴 능력치를 선택하세요 : \n\n1.공격력을 추가로 획득한다.\n2.방어력을 추가로 획득한다.\n3.민첩성을 추가로 획득한다.");
 	char statusChoice = Common::GetCharInput();
 	int16 playerAtk = levelData.attackPerLevel;
 	int16 playerDef = levelData.defensePerLevel;
@@ -393,11 +402,14 @@ BaseCharacter& Player::CharacterLevelUp()
 	}
 
 	// Update character stats based on level data
-	m_BaseStatus = CharacterStatus::NewStatus(m_BaseStatus.GetAttack() + playerAtk,	m_BaseStatus.GetDefense() + playerDef, m_BaseStatus.GetAgility() + playerAgi	);
+	m_BaseStatus = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
+	//m_BaseStatus = CharacterStatus::NewStatus(m_BaseStatus.GetAttack() + playerAtk,	m_BaseStatus.GetDefense() + playerDef, m_BaseStatus.GetAgility() + playerAgi	);
 
 	//fPlayerInfo.characterStats = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
 
 	UpdatePlayerStatus();
+
+	Common::PauseAndClearScreen(300);
 
 	string strLevelUpMsg = "레벨업!\n현재 레벨 : " + to_string(fPlayerInfo.iCurrentLevel) + "\n"
 		+ "체력 : " + to_string(fPlayerInfo.iCurrentHealth) + "/" + to_string(fPlayerInfo.iMaxHealth) + "\n"
@@ -502,8 +514,10 @@ void Player::ShowPlayerStatus()
 
 	Common::PrintSystemMsg(strPlayerStatus);
 
-	Common::PauseAndClearScreen(3500);
+	Common::PauseAndClearScreen(3000);
 }
+
+
 
 
 Player::~Player()

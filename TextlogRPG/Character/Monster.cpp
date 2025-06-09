@@ -14,7 +14,7 @@ Monster::Monster(const FMonsterInfo& info)
 }
 
 
-void Monster::ReceiveDamageFrom(BaseCharacter& target)
+void Monster::ApplyDamageFrom(BaseCharacter& target)
 {
 	const FCharacterInfo& fTragetCharacterInfo = target.GetCharacterInfo();
 
@@ -91,12 +91,12 @@ void Monster::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
-	string strMonsterAttackMsg = fMonsterInfo.strCharacterName + "가(이) 당신을 공격합니다.";
+	string strMonsterAttackMsg = fMonsterInfo.strCharacterName + "이(가) 당신을 공격합니다.";
 	Common::PrintSystemMsg(strMonsterAttackMsg);
 
 	Common::PauseAndClearScreen(3000);
 
-	target->ReceiveDamageFrom(*this);
+	target->ApplyDamageFrom(*this);
 	
 }
 
@@ -118,8 +118,6 @@ void Monster::ShowMonsterStatus()
 
 	cout << "Enter 키를 눌러 계속 진행하세요.\n" << endl;
 	cin.ignore(1024, '\n');
-
-	Common::PauseAndClearScreen(3000);
 }
 
 Monster::~Monster()
