@@ -52,17 +52,17 @@ public:
 		int32 exp = DEFAULT_PLAYER_EXPERIENCE, int32 maxExp = DEFAULT_PLAYER_MAX_EXPERIENCE, int32 gold = DEFAULT_PLAYER_GOLD,
 		Weapon* weapon = nullptr, Armor* armor = nullptr, MiscItem* misc = nullptr)
 		: FCharacterInfo(stats, maxHp, hp, lvl, name),
-		playerExperience(exp), playerMaxExperience(maxExp), playerGold(gold),
-		weaponEquipped(weapon), armorEquipped(armor), miscOwned(misc) {
-	}
+		playerExperience(exp), playerMaxExperience(maxExp), playerGold(gold)
+		{	}
+	/*weaponEquipped(weapon), armorEquipped(armor), miscOwned(misc)*/
 
 public:
 	int32 playerExperience = DEFAULT_PLAYER_EXPERIENCE;
 	int32 playerMaxExperience = DEFAULT_PLAYER_MAX_EXPERIENCE;
 	int32 playerGold = DEFAULT_PLAYER_GOLD;
-	Weapon* weaponEquipped = nullptr;
-	Armor* armorEquipped = nullptr;
-	MiscItem* miscOwned = nullptr;
+	//Weapon* weaponEquipped = nullptr;
+	//Armor* armorEquipped = nullptr;
+	//MiscItem* miscOwned = nullptr;
 
 };
 

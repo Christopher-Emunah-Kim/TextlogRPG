@@ -82,27 +82,68 @@ void Player::EquipItem(Item* item)
 	if (item == nullptr) 
 		return;
 
-	// add previous item to inventory 
-	if(item->GetItemInfo().itemType== EItemType::WEAPON && fPlayerInfo.weaponEquipped != nullptr) 
+	//Add previous item to inventory
+	Item* previousItem = nullptr;
+
+	switch (item->GetItemInfo().itemType)
 	{
-		AddToInventory(fPlayerInfo.weaponEquipped);
+	case EItemType::WEAPON:
+	{
+		previousItem = m_EquipmentManager.GetWeapon();
 	}
-	if (item->GetItemInfo().itemType == EItemType::ARMOR && fPlayerInfo.armorEquipped != nullptr)
+	break;
+	case EItemType::ARMOR:
 	{
-		AddToInventory(fPlayerInfo.armorEquipped);
+		previousItem = m_EquipmentManager.GetArmor();
+	}
+	break;
+	case EItemType::MISC:
+	{
+		previousItem = m_EquipmentManager.GetMisc();
+	}
+	break;
+
+	default:
+	{
+		Common::PrintSystemMsg("기존 장비 정보가 없습니다. 새로운 장비를 장착합니다.");
+	}
+		break;
 	}
 
-	// update new equipment
-	if (item->GetItemInfo().itemType == EItemType::WEAPON) {
-		fPlayerInfo.weaponEquipped = dynamic_cast<Weapon*>(item);
-	}
-	if (item->GetItemInfo().itemType == EItemType::ARMOR) {
-		fPlayerInfo.armorEquipped = dynamic_cast<Armor*>(item);
-	}
-	if (item->GetItemInfo().itemType == EItemType::MISC)
+	if (previousItem && item->GetItemInfo().itemName == previousItem->GetItemInfo().itemName)
 	{
-		fPlayerInfo.miscOwned = dynamic_cast<MiscItem*>(item);
+		Common::PrintSystemMsg("동일한 장비를 장착 중입니다: " + item->GetItemInfo().itemName + "\n인벤토리에 아이템이 추가되었습니다.");
 	}
+
+	if (previousItem)
+	{
+		AddToInventory(previousItem);
+	}
+
+	m_EquipmentManager.Equip(item);
+
+
+	//// add previous item to inventory 
+	//if(item->GetItemInfo().itemType== EItemType::WEAPON && fPlayerInfo.weaponEquipped != nullptr) 
+	//{
+	//	AddToInventory(fPlayerInfo.weaponEquipped);
+	//}
+	//if (item->GetItemInfo().itemType == EItemType::ARMOR && fPlayerInfo.armorEquipped != nullptr)
+	//{
+	//	AddToInventory(fPlayerInfo.armorEquipped);
+	//}
+
+	//// update new equipment
+	//if (item->GetItemInfo().itemType == EItemType::WEAPON) {
+	//	fPlayerInfo.weaponEquipped = dynamic_cast<Weapon*>(item);
+	//}
+	//if (item->GetItemInfo().itemType == EItemType::ARMOR) {
+	//	fPlayerInfo.armorEquipped = dynamic_cast<Armor*>(item);
+	//}
+	//if (item->GetItemInfo().itemType == EItemType::MISC)
+	//{
+	//	fPlayerInfo.miscOwned = dynamic_cast<MiscItem*>(item);
+	//}
 
 
 	UpdateEquipmentStatus();
@@ -119,7 +160,32 @@ void Player::EquipItem(Item* item)
 void Player::UpdateEquipmentStatus()
 {
 	int atk = 0, def = 0, agi = 0;
-	if (fPlayerInfo.weaponEquipped)
+	Weapon* newWeapon = m_EquipmentManager.GetWeapon();
+	Armor* newArmor = m_EquipmentManager.GetArmor();
+	MiscItem* newMisc = m_EquipmentManager.GetMisc();
+
+	if (newWeapon)
+	{
+		atk += newWeapon->GetItemInfo().attack;
+		def += newWeapon->GetItemInfo().defense;
+		agi += newWeapon->GetItemInfo().agility;
+	}
+
+	if (newArmor)
+	{
+		atk += newArmor->GetItemInfo().attack;
+		def += newArmor->GetItemInfo().defense;
+		agi += newArmor->GetItemInfo().agility;
+	}
+
+	if (newMisc)
+	{
+		atk += newMisc->GetItemInfo().attack;
+		def += newMisc->GetItemInfo().defense;
+		agi += newMisc->GetItemInfo().agility;
+	}
+
+	/*if (fPlayerInfo.weaponEquipped)
 	{
 		atk += fPlayerInfo.weaponEquipped->GetItemInfo().attack;
 		def += fPlayerInfo.weaponEquipped->GetItemInfo().defense;
@@ -136,7 +202,7 @@ void Player::UpdateEquipmentStatus()
 		atk += fPlayerInfo.miscOwned->GetItemInfo().attack;
 		def += fPlayerInfo.miscOwned->GetItemInfo().defense;
 		agi += fPlayerInfo.miscOwned->GetItemInfo().agility;
-	}
+	}*/
 	m_EquipmentStatus = CharacterStatus::NewStatus(atk, def, agi);
 }
 
@@ -147,7 +213,42 @@ void Player::LoseItem(Item* item)
 	
 	m_inventoryManager.RemoveItem(item);
 
+
+	//unequip item
 	switch (item->GetItemInfo().itemType)
+	{
+	case EItemType::WEAPON:
+	{
+		if (m_EquipmentManager.GetWeapon() == item)
+		{
+			m_EquipmentManager.Unequip(EItemType::WEAPON);
+		}
+	}
+		break;
+	case EItemType::ARMOR:
+	{
+		if (m_EquipmentManager.GetArmor() == item)
+		{
+			m_EquipmentManager.Unequip(EItemType::ARMOR);
+		}
+	}
+		break;
+	case EItemType::MISC:
+	{
+		if (m_EquipmentManager.GetMisc() == item)
+		{
+			m_EquipmentManager.Unequip(EItemType::MISC);
+		}
+	}
+		break;
+	default:
+	{
+		Common::PrintSystemMsg("해제할 장비가 존재하지 않습니다.");
+	}
+		break;
+	}
+
+	/*switch (item->GetItemInfo().itemType)
 	{
 	case EItemType::WEAPON:
 	{
@@ -173,7 +274,7 @@ void Player::LoseItem(Item* item)
 		}
 	}
 	break;
-	}
+	}*/
 
 	UpdateEquipmentStatus();
 	UpdatePlayerStatus();
@@ -306,7 +407,40 @@ BaseCharacter& Player::CharacterLevelUp()
 void Player::ShowPlayerStatus()
 {
 	string strWeaponName, strArmorName, strMiscItemName;
-	if (fPlayerInfo.weaponEquipped != nullptr)
+
+	Weapon* equippedWeapon = m_EquipmentManager.GetWeapon();
+	Armor* equipppedArmor = m_EquipmentManager.GetArmor();
+	MiscItem* ownedMiscItem = m_EquipmentManager.GetMisc();
+
+	if (equippedWeapon)
+	{
+		strWeaponName = equippedWeapon->GetItemName();
+	}
+	else
+	{
+		strWeaponName = "비어있음";
+	}
+
+	if (equipppedArmor)
+	{
+		strArmorName = equipppedArmor->GetItemName();
+	}
+	else
+	{
+		strArmorName = "비어있음";
+	}
+
+	if (ownedMiscItem)
+	{
+		strMiscItemName = ownedMiscItem->GetItemName();
+	}
+	else
+	{
+		strMiscItemName = "비어있음";
+	}
+
+
+	/*if (fPlayerInfo.weaponEquipped != nullptr)
 	{
 		strWeaponName = fPlayerInfo.weaponEquipped->GetItemName();
 	}
@@ -331,7 +465,7 @@ void Player::ShowPlayerStatus()
 	else
 	{
 		strMiscItemName = "비어있음";
-	}
+	}*/
 	
 
 	string strPlayerStatus = GetName() + " 용사의 스테이터스\n"
@@ -369,7 +503,7 @@ void Player::ShowPlayerStatus()
 
 Player::~Player()
 {
-	if (fPlayerInfo.weaponEquipped != nullptr)
+	/*if (fPlayerInfo.weaponEquipped != nullptr)
 	{
 		delete fPlayerInfo.weaponEquipped;
 		fPlayerInfo.weaponEquipped = nullptr;
@@ -383,6 +517,6 @@ Player::~Player()
 	{
 		delete fPlayerInfo.miscOwned;
 		fPlayerInfo.miscOwned = nullptr;
-	}
+	}*/
 	
 }

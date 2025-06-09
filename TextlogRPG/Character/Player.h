@@ -5,7 +5,6 @@
 #include "../Item/EItemType.h"
 #include "../Core/InventoryManager.h"
 #include "../Core/EquipmentManager.h"
-#include <vector>
 
 
 constexpr __int8 LEVELUP_BONUS = 2;
@@ -27,7 +26,7 @@ private:
 	CharacterStatus m_BaseStatus;
 	CharacterStatus m_EquipmentStatus;
 	InventoryManager m_inventoryManager;
-	//EquipmentManager m_EquipmentManager;
+	EquipmentManager m_EquipmentManager;
 
 
 public:
