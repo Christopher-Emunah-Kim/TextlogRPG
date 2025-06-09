@@ -35,7 +35,7 @@ void Player::ApplyDamageFrom(BaseCharacter& target)
 	if (fPlayerInfo.iCurrentHealth <= 0)
 	{
 		Common::PrintSystemMsg("당신은 여신의 곁으로 돌아갑니다..");
-		fPlayerInfo.iCurrentHealth = 0; // maintain gameover state with zero health
+		fPlayerInfo.iCurrentHealth = 0; // maintain game-over state
 	}
 	else
 	{
@@ -355,7 +355,7 @@ BaseCharacter& Player::CharacterLevelUp()
 	return *this; 
 }
 
-void Player::ShowPlayerStatus()
+void Player::ShowPlayerStatus() const
 {
 	string strWeaponName, strArmorName, strMiscItemName;
 

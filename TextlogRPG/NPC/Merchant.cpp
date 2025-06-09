@@ -103,7 +103,7 @@ void Merchant::BuyItem(Player* player, const string& itemName)
 	Interact(player);
 }
 
-list<Item*> Merchant::GetSellableItems(const Player& player)
+list<Item*> Merchant::GetSellableItems(const Player& player) const
 {
 	list<Item*> sellableItems;
 

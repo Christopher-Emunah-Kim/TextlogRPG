@@ -103,7 +103,7 @@ void Monster::SetCurrentHealth(int32 health)
 	fMonsterInfo.iCurrentHealth = health;
 }
 
-void Monster::ShowMonsterStatus()
+void Monster::ShowMonsterStatus() const
 {
 	string strMonsterStatus = " [몬스터 도감] " + fMonsterInfo.strCharacterName + " (상세보기)\n"
 		+ "몬스터 레벨 : " + to_string(fMonsterInfo.iCurrentLevel) + "\n"

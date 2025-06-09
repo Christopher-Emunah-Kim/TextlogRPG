@@ -18,7 +18,7 @@ public:
     void SellItem(Player* player, const string& itemName);
     void BuyItem(Player* player, const string& itemName);
 
-	list<Item*> GetSellableItems(const Player& player);
+	list<Item*> GetSellableItems(const Player& player) const;
 
     virtual void Interact(Player* player) override;
 };

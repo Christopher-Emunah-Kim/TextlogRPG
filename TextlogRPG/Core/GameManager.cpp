@@ -167,19 +167,12 @@ void GameManager::InitializeDungeon()
 		FMonsterInfo(CharacterStatus::NewStatus(6, 3, 6), 18, 18, 2, "허약한 고블린", 20, 10),
 		FMonsterInfo(CharacterStatus::NewStatus(5, 4, 5), 20, 20, 2, "허약한 슬라임", 22, 12),
 		FMonsterInfo(CharacterStatus::NewStatus(7, 4, 7), 22, 22, 3, "허약한 스켈레톤", 28, 15),
-		/*FMonsterInfo(CharacterStatus::NewStatus(5, 5, 8), 10, 10, 3, "허약한 고블린", 30, 16),
-		FMonsterInfo(CharacterStatus::NewStatus(3, 5, 6), 15, 15, 5, "허약한 슬라임", 30, 10),
-		FMonsterInfo(CharacterStatus::NewStatus(7, 5, 9), 20, 20, 8, "허약한 스켈레톤", 50, 30),*/
 	};
 	vector<FMonsterInfo> stage2 = {
 		FMonsterInfo(CharacterStatus::NewStatus(12, 7, 10), 35, 35, 5, "허약한 오크", 40, 25),
 		FMonsterInfo(CharacterStatus::NewStatus(15, 8, 12), 40, 40, 6, "허약한 드래곤", 60, 40),
 		FMonsterInfo(CharacterStatus::NewStatus(16, 9, 11), 38, 38, 5, "강력한 고블린", 45, 30),
 		FMonsterInfo(CharacterStatus::NewStatus(15, 8, 10), 39, 39, 5, "강력한 슬라임", 45, 30),
-		/*FMonsterInfo(CharacterStatus::NewStatus(14, 15, 15), 40, 40, 10, "허약한 오크", 60, 40),
-		FMonsterInfo(CharacterStatus::NewStatus(20, 18, 20), 50, 50, 15, "허약한 드래곤", 100, 60),
-		FMonsterInfo(CharacterStatus::NewStatus(27, 27, 27), 20, 20, 3, "강력한 고블린", 30, 16),
-		FMonsterInfo(CharacterStatus::NewStatus(25, 25, 25), 25, 25, 5, "강력한 슬라임", 30, 10)*/
 	};
 	vector<FMonsterInfo> stage3 = {
 		FMonsterInfo(CharacterStatus::NewStatus(22, 13, 15), 60, 60, 8, "강력한 스켈레톤", 80, 50),
@@ -188,12 +181,6 @@ void GameManager::InitializeDungeon()
 		FMonsterInfo(CharacterStatus::NewStatus(32, 18, 20), 90, 90, 12, "완전 강력한 고블린", 150, 100),
 		FMonsterInfo(CharacterStatus::NewStatus(36, 20, 22), 100, 100, 13, "완전 강력한 슬라임", 180, 120),
 		FMonsterInfo(CharacterStatus::NewStatus(40, 22, 25), 110, 110, 15, "완전 강력한 드래곤", 250, 180),
-		/*FMonsterInfo(CharacterStatus::NewStatus(28, 28, 28), 30, 30, 8, "강력한 스켈레톤", 50, 30),
-		FMonsterInfo(CharacterStatus::NewStatus(30, 30, 30), 40, 40, 10, "강력한 오크", 60, 40),
-		FMonsterInfo(CharacterStatus::NewStatus(35, 35, 35), 50, 50, 15, "완전 강력한 스켈레톤", 100, 60),
-		FMonsterInfo(CharacterStatus::NewStatus(50, 50, 50), 100, 100, 21, "완전 강력한 고블린", 150, 80),
-		FMonsterInfo(CharacterStatus::NewStatus(70, 60, 50), 88, 88, 19, "완전 강력한 슬라임", 120, 70),
-		FMonsterInfo(CharacterStatus::NewStatus(100, 100, 100), 200, 200, 41, "완전 강력한 드래곤", 25, 15)*/
 	};
 	
 	vector<vector<FMonsterInfo>> dungeonStages = { stage1, stage2, stage3 };
@@ -299,7 +286,6 @@ void GameManager::RunProcessVillage()
 	{
 		case '1':
 		{
-			//village->InteractWithNPC(playerPtr, healer);
 			pVilalgeArea->InteractWithNPC(playerPtr, healer);
 			SetGameState(EGameState::VILLAGE);
 
@@ -307,7 +293,6 @@ void GameManager::RunProcessVillage()
 		}
 		case '2':
 		{
-			//village->InteractWithNPC(playerPtr, merchant);
 			pVilalgeArea->InteractWithNPC(playerPtr, merchant);
 			SetGameState(EGameState::VILLAGE);
 
@@ -354,7 +339,7 @@ void GameManager::RunProcessDungeon()
 
 	switch (dungeonChoice)
 	{
-	case '1': // 전투 도전
+	case '1': // Choose Battle
 	{
 		while (true)
 		{
@@ -375,7 +360,7 @@ void GameManager::RunProcessDungeon()
 
 			while (true)
 			{
-				// 스테이지 내 모든 몬스터가 죽었는지 확인
+				// Check the Monsters on stage all dead
 				bool allMonstersDead = true;
 				for (size_t i = 0; i <stageMonsterList.size(); ++i)
 				{
@@ -386,7 +371,6 @@ void GameManager::RunProcessDungeon()
 						break;
 					}
 				}
-
 
 				if (allMonstersDead)
 				{
@@ -408,7 +392,7 @@ void GameManager::RunProcessDungeon()
 					}
 				}
 
-				// 도전/도망 선택
+				
 				Common::PrintSystemMsg("정말 이 스테이지를 도전하시겠습니까?\n\n1. 멈출 수 없다. 앞으로 나아가자.\n\n2. 목숨은 소중하니까, 도망간다(마을로 복귀)");
 				char stageChoice = Common::GetCharInput();
 
@@ -421,10 +405,10 @@ void GameManager::RunProcessDungeon()
 					return;
 				}
 
-				// 전투 진행
+				// Battle with monster
 				BattleInDungeonStage(stageMonsterList, stage);
 
-				// 전투 중 도망/사망 처리
+				// exception_RUN/DEAD_quit the loop
 				if (GetGameState() == EGameState::VILLAGE || GetGameState() == EGameState::GAME_OVER)
 					return;
 			}
@@ -432,7 +416,7 @@ void GameManager::RunProcessDungeon()
 		}
 		break;
 	}
-	case '2': // 도망
+	case '2': // Choose RUN
 	{
 		Common::PrintSystemMsg("무모한 도전이 반드시 정답은 아닙니다.\n던전 탐험을 중단하고 마을로 돌아갑니다.");
 		Common::PauseAndClearScreen();

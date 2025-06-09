@@ -28,6 +28,6 @@ public:
 
 
 	void SetCurrentHealth(int32 health);
-	void ShowMonsterStatus();
+	void ShowMonsterStatus() const;
 
 };

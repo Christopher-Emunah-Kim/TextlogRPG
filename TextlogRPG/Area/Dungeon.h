@@ -17,7 +17,7 @@ class Dungeon : public Area
 {
 public:
 	Dungeon();
-	Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo);
+	Dungeon(const vector<vector<FMonsterInfo>>& stageMonsterInfo);
 	~Dungeon();
 
 private:
@@ -27,7 +27,7 @@ private:
 
 public:
 	
-	DungeonStage* GetCurrentStage();
+	DungeonStage* GetCurrentStage() const;
 
 	bool IsMoreStageLeft();
 

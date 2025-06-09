@@ -10,7 +10,7 @@ Dungeon::Dungeon()
 	currentStageIndex = 0;
 }
 
-Dungeon::Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo)
+Dungeon::Dungeon(const vector<vector<FMonsterInfo>>& stageMonsterInfo)
 {
 	for (size_t i = 0; i < stageMonsterInfo.size(); ++i)
 	{
@@ -20,7 +20,7 @@ Dungeon::Dungeon(vector<vector<FMonsterInfo>>& stageMonsterInfo)
 	currentStageIndex = 0;
 }
 
-DungeonStage* Dungeon::GetCurrentStage()
+DungeonStage* Dungeon::GetCurrentStage() const
 {
 	if (currentStageIndex < vecDungeonStages.size())
 	{
@@ -74,7 +74,7 @@ void Dungeon::RemoveMonster(Monster* monster)
 	vecDungeonMonsters.erase(remove(vecDungeonMonsters.begin(), vecDungeonMonsters.end(), monster), vecDungeonMonsters.end());
 }
 
-vector<Monster*>& Dungeon::GetMonsterList() 
+vector<Monster*>& Dungeon::GetMonsterList()
 {
 	return vecDungeonMonsters;
 }
