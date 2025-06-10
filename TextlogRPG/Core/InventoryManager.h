@@ -16,6 +16,4 @@ public:
     list<Item*> GetItemsByType(EItemType type) const;
 
     const list<Item*>& GetAllItems() const;
-
-
 };
