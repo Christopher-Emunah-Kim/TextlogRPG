@@ -3,6 +3,7 @@
 // Text-based RPG Game Design Document
 
 [BaseCharacter]
+
 0.0 class BaseCharacter <abstract>
 0.0.0 int16 level
 0.0.1 int32 health
@@ -30,6 +31,7 @@
 0.2.2 void DropLoot(Player* player)
 
 [NonPlayerCharacter]
+
 1.0 class NonPlayerCharacter <abstract>
 1.0.0 string npcName
 1.0.1 enum class NPCType {HEALER, MERCHANT}
@@ -44,6 +46,7 @@
 1.2.3 void BuyItem(Player* player, Item* item)
 
 [Area]
+
 2.0 class Area <abstract>
 
 2.3 class Title - Derived
