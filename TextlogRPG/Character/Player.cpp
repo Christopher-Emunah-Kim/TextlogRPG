@@ -9,7 +9,7 @@
 Player::Player(const FPlayerInfo& data)
 	: fPlayerInfo(data), m_BaseStatus(data.characterStats), m_EquipmentStatus(CharacterStatus::NewStatus(0, 0, 0))
 {
-	UpdatePlayerStatus();
+	Initialize(data);
 }
 
 
@@ -24,70 +24,117 @@ Player* Player::CreateCharacter(const string& characterName)
 	return new Player(fTempCharacterInfo);
 }
 
+void Player::Initialize(const FPlayerInfo& data)
+{
+	fPlayerInfo = data;
+	m_BaseStatus = data.characterStats;
+	m_EquipmentStatus = CharacterStatus::NewStatus(0, 0, 0);
+
+	UpdatePlayerStatus();
+}
+
+
 void Player::ApplyDamageFrom(BaseCharacter& attacker)
+{
+	UpdateDamage(attacker);
+	
+	RenderDamageResult();
+}
+
+void Player::UpdateDamage(BaseCharacter& attacker)
 {
 	const FCharacterInfo& fTargetCharacterInfo = attacker.GetCharacterInfo();
 
 	int32 iCalculatedDamage = CaculateDamageFrom(fTargetCharacterInfo);
 
-	ApplyCaculatedDamage(iCalculatedDamage);
+	fPlayerInfo.iCurrentHealth -= iCalculatedDamage;
 
-	ProcessDamageResult(attacker, iCalculatedDamage);
+	if (fPlayerInfo.iCurrentHealth <= 0)
+	{
+		fPlayerInfo.iCurrentHealth = 0; // maintain game-over state
+	}
 
+	m_lastAttacker = &attacker; // Store the last info for reference
+	m_lastCalculatedDamage = iCalculatedDamage;
 }
 
-void Player::ProcessDamageResult(BaseCharacter& target, int32 iCalculatedDamage)
+
+
+void Player::RenderDamageResult()
 {
 	if (fPlayerInfo.iCurrentHealth <= 0)
 	{
-		ProcessPlayerDeath();
+		DisplayDeathMessage();
 
 	}
 	else
 	{
-		DisplayDamageMessage(target, iCalculatedDamage);
+		DisplayDamageMessage(m_lastAttacker, m_lastCalculatedDamage);
 
 	}
 	Common::PauseAndClearScreen(2000);
 }
 
-void Player::ProcessPlayerDeath()
+void Player::DisplayDeathMessage()
 {
-	//TODO : 필요시 추가 처리할 내용.(사망)
 	Common::PrintSystemMsg("당신은 여신의 곁으로 돌아갑니다..");
 }
 
-void Player::DisplayDamageMessage(BaseCharacter& target, int32 iCalculatedDamage)
+void Player::DisplayDamageMessage(BaseCharacter* attacker, int32 damage)
 {
-	string strDamageText = target.GetCharacterInfo().strCharacterName + "에게 " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.\n당신의 현재 체력 : " + to_string(fPlayerInfo.iCurrentHealth);
+	string strDamageText = attacker->GetCharacterInfo().strCharacterName + "에게 " + to_string(damage) + "의 데미지를 입었습니다.\n당신의 현재 체력 : " + to_string(fPlayerInfo.iCurrentHealth);
 	Common::PrintSystemMsg(strDamageText);
 }
 
-void Player::ApplyCaculatedDamage(int32 iCalculatedDamage)
-{
-	fPlayerInfo.iCurrentHealth -= iCalculatedDamage;
-	if (fPlayerInfo.iCurrentHealth <= 0)
-	{
-		fPlayerInfo.iCurrentHealth = 0; // maintain game-over state
-	}
-}
+
 
 int32 Player::CaculateDamageFrom(const FCharacterInfo& fTargetCharacterInfo)
 {
 	return fPlayerInfo.characterStats.CalculateDamage(fTargetCharacterInfo.characterStats);
 }
 
+
 void Player::Attack(BaseCharacter* target)
 {
-	if (target == nullptr) return;
-	
-	string strAttackText = "당신은 " + target->GetCharacterInfo().strCharacterName + "을(를) 공격합니다.";
-	Common::PrintSystemMsg(strAttackText);
-	Common::PauseAndClearScreen(3000);
+	if (target == nullptr)
+	{
+		Common::PrintSystemMsg("공격 대상이 없습니다.");
+		return;
+	}
 
-	target->ApplyDamageFrom(*this);
-	
+	RenderAttackMessage(target);
+
+	UpdateAttack(target);
 }
+
+
+void Player::UpdateAttack(BaseCharacter* target)
+{
+	if (target != nullptr)
+	{
+		target->ApplyDamageFrom(*this);
+	}
+	else
+	{
+		Common::PrintSystemMsg("공격 대상이 없습니다.");
+	}
+}
+
+void Player::RenderAttackMessage(BaseCharacter* target)
+{
+	if (target != nullptr)
+	{
+		string strAttackText = "당신은 " + target->GetCharacterInfo().strCharacterName + "을(를) 공격합니다.";
+		Common::PrintSystemMsg(strAttackText);
+		Common::PauseAndClearScreen(2000);
+	}
+	else
+	{
+		Common::PrintSystemMsg("공격 대상이 없습니다.");
+		Common::PauseAndClearScreen(1000);
+	}
+}
+
 
 void Player::SetName(const string& name)
 {
@@ -159,7 +206,7 @@ void Player::PerformEquipItem(Item* previousItem, Item* newItem)
 	Common::PrintSystemMsg(newItem->GetItemInfo().itemName + "을(를) 장착합니다.");
 	Common::PauseAndClearScreen(2000);
 
-	ShowPlayerStatus();
+	RenderPlayerStatus();
 }
 
 Item* Player::HandlePreviousEquipItem(Item* item)
@@ -201,7 +248,7 @@ void Player::HandleMiscItem(Item* item)
 	Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 인벤토리에 추가했습니다.");
 	Common::PauseAndClearScreen();
 
-	ShowPlayerStatus();
+	RenderPlayerStatus();
 }
 
 void Player::UpdateEquipmentStatus()
@@ -251,31 +298,6 @@ void Player::UnequipItem(Item* item)
 	}
 
 	EItemType itemType = item->GetItemInfo().itemType;
-
-	/*switch (item->GetItemInfo().itemType)
-	{
-	case EItemType::WEAPON:
-	{
-		if (m_EquipmentManager.GetWeapon() == item)
-		{
-			m_EquipmentManager.Unequip(EItemType::WEAPON);
-		}
-	}
-	break;
-	case EItemType::ARMOR:
-	{
-		if (m_EquipmentManager.GetArmor() == item)
-		{
-			m_EquipmentManager.Unequip(EItemType::ARMOR);
-		}
-	}
-	break;
-	default:
-	{
-		Common::PrintSystemMsg("해제할 장비가 존재하지 않습니다.");
-	}
-	break;
-	}*/
 
 	if (m_EquipmentManager.HasEquippedItem(itemType))
 	{
@@ -338,7 +360,7 @@ void Player::GainLoot(int32 experience, int32 gold, Item* item)
 	Common::PrintLine();
 	Common::PauseAndClearScreen();
 
-	ShowPlayerStatus();
+	RenderPlayerStatus();
 
 	ProcessLevelUp();
 
@@ -466,7 +488,7 @@ void Player::ApplyLevelDataPerLevel()
 	fPlayerInfo.iCurrentHealth = fPlayerInfo.iMaxHealth; // Reset current health to max health after level up
 }
 
-void Player::ShowPlayerStatus() const
+void Player::RenderPlayerStatus() const
 {
 	string statusString = BuildPlayerStatusString();
 

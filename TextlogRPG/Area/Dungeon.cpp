@@ -127,7 +127,7 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 			case '2':
 			{
 				Common::PauseAndClearScreen(500);
-				player->ShowPlayerStatus();
+				player->RenderPlayerStatus();
 				continue;
 			} 
 			break;

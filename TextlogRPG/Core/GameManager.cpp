@@ -225,7 +225,7 @@ void GameManager::RunProcessTitle()
 				return;
 			}
 			Common::PauseAndClearScreen();
-			playerPtr->ShowPlayerStatus();
+			playerPtr->RenderPlayerStatus();
 			SetGameState(EGameState::TITLE);
 		}
 			break;

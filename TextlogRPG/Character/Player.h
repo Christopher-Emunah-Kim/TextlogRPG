@@ -31,14 +31,17 @@ private:
 	InventoryManager m_inventoryManager;
 	EquipmentManager m_EquipmentManager;
 
+private:
+	BaseCharacter* m_lastAttacker = nullptr;
+	int32 m_lastCalculatedDamage = 0;
+
 
 public:
 	//Combat COmponent
 	virtual void ApplyDamageFrom(BaseCharacter& attacker) override;
-	void ProcessDamageResult(BaseCharacter& target, int32 iCalculatedDamage);
-	void ProcessPlayerDeath();
-	void DisplayDamageMessage(BaseCharacter& target, int32 iCalculatedDamage);
-	void ApplyCaculatedDamage(int32 iCalculatedDamage);
+	void RenderDamageResult();
+	void DisplayDeathMessage();
+	void DisplayDamageMessage(BaseCharacter* attacker, int32 damage);
 	int32 CaculateDamageFrom(const FCharacterInfo& fTargetCharacterInfo);
 	virtual void Attack(BaseCharacter* target) override;
 	//Info Component
@@ -48,6 +51,12 @@ public:
 	//캐릭터 생성
 	static Player* CreateCharacter(const string& characterName);
 
+	void Initialize(const FPlayerInfo& data);
+	void UpdateDamage(BaseCharacter& attacker);
+	void UpdateAttack(BaseCharacter* target);
+
+	void RenderAttackMessage(BaseCharacter* target);
+
 
 public:
 	//Info Component?
@@ -55,6 +64,7 @@ public:
 	string GetName() const;
 	FPlayerInfo GetPlayerData() const;
 
+public:
 	//Status Component
 	void Heal(int32 healAmount);
 	BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class
@@ -65,6 +75,7 @@ public:
 	void ApplyLevelDataPerLevel();
 	void UpdatePlayerStatus();
 
+public:
 	//Inventory Component
 	void AddToInventory(Item* item);
 	list<Item*> GetInventoryItems(EItemType type) const;
@@ -72,6 +83,7 @@ public:
 	void UnequipItem(Item* item);
 	void RemoveFromInventory(Item* item);
 
+public:
 	//Equipment Component
 	void EquipItem(Item* item);
 	void PerformEquipItem(Item* previousItem, Item* newItem);
@@ -80,10 +92,12 @@ public:
 	const EquipmentManager& GetEquipmentManager() const;
 	void UpdateEquipmentStatus();
 
+public:
 	//Gold Component
 	void UseGold(int32 cost);
 	void EarnGold(int32 earnGold);
 	
+public:
 	//Reward
 	void GainLoot(int32 experience, int32 gold, Item* item);
 	void AddGold(int32 gold);
@@ -91,9 +105,9 @@ public:
 	void ProcessLevelUp();
 
 	
-
+public:
 	//UI Comp
-	void ShowPlayerStatus() const;
+	void RenderPlayerStatus() const;
 	string BuildPlayerStatusString() const;
 	string BuildInventoryString() const;
 	string BuildEquipInfoString() const;
