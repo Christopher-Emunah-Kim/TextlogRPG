@@ -143,6 +143,7 @@
     <ClCompile Include="TextlogRPG.cpp" />
     <ClCompile Include="TextlogRPG\Item\Weapon.cpp" />
     <ClCompile Include="TextlogRPG\NPC\Healer.cpp" />
+    <ClCompile Include="TextlogRPG\Core\InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextlogRPG\Area\Area.h" />
@@ -172,6 +173,7 @@
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h" />
     <ClInclude Include="TextlogRPG\Util\Common.h" />
     <ClInclude Include="TextlogRPG\Util\Dialogue.h" />
+    <ClInclude Include="TextlogRPG\Core\InputManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
