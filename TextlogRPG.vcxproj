@@ -156,6 +156,7 @@
     <ClInclude Include="TextlogRPG\Character\BaseCharacter.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterInfo.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
+    <ClInclude Include="TextlogRPG\Character\Component\IComponent.h" />
     <ClInclude Include="TextlogRPG\Core\EquipmentManager.h" />
     <ClInclude Include="TextlogRPG\Core\EquipSlot.h" />
     <ClInclude Include="TextlogRPG\Core\InventoryManager.h" />
