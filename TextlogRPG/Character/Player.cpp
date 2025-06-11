@@ -96,7 +96,42 @@ void Player::EquipItem(Item* item)
 	if (item == nullptr) 
 		return;
 
+	//add the misc item to inventory directly
+	if (item->GetItemInfo().itemType == EItemType::MISC)
+	{
+		HandleMiscItem(item);
+		return;
+	}
+
 	//Add previous item to inventory
+	Item* previousItem = HandlePreviousEquipItem(item);
+
+	//perform equip process
+	PerformEquipItem(previousItem, item);
+}
+
+void Player::PerformEquipItem(Item* previousItem, Item* newItem)
+{
+	if (previousItem)
+	{
+		AddToInventory(previousItem);
+	}
+
+	m_EquipmentManager.Equip(newItem);
+
+
+	UpdateEquipmentStatus();
+
+	UpdatePlayerStatus(); // update status
+
+	Common::PrintSystemMsg(newItem->GetItemInfo().itemName + "을(를) 장착합니다.");
+	Common::PauseAndClearScreen(2000);
+
+	ShowPlayerStatus();
+}
+
+Item* Player::HandlePreviousEquipItem(Item* item)
+{
 	Item* previousItem = nullptr;
 
 	switch (item->GetItemInfo().itemType)
@@ -111,24 +146,13 @@ void Player::EquipItem(Item* item)
 		previousItem = m_EquipmentManager.GetArmor();
 	}
 	break;
-	case EItemType::MISC:
-	{
-		//previousItem = m_EquipmentManager.GetMisc();
-		//add the misc item to inventory directly
-		AddToInventory(item);
-		Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 인벤토리에 추가했습니다.");
-		Common::PauseAndClearScreen();
 
-		ShowPlayerStatus();
-		return;
-	}
-	break;
 
 	default:
 	{
 		Common::PrintSystemMsg("기존 장비 정보가 없습니다. 새로운 장비를 장착합니다.");
 	}
-		break;
+	break;
 	}
 
 	if (previousItem && item->GetItemInfo().itemName == previousItem->GetItemInfo().itemName)
@@ -136,23 +160,16 @@ void Player::EquipItem(Item* item)
 		Common::PrintSystemMsg("동일한 장비를 장착 중입니다: " + item->GetItemInfo().itemName + "\n인벤토리에 아이템이 추가되었습니다.");
 	}
 
-	if (previousItem)
-	{
-		AddToInventory(previousItem);
-	}
+	return previousItem;
+}
 
-	m_EquipmentManager.Equip(item);
-
-
-	UpdateEquipmentStatus();
-
-	UpdatePlayerStatus(); // update status
-
-	Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 장착합니다.");
-	Common::PauseAndClearScreen(2000);
+void Player::HandleMiscItem(Item* item)
+{
+	AddToInventory(item);
+	Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 인벤토리에 추가했습니다.");
+	Common::PauseAndClearScreen();
 
 	ShowPlayerStatus();
-
 }
 
 void Player::UpdateEquipmentStatus()
@@ -176,12 +193,6 @@ void Player::UpdateEquipmentStatus()
 		agi += newArmor->GetItemInfo().agility;
 	}
 
-	/*if (newMisc)
-	{
-		atk += newMisc->GetItemInfo().attack;
-		def += newMisc->GetItemInfo().defense;
-		agi += newMisc->GetItemInfo().agility;
-	}*/
 
 	m_EquipmentStatus = CharacterStatus::NewStatus(atk, def, agi);
 }
@@ -213,14 +224,6 @@ void Player::LoseItem(Item* item)
 		}
 	}
 		break;
-	/*case EItemType::MISC:
-	{
-		if (m_EquipmentManager.GetMisc() == item)
-		{
-			m_EquipmentManager.Unequip(EItemType::MISC);
-		}
-	}
-		break;*/
 	default:
 	{
 		Common::PrintSystemMsg("해제할 장비가 존재하지 않습니다.");
@@ -268,10 +271,8 @@ void Player::EarnGold(int32 earnGold)
 
 void Player::GainLoot(int32 experience, int32 gold, Item* item)
 {
-	if (experience < 0 || gold < 0) return;
-
-	fPlayerInfo.playerExperience += experience;
-	fPlayerInfo.playerGold += gold;
+	AddGold(gold);
+	AddExperience(experience);
 
 	Common::PrintLine();
 	Common::PrintSystemMsg("최종 전투 결과입니다!!\n당신은 "+ to_string(experience) + " 경험치와 " + to_string(gold) + " 골드를 획득했습니다.");
@@ -281,13 +282,31 @@ void Player::GainLoot(int32 experience, int32 gold, Item* item)
 		Common::PrintSystemMsg("아이템 " + item->GetItemInfo().itemName + "을(를) 획득했습니다.");
 	}
 	Common::PrintLine();
-
-
 	Common::PauseAndClearScreen();
 
 	ShowPlayerStatus();
 
-    while (fPlayerInfo.playerExperience >= fPlayerInfo.playerMaxExperience)
+	ProcessLevelUp();
+
+}
+
+void Player::AddGold(int32 gold)
+{
+	if (gold < 0)
+		return;
+	fPlayerInfo.playerGold += gold;
+}
+
+void Player::AddExperience(int32 experience)
+{
+	if (experience <= 0)
+		return;
+	fPlayerInfo.playerExperience += experience;
+}
+
+void Player::ProcessLevelUp()
+{
+	while (fPlayerInfo.playerExperience >= fPlayerInfo.playerMaxExperience)
 	{
 		//experience carry-over delete
 		fPlayerInfo.playerExperience -= fPlayerInfo.playerMaxExperience;
@@ -307,26 +326,61 @@ void Player::UpdatePlayerStatus()
 BaseCharacter& Player::CharacterLevelUp()
 {
 	//Update Player's level and status based on LevelData Array
-	fPlayerInfo.iCurrentLevel++;
+	IncrementLevel();
+
+
 	if (fPlayerInfo.iCurrentLevel > DEFAULT_CHARACTER_MAX_LEVEL)
 	{
 		fPlayerInfo.iCurrentLevel = DEFAULT_CHARACTER_MAX_LEVEL; 
 		return *this;
 	}
+	
+	ApplyLevelDataPerLevel();
+
+	// additional status reward
+	ApplyBonusStatus();
+
+
+	DisplayLevelUpResult();
+
+
+	return *this; 
+}
+
+void Player::DisplayLevelUpResult()
+{
+	Common::PauseAndClearScreen(300);
+
+	string strLevelUpMsg = "레벨업 결과 보기\n현재 레벨 : " + to_string(fPlayerInfo.iCurrentLevel) + "\n"
+		+ "체력 : " + to_string(fPlayerInfo.iCurrentHealth) + "/" + to_string(fPlayerInfo.iMaxHealth) + "\n"
+		+ "공격력 : " + to_string(fPlayerInfo.characterStats.GetAttack()) + "\n"
+		+ "방어력 : " + to_string(fPlayerInfo.characterStats.GetDefense()) + "\n"
+		+ "민첩성 : " + to_string(fPlayerInfo.characterStats.GetAgility());
+
+	Common::PrintSystemMsg(strLevelUpMsg);
+}
+
+void Player::ApplyBonusStatus()
+{
+	Common::PrintSystemMsg("레벨업!\n추가로 올릴 능력치를 선택하세요 : \n\n1.공격력을 추가로 획득한다.\n2.방어력을 추가로 획득한다.\n3.민첩성을 추가로 획득한다.");
+	char statusChoice = Common::GetCharInput();
 
 	LevelData levelDataInstance;
 	FLevelProperties levelData = levelDataInstance.GetLevelData(fPlayerInfo.iCurrentLevel);
-
-	fPlayerInfo.iMaxHealth = levelData.maxHealthPerLevel;
-	fPlayerInfo.playerMaxExperience = levelData.maxExperiencePerLevel;
-	fPlayerInfo.iCurrentHealth = fPlayerInfo.iMaxHealth; // Reset current health to max health after level up
-
-	// additional status reward
-	Common::PrintSystemMsg("레벨업!\n추가로 올릴 능력치를 선택하세요 : \n\n1.공격력을 추가로 획득한다.\n2.방어력을 추가로 획득한다.\n3.민첩성을 추가로 획득한다.");
-	char statusChoice = Common::GetCharInput();
 	int16 playerAtk = levelData.attackPerLevel;
 	int16 playerDef = levelData.defensePerLevel;
 	int16 playerAgi = levelData.agilityPerLevel;
+
+	ApplyStatusBonus(statusChoice, playerAtk, playerDef, playerAgi);
+
+	// Update character stats based on level data
+	m_BaseStatus = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
+
+	UpdatePlayerStatus();
+}
+
+void Player::ApplyStatusBonus(char statusChoice, int16& playerAtk, int16& playerDef, int16& playerAgi)
+{
 	switch (statusChoice)
 	{
 	case '1':
@@ -339,25 +393,23 @@ BaseCharacter& Player::CharacterLevelUp()
 		playerAgi += LEVELUP_BONUS;
 		break;
 
-	default :
+	default:
 		break;
 	}
+}
 
-	// Update character stats based on level data
-	m_BaseStatus = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
+void Player::IncrementLevel()
+{
+	fPlayerInfo.iCurrentLevel++;
+}
 
-	UpdatePlayerStatus();
-
-	Common::PauseAndClearScreen(300);
-
-	string strLevelUpMsg = "레벨업 결과 보기\n현재 레벨 : " + to_string(fPlayerInfo.iCurrentLevel) + "\n"
-		+ "체력 : " + to_string(fPlayerInfo.iCurrentHealth) + "/" + to_string(fPlayerInfo.iMaxHealth) + "\n"
-		+ "공격력 : " + to_string(fPlayerInfo.characterStats.GetAttack()) + "\n"
-		+ "방어력 : " + to_string(fPlayerInfo.characterStats.GetDefense()) + "\n"
-		+ "민첩성 : " + to_string(fPlayerInfo.characterStats.GetAgility());
-
-	Common::PrintSystemMsg(strLevelUpMsg);
-	return *this; 
+void Player::ApplyLevelDataPerLevel()
+{
+	LevelData levelDataInstance;
+	FLevelProperties levelData = levelDataInstance.GetLevelData(fPlayerInfo.iCurrentLevel);
+	fPlayerInfo.iMaxHealth = levelData.maxHealthPerLevel;
+	fPlayerInfo.playerMaxExperience = levelData.maxExperiencePerLevel;
+	fPlayerInfo.iCurrentHealth = fPlayerInfo.iMaxHealth; // Reset current health to max health after level up
 }
 
 void Player::ShowPlayerStatus() const
@@ -366,7 +418,6 @@ void Player::ShowPlayerStatus() const
 
 	Weapon* equippedWeapon = m_EquipmentManager.GetWeapon();
 	Armor* equipppedArmor = m_EquipmentManager.GetArmor();
-	//MiscItem* ownedMiscItem = m_EquipmentManager.GetMisc();
 
 	if (equippedWeapon)
 	{
@@ -385,15 +436,6 @@ void Player::ShowPlayerStatus() const
 	{
 		strArmorName = "비어있음";
 	}
-
-	/*if (ownedMiscItem)
-	{
-		strMiscItemName = ownedMiscItem->GetItemName();
-	}*/
-	/*else
-	{
-		strMiscItemName = "비어있음";
-	}*/
 	
 
 	string strPlayerStatus = GetName() + " 용사의 스테이터스\n"
@@ -427,4 +469,6 @@ void Player::ShowPlayerStatus() const
 
 	Common::PauseAndClearScreen(3000);
 }
+
+
 
