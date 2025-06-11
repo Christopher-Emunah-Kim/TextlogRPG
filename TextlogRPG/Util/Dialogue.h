@@ -38,7 +38,8 @@ public:
            cout << dialog.GetText() << "\n";
            cout << "\n===========================================\n";
            cout << "Enter 키를 눌러 계속 진행하세요.\n" << endl;
-           cin.ignore(1024, '\n');
+           //cin.ignore(1024, '\n');
+		   InputManager::GetInstance().GetLineInput();
        }
    }
 };

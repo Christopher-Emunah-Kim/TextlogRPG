@@ -1,6 +1,7 @@
 ﻿#include "Merchant.h"
 #include "../Item/Item.h"
 #include "../Core/ItemManager.h"
+#include "../Core/InputManager.h"
 #include "../Character/Player.h"
 
 void Merchant::AddItemForSale(const string& itemName, int32 price)
@@ -164,9 +165,7 @@ void Merchant::Interact(Player* player)
 		+"\n\n1. 무기를 구매한다.\n\n2. 방어구를 구매한다.\n\n3. 인벤토리의 아이템들을 판매한다.\n\n4. 마을로 돌아간다.\n" ;
 	Common::PrintSystemMsg(strMerchantMsg);
 
-	char merchantChoice;
-	cin >> merchantChoice;
-	cin.ignore(1024, '\n');
+	char merchantChoice = InputManager::GetInstance().GetCharInput();
 	Common::PauseAndClearScreen(1000);
 
 
@@ -212,8 +211,10 @@ void Merchant::Interact(Player* player)
 			cout << (availableWeapons.size() + 1) << ". 뒤로 가기\n";
 			Common::PrintLine();
 
-			cin >> weaponChoice;
-			cin.ignore(1024, '\n');
+			
+			weaponChoice = static_cast<size_t>(InputManager::GetInstance().GetCharInput() - '0');
+
+
 			if (weaponChoice > 0 && weaponChoice <= availableWeapons.size())
 			{
 				SellItem(player, availableWeapons[weaponChoice - 1]);
@@ -258,8 +259,11 @@ void Merchant::Interact(Player* player)
 			cout << (availableArmors.size() + 1) << ". 뒤로 가기\n";
 			Common::PrintLine();
 
-			cin >> armorChoice;
-			cin.ignore(1024, '\n');
+// 			cin >> armorChoice;
+// 			cin.ignore(1024, '\n');
+			armorChoice = static_cast<size_t>(InputManager::GetInstance().GetCharInput() - '0');
+
+
 			if (armorChoice > 0 && armorChoice <= availableArmors.size())
 			{
 				SellItem(player, availableArmors[armorChoice - 1]);
@@ -300,9 +304,10 @@ void Merchant::Interact(Player* player)
 			Common::PrintLine();
 
 			
-			char sellChoice;
+			char sellChoice = InputManager::GetInstance().GetCharInput();
+			/*
 			cin >> sellChoice;
-			cin.ignore(1024, '\n');
+			cin.ignore(1024, '\n');*/
 
 			size_t sellChoiceCount = sellableItems.size();
 			if (sellChoice >= '1' && sellChoice <= '0'+sellChoiceCount)

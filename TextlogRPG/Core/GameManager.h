@@ -41,8 +41,8 @@ private:
 	void InitializeDungeon();
 
 	//InitializeGameMethods
-	void WelcomMsg();
-	void SetPlayerName();
+	void ShowWelcomMsg();
+	void RequestPlayerName();
 
 	//RunProcess Methods
 	void RunProcessTitle();

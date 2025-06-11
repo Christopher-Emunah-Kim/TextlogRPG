@@ -93,18 +93,18 @@ void GameManager::Run()
 
 void GameManager::InitializeGame() 
 {
-	WelcomMsg();
+	ShowWelcomMsg();
 
 	Common::PauseAndClearScreen();
 
-	SetPlayerName();
+	RequestPlayerName();
 
 	SetGameState(EGameState::TITLE);
 }
 
 
 #pragma region InitializeGame methods
-void GameManager::WelcomMsg()
+void GameManager::ShowWelcomMsg()
 {
 	vector<Dialogue> initialDialogs;
 	initialDialogs.push_back(Dialogue::NewText(0, "[Unknown] 안녕하신가 용사여\n[Unknown] 놀라지 말게. 자네의 3D세상은 멀쩡하다네"));
@@ -112,7 +112,7 @@ void GameManager::WelcomMsg()
 	initialDialogs.push_back(Dialogue::NewText(2, "[Unknown] 자, 이제 게임을 시작하지\n[Unknown] 준비가 되었는가?"));
 	Dialogue::ShowDialogs(initialDialogs);
 }
-void GameManager::SetPlayerName()
+void GameManager::RequestPlayerName()
 {
 	Common::ShowOption("[System] 이해할 수 없는 곳이다. \n 당신의 선택은?\n1. 게임을 시작한다.\n2. 당장 도망친다.");
 
@@ -133,7 +133,7 @@ void GameManager::SetPlayerName()
 	while (true)
 	{
 		Common::PrintSystemMsg("당신의 이름을 입력하시오. \n이름은 20자 이내로 입력해주세요.");
-		getline(cin, inputName);
+		inputName = InputManager::GetInstance().GetLineInput();
 
 		// 공백이 포함되어 있으면 에러 메시지 출력
 		if (any_of(inputName.begin(), inputName.end(), ::isspace))
