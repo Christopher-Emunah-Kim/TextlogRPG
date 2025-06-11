@@ -69,7 +69,7 @@ public:
 	void AddToInventory(Item* item);
 	list<Item*> GetInventoryItems(EItemType type) const;
 	void LoseItem(Item* item);
-	void UnequipItemIfEquipped(Item* item);
+	void UnequipItem(Item* item);
 	void RemoveFromInventory(Item* item);
 
 	//Equipment Component

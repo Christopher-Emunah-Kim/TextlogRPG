@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "../Item/EItemType.h"
+#include "EquipSlot.h"
+#include "../Util/Common.h"
 
 class Weapon;
 class Armor;
@@ -9,13 +11,15 @@ class Item;
 class EquipmentManager
 {
 public:
-	EquipmentManager() = default;
+	EquipmentManager();
 	~EquipmentManager() = default;
 
 private:
-	Weapon* pWeapon = nullptr;
-	Armor* pArmor = nullptr;
+	//Weapon* pWeapon = nullptr;
+	//Armor* pArmor = nullptr;
 	//MiscItem* pMiscItem = nullptr;
+	unordered_map<EItemType, EquipSlot> m_EquipSlots;
+
 
 public:
 	void Equip(Item* item);
@@ -27,5 +31,9 @@ public:
 	Armor* GetArmor() const;
 
 	//MiscItem* GetMisc() const;
+
+	Item* GetEquippedItem(EItemType slotType) const;
+
+	bool HasEquippedItem(EItemType slotType) const;
 
 };

@@ -131,6 +131,7 @@
     <ClCompile Include="TextlogRPG\BattleSystem\MonsterPool.cpp" />
     <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
     <ClCompile Include="TextlogRPG\Core\EquipmentManager.cpp" />
+    <ClCompile Include="TextlogRPG\Core\EquipSlot.cpp" />
     <ClCompile Include="TextlogRPG\Core\InventoryManager.cpp" />
     <ClCompile Include="TextlogRPG\Character\Monster.cpp" />
     <ClCompile Include="TextlogRPG\NPC\Merchant.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="TextlogRPG\Character\CharacterInfo.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
     <ClInclude Include="TextlogRPG\Core\EquipmentManager.h" />
+    <ClInclude Include="TextlogRPG\Core\EquipSlot.h" />
     <ClInclude Include="TextlogRPG\Core\InventoryManager.h" />
     <ClInclude Include="TextlogRPG\Character\Monster.h" />
     <ClInclude Include="TextlogRPG\Util\EGameState.h" />

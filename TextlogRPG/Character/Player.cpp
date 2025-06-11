@@ -207,24 +207,22 @@ void Player::HandleMiscItem(Item* item)
 void Player::UpdateEquipmentStatus()
 {
 	int atk = 0, def = 0, agi = 0;
-	Weapon* newWeapon = m_EquipmentManager.GetWeapon();
-	Armor* newArmor = m_EquipmentManager.GetArmor();
-	//MiscItem* newMisc = m_EquipmentManager.GetMisc();
 
-	if (newWeapon)
+	if (m_EquipmentManager.HasEquippedItem(EItemType::WEAPON))
 	{
+		Weapon* newWeapon = m_EquipmentManager.GetWeapon();
 		atk += newWeapon->GetItemInfo().attack;
 		def += newWeapon->GetItemInfo().defense;
 		agi += newWeapon->GetItemInfo().agility;
 	}
 
-	if (newArmor)
+	if (m_EquipmentManager.HasEquippedItem(EItemType::ARMOR))
 	{
+		Armor* newArmor = m_EquipmentManager.GetArmor();
 		atk += newArmor->GetItemInfo().attack;
 		def += newArmor->GetItemInfo().defense;
 		agi += newArmor->GetItemInfo().agility;
 	}
-
 
 	m_EquipmentStatus = CharacterStatus::NewStatus(atk, def, agi);
 }
@@ -237,7 +235,7 @@ void Player::LoseItem(Item* item)
 	RemoveFromInventory(item);
 
 	//unequip item
-	UnequipItemIfEquipped(item);
+	UnequipItem(item);
 
 	UpdateEquipmentStatus();
 
@@ -245,9 +243,16 @@ void Player::LoseItem(Item* item)
 
 }
 
-void Player::UnequipItemIfEquipped(Item* item)
+void Player::UnequipItem(Item* item)
 {
-	switch (item->GetItemInfo().itemType)
+	if (item == nullptr)
+	{
+		return;
+	}
+
+	EItemType itemType = item->GetItemInfo().itemType;
+
+	/*switch (item->GetItemInfo().itemType)
 	{
 	case EItemType::WEAPON:
 	{
@@ -270,6 +275,14 @@ void Player::UnequipItemIfEquipped(Item* item)
 		Common::PrintSystemMsg("해제할 장비가 존재하지 않습니다.");
 	}
 	break;
+	}*/
+
+	if (m_EquipmentManager.HasEquippedItem(itemType))
+	{
+		if (m_EquipmentManager.GetEquippedItem(itemType))
+		{
+			m_EquipmentManager.Unequip(itemType);
+		}
 	}
 }
 
