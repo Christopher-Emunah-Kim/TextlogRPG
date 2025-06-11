@@ -16,9 +16,9 @@ void EquipmentManager::Equip(Item* item)
 	case EItemType::ARMOR:
 		pArmor = dynamic_cast<Armor*>(item);
 		break;
-	case EItemType::MISC:
+	/*case EItemType::MISC:
 		pMiscItem = dynamic_cast<MiscItem*>(item);
-		break;
+		break;*/
 
 	default: break;
 	}
@@ -34,9 +34,9 @@ void EquipmentManager::Unequip(EItemType type)
 	case EItemType::ARMOR:
 		pArmor = nullptr;
 		break;
-	case EItemType::MISC:
-		pMiscItem = nullptr;
-		break;
+		/*case EItemType::MISC:
+			pMiscItem = nullptr;
+			break;*/
 
 	default: break;
 	}
@@ -52,7 +52,7 @@ Armor* EquipmentManager::GetArmor() const
 	return pArmor;
 }
 
-MiscItem* EquipmentManager::GetMisc() const
-{
-	return pMiscItem;
-}
+//MiscItem* EquipmentManager::GetMisc() const
+//{
+//	return pMiscItem;
+//}

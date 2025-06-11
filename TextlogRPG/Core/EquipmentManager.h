@@ -15,7 +15,7 @@ public:
 private:
 	Weapon* pWeapon = nullptr;
 	Armor* pArmor = nullptr;
-	MiscItem* pMiscItem = nullptr;
+	//MiscItem* pMiscItem = nullptr;
 
 public:
 	void Equip(Item* item);
@@ -26,6 +26,6 @@ public:
 
 	Armor* GetArmor() const;
 
-	MiscItem* GetMisc() const;
+	//MiscItem* GetMisc() const;
 
 };

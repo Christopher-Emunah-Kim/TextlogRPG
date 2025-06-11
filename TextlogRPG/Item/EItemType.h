@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class EItemType
+enum class EItemType 
 {
 	NONE,
 	WEAPON,

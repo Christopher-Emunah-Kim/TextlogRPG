@@ -113,7 +113,14 @@ void Player::EquipItem(Item* item)
 	break;
 	case EItemType::MISC:
 	{
-		previousItem = m_EquipmentManager.GetMisc();
+		//previousItem = m_EquipmentManager.GetMisc();
+		//add the misc item to inventory directly
+		AddToInventory(item);
+		Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 인벤토리에 추가했습니다.");
+		Common::PauseAndClearScreen();
+
+		ShowPlayerStatus();
+		return;
 	}
 	break;
 
@@ -153,7 +160,7 @@ void Player::UpdateEquipmentStatus()
 	int atk = 0, def = 0, agi = 0;
 	Weapon* newWeapon = m_EquipmentManager.GetWeapon();
 	Armor* newArmor = m_EquipmentManager.GetArmor();
-	MiscItem* newMisc = m_EquipmentManager.GetMisc();
+	//MiscItem* newMisc = m_EquipmentManager.GetMisc();
 
 	if (newWeapon)
 	{
@@ -169,12 +176,12 @@ void Player::UpdateEquipmentStatus()
 		agi += newArmor->GetItemInfo().agility;
 	}
 
-	if (newMisc)
+	/*if (newMisc)
 	{
 		atk += newMisc->GetItemInfo().attack;
 		def += newMisc->GetItemInfo().defense;
 		agi += newMisc->GetItemInfo().agility;
-	}
+	}*/
 
 	m_EquipmentStatus = CharacterStatus::NewStatus(atk, def, agi);
 }
@@ -206,14 +213,14 @@ void Player::LoseItem(Item* item)
 		}
 	}
 		break;
-	case EItemType::MISC:
+	/*case EItemType::MISC:
 	{
 		if (m_EquipmentManager.GetMisc() == item)
 		{
 			m_EquipmentManager.Unequip(EItemType::MISC);
 		}
 	}
-		break;
+		break;*/
 	default:
 	{
 		Common::PrintSystemMsg("해제할 장비가 존재하지 않습니다.");
@@ -355,11 +362,11 @@ BaseCharacter& Player::CharacterLevelUp()
 
 void Player::ShowPlayerStatus() const
 {
-	string strWeaponName, strArmorName, strMiscItemName;
+	string strWeaponName, strArmorName;
 
 	Weapon* equippedWeapon = m_EquipmentManager.GetWeapon();
 	Armor* equipppedArmor = m_EquipmentManager.GetArmor();
-	MiscItem* ownedMiscItem = m_EquipmentManager.GetMisc();
+	//MiscItem* ownedMiscItem = m_EquipmentManager.GetMisc();
 
 	if (equippedWeapon)
 	{
@@ -379,14 +386,14 @@ void Player::ShowPlayerStatus() const
 		strArmorName = "비어있음";
 	}
 
-	if (ownedMiscItem)
+	/*if (ownedMiscItem)
 	{
 		strMiscItemName = ownedMiscItem->GetItemName();
-	}
-	else
+	}*/
+	/*else
 	{
 		strMiscItemName = "비어있음";
-	}
+	}*/
 	
 
 	string strPlayerStatus = GetName() + " 용사의 스테이터스\n"
@@ -398,7 +405,6 @@ void Player::ShowPlayerStatus() const
 		+ "민첩성 : " + to_string(fPlayerInfo.characterStats.GetAgility()) + "\n\n"
 		+ "장착 중인 무기 : " + strWeaponName + "\n"
 		+ "장착 중인 방어구 : " + strArmorName + "\n"
-		+ "보유 중인 잡템 : " + strMiscItemName + "\n\n"
 		+ "보유 금화 : " + to_string(fPlayerInfo.playerGold) + "\n";
 
 	const list<Item*>& inventoryItems = m_inventoryManager.GetAllItems();

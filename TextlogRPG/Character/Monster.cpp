@@ -45,7 +45,7 @@ void Monster::ApplyDamageFrom(BaseCharacter& target)
 			{
 				Common::PrintSystemMsg("전리품을 획득했습니다!");
 				randomDropItem->ShowItemInfo();
-				Common::PrintSystemMsg("이 아이템을 장착하시겠습니까?\n-> 1. 새로운 장비를 장착한다.  2. 기존의 장비를 사용한다.");
+				Common::PrintSystemMsg("이 아이템을 등록하시겠습니까?\n-> 1. 새로운 아이템을 등록한다.  2. 기존의 아이템을 사용한다.");
 				
 				char equipChoice = Common::GetCharInput();
 

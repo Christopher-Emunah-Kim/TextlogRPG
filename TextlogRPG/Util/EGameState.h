@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-enum class EGameState
+enum class EGameState 
 {
 	NONE,
 	TITLE,

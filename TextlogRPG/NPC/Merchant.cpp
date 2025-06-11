@@ -113,7 +113,7 @@ list<Item*> Merchant::GetSellableItems(const Player& player) const
 
 	Item* equippedWeapon = player.GetEquipmentManager().GetWeapon();
 	Item* equippedArmor = player.GetEquipmentManager().GetArmor();
-	Item* ownedMisc = player.GetEquipmentManager().GetMisc();
+	//Item* ownedMisc = player.GetEquipmentManager().GetMisc();
 
 	list<Item*> result;
 
@@ -138,10 +138,7 @@ list<Item*> Merchant::GetSellableItems(const Player& player) const
 	{
 		Item* item = *it;
 		{
-			if (item != ownedMisc)
-			{
-				sellableItems.push_back(item);
-			}
+			sellableItems.push_back(item);
 		}
 	}
 
