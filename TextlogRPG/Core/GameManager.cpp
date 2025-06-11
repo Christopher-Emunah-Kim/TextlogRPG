@@ -222,7 +222,8 @@ void GameManager::RunProcessTitle()
 		{
 			if (!playerPtr) {
 				Common::PrintErrorMsg("플레이어 정보가 없습니다.");
-				return;
+				
+				;
 			}
 			Common::PauseAndClearScreen();
 			playerPtr->RenderPlayerStatus();

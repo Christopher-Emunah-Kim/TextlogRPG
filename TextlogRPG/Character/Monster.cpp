@@ -74,7 +74,8 @@ void Monster::RenderDamageResult()
 
 bool Monster::ProcessItemDrop(Player* playerTarget)
 {
-	if (dropItemNames.empty()) {
+	if (dropItemNames.empty()) 
+	{
 		return false; 
 	}
 
@@ -105,7 +106,9 @@ void Monster::RenderItemDropResult(Item* droppedItem, bool isSuccessful, Player*
 	char equipChoice = Common::GetCharInput();
 
 	Player* playerTarget = dynamic_cast<Player*>(attacker);
-	if (!playerTarget) return;
+
+	if (playerTarget == nullptr) 
+		return;
 
 	if (equipChoice == '1')
 	{
@@ -129,7 +132,8 @@ void Monster::RenderItemDropResult(Item* droppedItem, bool isSuccessful, Player*
 
 void Monster::Attack(BaseCharacter* target)
 {
-	if (target == nullptr) return;
+	if (target == nullptr) 
+		return;
 	
 	RenderAttackMessage();
 

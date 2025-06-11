@@ -17,7 +17,6 @@ Player::~Player()
 {
 }
 
-
 Player* Player::CreateCharacter(const string& characterName)
 {
 	FPlayerInfo fTempCharacterInfo;
@@ -30,22 +29,22 @@ void Player::Initialize(const FPlayerInfo& data)
 	m_BaseStatus = data.characterStats;
 	m_EquipmentStatus = CharacterStatus::NewStatus(0, 0, 0);
 
-	UpdatePlayerStatus();
+	UpdateFinalStatus();
 }
 
 
 void Player::ApplyDamageFrom(BaseCharacter& attacker)
 {
-	UpdateDamage(attacker);
+	int32 iCalculatedDamage = UpdateDamage(attacker);
 	
-	RenderDamageResult();
+	RenderDamageResult(attacker, iCalculatedDamage);
 }
 
-void Player::UpdateDamage(BaseCharacter& attacker)
+int32 Player::UpdateDamage(BaseCharacter& attacker)
 {
 	const FCharacterInfo& fTargetCharacterInfo = attacker.GetCharacterInfo();
 
-	int32 iCalculatedDamage = CaculateDamageFrom(fTargetCharacterInfo);
+	int32 iCalculatedDamage = CalculateDamageFrom(fTargetCharacterInfo);
 
 	fPlayerInfo.iCurrentHealth -= iCalculatedDamage;
 
@@ -54,13 +53,14 @@ void Player::UpdateDamage(BaseCharacter& attacker)
 		fPlayerInfo.iCurrentHealth = 0; // maintain game-over state
 	}
 
-	m_lastAttacker = &attacker; // Store the last info for reference
-	m_lastCalculatedDamage = iCalculatedDamage;
+	//m_lastAttacker = &attacker; // Store the last info for reference
+	//m_lastCalculatedDamage = iCalculatedDamage;
+	return iCalculatedDamage;
 }
 
 
 
-void Player::RenderDamageResult()
+void Player::RenderDamageResult(BaseCharacter& attacker, int32 damage)
 {
 	if (fPlayerInfo.iCurrentHealth <= 0)
 	{
@@ -69,7 +69,7 @@ void Player::RenderDamageResult()
 	}
 	else
 	{
-		DisplayDamageMessage(m_lastAttacker, m_lastCalculatedDamage);
+		DisplayDamageMessage(attacker, damage);
 
 	}
 	Common::PauseAndClearScreen(2000);
@@ -80,15 +80,15 @@ void Player::DisplayDeathMessage()
 	Common::PrintSystemMsg("당신은 여신의 곁으로 돌아갑니다..");
 }
 
-void Player::DisplayDamageMessage(BaseCharacter* attacker, int32 damage)
+void Player::DisplayDamageMessage(BaseCharacter& attacker, int32 damage)
 {
-	string strDamageText = attacker->GetCharacterInfo().strCharacterName + "에게 " + to_string(damage) + "의 데미지를 입었습니다.\n당신의 현재 체력 : " + to_string(fPlayerInfo.iCurrentHealth);
+	string strDamageText = attacker.GetCharacterInfo().strCharacterName + "에게 " + to_string(damage) + "의 데미지를 입었습니다.\n당신의 현재 체력 : " + to_string(fPlayerInfo.iCurrentHealth);
 	Common::PrintSystemMsg(strDamageText);
 }
 
 
 
-int32 Player::CaculateDamageFrom(const FCharacterInfo& fTargetCharacterInfo)
+int32 Player::CalculateDamageFrom(const FCharacterInfo& fTargetCharacterInfo)
 {
 	return fPlayerInfo.characterStats.CalculateDamage(fTargetCharacterInfo.characterStats);
 }
@@ -186,10 +186,18 @@ void Player::EquipItem(Item* item)
 	Item* previousItem = HandlePreviousEquipItem(item);
 
 	//perform equip process
-	PerformEquipItem(previousItem, item);
+	UpdateEquipItem(previousItem, item);
+
+	UpdateEquipmentStatus();
+
+	UpdateFinalStatus();
+
+	RenderEquipMessage(item);
+
+	RenderPlayerStatus();
 }
 
-void Player::PerformEquipItem(Item* previousItem, Item* newItem)
+void Player::UpdateEquipItem(Item* previousItem, Item* newItem)
 {
 	if (previousItem)
 	{
@@ -197,16 +205,12 @@ void Player::PerformEquipItem(Item* previousItem, Item* newItem)
 	}
 
 	m_EquipmentManager.Equip(newItem);
+}
 
-
-	UpdateEquipmentStatus();
-
-	UpdatePlayerStatus(); // update status
-
+void Player::RenderEquipMessage(Item* newItem)
+{
 	Common::PrintSystemMsg(newItem->GetItemInfo().itemName + "을(를) 장착합니다.");
 	Common::PauseAndClearScreen(2000);
-
-	RenderPlayerStatus();
 }
 
 Item* Player::HandlePreviousEquipItem(Item* item)
@@ -245,10 +249,16 @@ Item* Player::HandlePreviousEquipItem(Item* item)
 void Player::HandleMiscItem(Item* item)
 {
 	AddToInventory(item);
-	Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 인벤토리에 추가했습니다.");
-	Common::PauseAndClearScreen();
+
+	RenderMiscItemAdded(item);
 
 	RenderPlayerStatus();
+}
+
+void Player::RenderMiscItemAdded(Item* item)
+{
+	Common::PrintSystemMsg(item->GetItemInfo().itemName + "을(를) 인벤토리에 추가했습니다.");
+	Common::PauseAndClearScreen();
 }
 
 void Player::UpdateEquipmentStatus()
@@ -286,7 +296,7 @@ void Player::LoseItem(Item* item)
 
 	UpdateEquipmentStatus();
 
-	UpdatePlayerStatus();
+	UpdateFinalStatus();
 
 }
 
@@ -315,8 +325,11 @@ void Player::RemoveFromInventory(Item* item)
 
 void Player::Heal(int32 healAmount)
 {
-	if (healAmount <= 0) return;
+	if (healAmount <= 0) 
+		return;
+
 	fPlayerInfo.iCurrentHealth += healAmount;
+
 	if (fPlayerInfo.iCurrentHealth > fPlayerInfo.iMaxHealth)
 	{
 		fPlayerInfo.iCurrentHealth = fPlayerInfo.iMaxHealth;
@@ -325,10 +338,13 @@ void Player::Heal(int32 healAmount)
 
 void Player::UseGold(int32 cost)
 {
-	if (cost <= 0) return;
+	if (cost <= 0) 
+		return;
+
 	if (fPlayerInfo.playerGold >= cost)
 	{
 		fPlayerInfo.playerGold -= cost;
+
 		if (fPlayerInfo.playerGold < 0)
 		{
 			fPlayerInfo.playerGold = 0; 
@@ -338,20 +354,32 @@ void Player::UseGold(int32 cost)
 
 void Player::EarnGold(int32 earnGold)
 {
-	if (earnGold <= 0) return;
+	UpdateGold(earnGold);
 
-	fPlayerInfo.playerGold += earnGold;
-	string strEarnGoldMsg = to_string(earnGold) + " 골드를 획득했습니다. 현재 골드: " + to_string(fPlayerInfo.playerGold);
-	Common::PrintSystemMsg(strEarnGoldMsg);
+	RenderGoldChange(earnGold);
 }
 
 void Player::GainLoot(int32 experience, int32 gold, Item* item)
 {
+	UpdateLoot(gold, experience);
+
+	RenderLootResult(experience, gold, item);
+}
+
+void Player::UpdateLoot(int32 gold, int32 experience)
+{
 	AddGold(gold);
+
 	AddExperience(experience);
 
+	ProcessLevelUp();
+}
+
+
+void Player::RenderLootResult(int32 experience, int32 gold, Item* item)
+{
 	Common::PrintLine();
-	Common::PrintSystemMsg("최종 전투 결과입니다!!\n당신은 "+ to_string(experience) + " 경험치와 " + to_string(gold) + " 골드를 획득했습니다.");
+	Common::PrintSystemMsg("최종 전투 결과입니다!!\n당신은 " + to_string(experience) + " 경험치와 " + to_string(gold) + " 골드를 획득했습니다.");
 	if (item != nullptr)
 	{
 		//AddToInventory(item);
@@ -361,10 +389,23 @@ void Player::GainLoot(int32 experience, int32 gold, Item* item)
 	Common::PauseAndClearScreen();
 
 	RenderPlayerStatus();
-
-	ProcessLevelUp();
-
 }
+
+void Player::UpdateGold(int32 earnGold)
+{
+	if (earnGold <= 0)
+		return;
+
+	fPlayerInfo.playerGold += earnGold;
+}
+
+void Player::RenderGoldChange(int32 earnGold)
+{
+	string strEarnGoldMsg = to_string(earnGold) + " 골드를 획득했습니다. 현재 골드: " + to_string(fPlayerInfo.playerGold);
+	Common::PrintSystemMsg(strEarnGoldMsg);
+}
+
+
 
 void Player::AddGold(int32 gold)
 {
@@ -390,7 +431,7 @@ void Player::ProcessLevelUp()
 	}
 }
 
-void Player::UpdatePlayerStatus()
+void Player::UpdateFinalStatus()
 {
 	fPlayerInfo.characterStats = CharacterStatus::NewStatus(
 		m_BaseStatus.GetAttack() + m_EquipmentStatus.GetAttack(),
@@ -404,26 +445,23 @@ BaseCharacter& Player::CharacterLevelUp()
 	//Update Player's level and status based on LevelData Array
 	IncrementLevel();
 
-
 	if (fPlayerInfo.iCurrentLevel > DEFAULT_CHARACTER_MAX_LEVEL)
 	{
-		fPlayerInfo.iCurrentLevel = DEFAULT_CHARACTER_MAX_LEVEL; 
+		fPlayerInfo.iCurrentLevel = DEFAULT_CHARACTER_MAX_LEVEL;
 		return *this;
 	}
-	
-	ApplyLevelDataPerLevel();
+
+	UpdateLevelDataPerLevel();
+
+	ProcessBonusStatusSelection();
 
 	// additional status reward
-	ApplyBonusStatus();
-
-
-	DisplayLevelUpResult();
-
+	RenderLevelUpResult();
 
 	return *this; 
 }
 
-void Player::DisplayLevelUpResult()
+void Player::RenderLevelUpResult()
 {
 	Common::PauseAndClearScreen(300);
 
@@ -436,11 +474,22 @@ void Player::DisplayLevelUpResult()
 	Common::PrintSystemMsg(strLevelUpMsg);
 }
 
-void Player::ApplyBonusStatus()
+void Player::ProcessBonusStatusSelection()
 {
-	Common::PrintSystemMsg("레벨업!\n추가로 올릴 능력치를 선택하세요 : \n\n1.공격력을 추가로 획득한다.\n2.방어력을 추가로 획득한다.\n3.민첩성을 추가로 획득한다.");
+	RenderBonusStatusPrompt();
+
 	char statusChoice = Common::GetCharInput();
 
+	UpdateBonusStatus(statusChoice);
+}
+
+void Player::RenderBonusStatusPrompt()
+{
+	Common::PrintSystemMsg("레벨업!\n추가로 올릴 능력치를 선택하세요 : \n\n1.공격력을 추가로 획득한다.\n2.방어력을 추가로 획득한다.\n3.민첩성을 추가로 획득한다.");
+}
+
+void Player::UpdateBonusStatus(char statusChoice)
+{
 	LevelData levelDataInstance;
 	FLevelProperties levelData = levelDataInstance.GetLevelData(fPlayerInfo.iCurrentLevel);
 	int16 playerAtk = levelData.attackPerLevel;
@@ -452,8 +501,10 @@ void Player::ApplyBonusStatus()
 	// Update character stats based on level data
 	m_BaseStatus = CharacterStatus::NewStatus(playerAtk, playerDef, playerAgi);
 
-	UpdatePlayerStatus();
+	UpdateFinalStatus();
 }
+
+
 
 void Player::ApplyStatusBonus(char statusChoice, int16& playerAtk, int16& playerDef, int16& playerAgi)
 {
@@ -479,7 +530,7 @@ void Player::IncrementLevel()
 	fPlayerInfo.iCurrentLevel++;
 }
 
-void Player::ApplyLevelDataPerLevel()
+void Player::UpdateLevelDataPerLevel()
 {
 	LevelData levelDataInstance;
 	FLevelProperties levelData = levelDataInstance.GetLevelData(fPlayerInfo.iCurrentLevel);

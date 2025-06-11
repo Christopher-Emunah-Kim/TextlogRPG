@@ -24,6 +24,29 @@ public:
 	//Destructor
 	~Player();
 
+	
+
+
+	void UpdateLoot(int32 gold, int32 experience);
+
+
+	void RenderLootResult(int32 experience, int32 gold, Item* item);
+
+
+	void UpdateGold(int32 earnGold);
+
+
+	void RenderGoldChange(int32 earnGold);
+
+
+	void RenderBonusStatusPrompt();
+
+
+	void UpdateBonusStatus(char statusChoice);
+
+
+	void RenderMiscItemAdded(Item* item);
+
 private:
 	FPlayerInfo fPlayerInfo;
 	CharacterStatus m_BaseStatus;
@@ -32,18 +55,22 @@ private:
 	EquipmentManager m_EquipmentManager;
 
 private:
-	BaseCharacter* m_lastAttacker = nullptr;
-	int32 m_lastCalculatedDamage = 0;
+	//BaseCharacter* m_lastAttacker = nullptr;
+	//int32 m_lastCalculatedDamage = 0;
 
 
 public:
 	//Combat COmponent
 	virtual void ApplyDamageFrom(BaseCharacter& attacker) override;
-	void RenderDamageResult();
+	void RenderDamageResult(BaseCharacter& attacker, int32 damage);
 	void DisplayDeathMessage();
-	void DisplayDamageMessage(BaseCharacter* attacker, int32 damage);
-	int32 CaculateDamageFrom(const FCharacterInfo& fTargetCharacterInfo);
+	void DisplayDamageMessage(BaseCharacter& attacker, int32 damage);
+	int32 CalculateDamageFrom(const FCharacterInfo& fTargetCharacterInfo);
 	virtual void Attack(BaseCharacter* target) override;
+	int32 UpdateDamage(BaseCharacter& attacker);
+	void UpdateAttack(BaseCharacter* target);
+	void RenderAttackMessage(BaseCharacter* target);
+
 	//Info Component
 	virtual const FPlayerInfo& GetCharacterInfo() const override { return fPlayerInfo; }
 
@@ -52,10 +79,6 @@ public:
 	static Player* CreateCharacter(const string& characterName);
 
 	void Initialize(const FPlayerInfo& data);
-	void UpdateDamage(BaseCharacter& attacker);
-	void UpdateAttack(BaseCharacter* target);
-
-	void RenderAttackMessage(BaseCharacter* target);
 
 
 public:
@@ -68,12 +91,12 @@ public:
 	//Status Component
 	void Heal(int32 healAmount);
 	BaseCharacter& CharacterLevelUp(); //Player status update with Level Data class
-	void DisplayLevelUpResult();
-	void ApplyBonusStatus();
+	void RenderLevelUpResult();
+	void ProcessBonusStatusSelection();
 	void ApplyStatusBonus(char statusChoice, int16& playerAtk, int16& playerDef, int16& playerAgi);
 	void IncrementLevel();
-	void ApplyLevelDataPerLevel();
-	void UpdatePlayerStatus();
+	void UpdateLevelDataPerLevel();
+	void UpdateFinalStatus();
 
 public:
 	//Inventory Component
@@ -86,11 +109,12 @@ public:
 public:
 	//Equipment Component
 	void EquipItem(Item* item);
-	void PerformEquipItem(Item* previousItem, Item* newItem);
+	void UpdateEquipItem(Item* previousItem, Item* newItem);
 	Item* HandlePreviousEquipItem(Item* item);
 	void HandleMiscItem(Item* item);
 	const EquipmentManager& GetEquipmentManager() const;
 	void UpdateEquipmentStatus();
+	void RenderEquipMessage(Item* newItem);
 
 public:
 	//Gold Component
