@@ -28,21 +28,53 @@ void Player::ApplyDamageFrom(BaseCharacter& target)
 {
 	const FCharacterInfo& fTargetCharacterInfo = target.GetCharacterInfo();
 
-	int32 iCalculatedDamage = fPlayerInfo.characterStats.CalculateDamage(fTargetCharacterInfo.characterStats);
-	
-	fPlayerInfo.iCurrentHealth -= iCalculatedDamage;
+	int32 iCalculatedDamage = CaculateDamageFrom(fTargetCharacterInfo);
 
+	ApplyCaculatedDamage(iCalculatedDamage);
+
+	ProcessDamageResult(target, iCalculatedDamage);
+
+}
+
+void Player::ProcessDamageResult(BaseCharacter& target, int32 iCalculatedDamage)
+{
 	if (fPlayerInfo.iCurrentHealth <= 0)
 	{
-		Common::PrintSystemMsg("당신은 여신의 곁으로 돌아갑니다..");
-		fPlayerInfo.iCurrentHealth = 0; // maintain game-over state
+		ProcessPlayerDeath();
+
 	}
 	else
 	{
-		string strDamageText = target.GetCharacterInfo().strCharacterName + "에게 " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.\n당신의 현재 체력 : " + to_string(fPlayerInfo.iCurrentHealth);
-		Common::PrintSystemMsg(strDamageText);
+		DisplayDamageMessage(target, iCalculatedDamage);
+
 	}
 	Common::PauseAndClearScreen(2000);
+}
+
+void Player::ProcessPlayerDeath()
+{
+	//TODO : 필요시 추가 처리할 내용.(사망)
+	Common::PrintSystemMsg("당신은 여신의 곁으로 돌아갑니다..");
+}
+
+void Player::DisplayDamageMessage(BaseCharacter& target, int32 iCalculatedDamage)
+{
+	string strDamageText = target.GetCharacterInfo().strCharacterName + "에게 " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.\n당신의 현재 체력 : " + to_string(fPlayerInfo.iCurrentHealth);
+	Common::PrintSystemMsg(strDamageText);
+}
+
+void Player::ApplyCaculatedDamage(int32 iCalculatedDamage)
+{
+	fPlayerInfo.iCurrentHealth -= iCalculatedDamage;
+	if (fPlayerInfo.iCurrentHealth <= 0)
+	{
+		fPlayerInfo.iCurrentHealth = 0; // maintain game-over state
+	}
+}
+
+int32 Player::CaculateDamageFrom(const FCharacterInfo& fTargetCharacterInfo)
+{
+	return fPlayerInfo.characterStats.CalculateDamage(fTargetCharacterInfo.characterStats);
 }
 
 void Player::Attack(BaseCharacter* target)
@@ -202,10 +234,19 @@ void Player::LoseItem(Item* item)
 	if (item == nullptr) 
 		return;
 	
-	m_inventoryManager.RemoveItem(item);
-
+	RemoveFromInventory(item);
 
 	//unequip item
+	UnequipItemIfEquipped(item);
+
+	UpdateEquipmentStatus();
+
+	UpdatePlayerStatus();
+
+}
+
+void Player::UnequipItemIfEquipped(Item* item)
+{
 	switch (item->GetItemInfo().itemType)
 	{
 	case EItemType::WEAPON:
@@ -215,7 +256,7 @@ void Player::LoseItem(Item* item)
 			m_EquipmentManager.Unequip(EItemType::WEAPON);
 		}
 	}
-		break;
+	break;
 	case EItemType::ARMOR:
 	{
 		if (m_EquipmentManager.GetArmor() == item)
@@ -223,18 +264,18 @@ void Player::LoseItem(Item* item)
 			m_EquipmentManager.Unequip(EItemType::ARMOR);
 		}
 	}
-		break;
+	break;
 	default:
 	{
 		Common::PrintSystemMsg("해제할 장비가 존재하지 않습니다.");
 	}
-		break;
+	break;
 	}
+}
 
-
-	UpdateEquipmentStatus();
-	UpdatePlayerStatus();
-
+void Player::RemoveFromInventory(Item* item)
+{
+	m_inventoryManager.RemoveItem(item);
 }
 
 void Player::Heal(int32 healAmount)
@@ -414,10 +455,55 @@ void Player::ApplyLevelDataPerLevel()
 
 void Player::ShowPlayerStatus() const
 {
-	string strWeaponName, strArmorName;
+	string statusString = BuildPlayerStatusString();
 
+	Common::PrintSystemMsg(statusString);
+
+	Common::PauseAndClearScreen(3000);
+}
+
+
+string Player::BuildPlayerStatusString() const
+{
+	string strPlayerStatus = GetName() + " 용사의 스테이터스\n";
+
+	strPlayerStatus += BuildBasicInfoString();
+
+	strPlayerStatus += BuildStatsString();
+
+	strPlayerStatus += BuildEquipInfoString();
+
+	strPlayerStatus += BuildInventoryString();
+
+	return strPlayerStatus;
+
+}
+
+
+string Player::BuildInventoryString() const
+{
+	string result = "\n인벤토리 아이템 목록 : ";
+
+	const list<Item*>& inventoryItems = m_inventoryManager.GetAllItems();
+	if (inventoryItems.empty())
+	{
+		result += "(비어있음)\n";
+	}
+	else
+	{
+		for (list<Item*>::const_iterator it = inventoryItems.begin(); it != inventoryItems.end(); ++it)
+		{
+			Item* item = *it;
+			result += " [ " + item->GetItemInfo().itemName + " ], ";
+		}
+	}	return result;
+}
+
+string Player::BuildEquipInfoString() const
+{
+	string strWeaponName, strArmorName;
 	Weapon* equippedWeapon = m_EquipmentManager.GetWeapon();
-	Armor* equipppedArmor = m_EquipmentManager.GetArmor();
+	Armor* equippedArmor = m_EquipmentManager.GetArmor();
 
 	if (equippedWeapon)
 	{
@@ -427,48 +513,31 @@ void Player::ShowPlayerStatus() const
 	{
 		strWeaponName = "비어있음";
 	}
-
-	if (equipppedArmor)
+	
+	if (equippedArmor)
 	{
-		strArmorName = equipppedArmor->GetItemName();
+		strArmorName = equippedArmor->GetItemName();
 	}
 	else
 	{
 		strArmorName = "비어있음";
 	}
-	
 
-	string strPlayerStatus = GetName() + " 용사의 스테이터스\n"
-		+ "현재 레벨 : " + to_string(fPlayerInfo.iCurrentLevel) + "\n"
-		+ "경험치 : " + to_string(fPlayerInfo.playerExperience) + "/" + to_string(fPlayerInfo.playerMaxExperience) + "\n"
-		+ "체력 : " + to_string(fPlayerInfo.iCurrentHealth) + "/" + to_string(fPlayerInfo.iMaxHealth) + "\n\n"
-		+ "공격력 : " + to_string(fPlayerInfo.characterStats.GetAttack()) + "\n"
-		+ "방어력 : " + to_string(fPlayerInfo.characterStats.GetDefense()) + "\n"
-		+ "민첩성 : " + to_string(fPlayerInfo.characterStats.GetAgility()) + "\n\n"
-		+ "장착 중인 무기 : " + strWeaponName + "\n"
+	return "장착 중인 무기 : " + strWeaponName + "\n"
 		+ "장착 중인 방어구 : " + strArmorName + "\n"
 		+ "보유 금화 : " + to_string(fPlayerInfo.playerGold) + "\n";
-
-	const list<Item*>& inventoryItems = m_inventoryManager.GetAllItems();
-	strPlayerStatus += "\n인벤토리 아이템 목록 : ";
-	if (inventoryItems.empty())
-	{
-		strPlayerStatus += "(비어있음)\n";
-	}
-	else
-	{
-		for (list<Item*>::const_iterator it = inventoryItems.begin(); it != inventoryItems.end(); ++it)
-		{
-			Item* item = *it;
-			strPlayerStatus += " [ " + item->GetItemInfo().itemName + " ], ";
-		}
-	}
-
-
-	Common::PrintSystemMsg(strPlayerStatus);
-
-	Common::PauseAndClearScreen(3000);
 }
 
+string Player::BuildStatsString() const
+{
+	return "공격력 : " + to_string(fPlayerInfo.characterStats.GetAttack()) + "\n"
+		+ "방어력 : " + to_string(fPlayerInfo.characterStats.GetDefense()) + "\n"
+		+ "민첩성 : " + to_string(fPlayerInfo.characterStats.GetAgility()) + "\n\n";
+}
 
-
+string Player::BuildBasicInfoString() const
+{
+	return "현재 레벨 : " + to_string(fPlayerInfo.iCurrentLevel) + "\n"
+		+ "경험치 : " + to_string(fPlayerInfo.playerExperience) + "/" + to_string(fPlayerInfo.playerMaxExperience) + "\n"
+		+ "체력 : " + to_string(fPlayerInfo.iCurrentHealth) + "/" + to_string(fPlayerInfo.iMaxHealth) + "\n\n";
+}

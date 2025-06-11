@@ -35,6 +35,11 @@ private:
 public:
 	//Combat COmponent
 	virtual void ApplyDamageFrom(BaseCharacter& target) override;
+	void ProcessDamageResult(BaseCharacter& target, int32 iCalculatedDamage);
+	void ProcessPlayerDeath();
+	void DisplayDamageMessage(BaseCharacter& target, int32 iCalculatedDamage);
+	void ApplyCaculatedDamage(int32 iCalculatedDamage);
+	int32 CaculateDamageFrom(const FCharacterInfo& fTargetCharacterInfo);
 	virtual void Attack(BaseCharacter* target) override;
 	//Info Component
 	virtual const FPlayerInfo& GetCharacterInfo() const override { return fPlayerInfo; }
@@ -64,6 +69,8 @@ public:
 	void AddToInventory(Item* item);
 	list<Item*> GetInventoryItems(EItemType type) const;
 	void LoseItem(Item* item);
+	void UnequipItemIfEquipped(Item* item);
+	void RemoveFromInventory(Item* item);
 
 	//Equipment Component
 	void EquipItem(Item* item);
@@ -87,6 +94,12 @@ public:
 
 	//UI Comp
 	void ShowPlayerStatus() const;
-	
+	string BuildPlayerStatusString() const;
+	string BuildInventoryString() const;
+	string BuildEquipInfoString() const;
+	string BuildStatsString() const;
+	string BuildBasicInfoString() const;
+
+
 };
 
