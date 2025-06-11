@@ -9,101 +9,160 @@
 Monster::Monster(const FMonsterInfo& info)
 	: fMonsterInfo(info), dropExperience(info.dropExperience), dropGold(info.dropGold)
 {
+	Initialize(info);
+}
+
+void Monster::Initialize(const FMonsterInfo& info)
+{
 	//setting the dropItemList of Monster
 	dropItemNames = ItemManager::GetInstance().GetItemList();
+	isDefeated = false;
+	lastCalculatedDamage = 0;
+	lastDropItem = nullptr;
+}
+
+void Monster::ApplyDamageFrom(BaseCharacter& attacker)
+{
+	UpdateDamage(attacker);
+
+	RenderDamageResult();
+
+	if (isDefeated)
+	{
+		Player* playerAttacker = dynamic_cast<Player*>(&attacker);
+		if (playerAttacker != nullptr && !dropItemNames.empty()) 
+		{
+			bool dropSuccess = ProcessItemDrop(playerAttacker);
+			RenderItemDropResult(lastDropItem, dropSuccess, playerAttacker);
+		}
+		Common::PauseAndClearScreen(2000);
+	}
+	
+}
+
+void Monster::UpdateDamage(BaseCharacter& attacker)
+{
+	const FCharacterInfo& fAttackerCharacterInfo = attacker.GetCharacterInfo();
+
+	lastCalculatedDamage = fMonsterInfo.characterStats.CalculateDamage(fAttackerCharacterInfo.characterStats);
+
+	fMonsterInfo.iCurrentHealth -= lastCalculatedDamage;
+	if (fMonsterInfo.iCurrentHealth <= 0)
+	{
+		fMonsterInfo.iCurrentHealth = 0;
+		isDefeated = true;
+	}
 }
 
 
-void Monster::ApplyDamageFrom(BaseCharacter& target)
+void Monster::RenderDamageResult()
 {
-	const FCharacterInfo& fTragetCharacterInfo = target.GetCharacterInfo();
-
-	int32 iCalculatedDamage = fMonsterInfo.characterStats.CalculateDamage(fTragetCharacterInfo.characterStats);
-
-	fMonsterInfo.iCurrentHealth -= iCalculatedDamage;
-	if (fMonsterInfo.iCurrentHealth <= 0)
+	if (isDefeated)
 	{
-		string strMonsterDefeatMsg = fMonsterInfo.strCharacterName + "은(는) " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.";
+		string strMonsterDefeatMsg = fMonsterInfo.strCharacterName + "은(는) " + to_string(lastCalculatedDamage) + "의 데미지를 입었습니다.";
 		Common::PrintSystemMsg(strMonsterDefeatMsg);
 
 		string strMonsterDefeatMesg = "몬스터 " + fMonsterInfo.strCharacterName + "이(가) 쓰러졌습니다.";
 		Common::PrintSystemMsg(strMonsterDefeatMesg);
-
-		fMonsterInfo.iCurrentHealth = 0;
-
-		
-		Player* playerTarget = dynamic_cast<Player*>(&target);
-		if (playerTarget != nullptr && !dropItemNames.empty())
-		{
-			srand(static_cast<unsigned int>(time(NULL)));
-			size_t randomIndex = rand() % dropItemNames.size();
-
-			string strRandomItemName = dropItemNames[randomIndex];
-			Item* randomDropItem = ItemManager::GetInstance().CreateItem(strRandomItemName);
-			 
-			if (randomDropItem)
-			{
-				Common::PrintSystemMsg("전리품을 획득했습니다!");
-				randomDropItem->ShowItemInfo();
-				Common::PrintSystemMsg("이 아이템을 등록하시겠습니까?\n-> 1. 새로운 아이템을 등록한다.  2. 기존의 아이템을 사용한다.");
-				
-				char equipChoice = Common::GetCharInput();
-
-				if (equipChoice == '1')
-				{
-					playerTarget->EquipItem(randomDropItem);
-				}
-				else if (equipChoice == '2')
-				{
-					playerTarget->AddToInventory(randomDropItem);
-					Common::PrintSystemMsg("아이템을 인벤토리에 보관했습니다.");
-				}
-				else
-				{
-					Common::PrintSystemMsg("잘못된 입력입니다. 아이템을 획득하지 못했습니다.");
-					return;
-				}
-
-			
-				
-				const_cast<Player*>(playerTarget)->GainLoot(dropExperience, dropGold, randomDropItem);
-			}
-			else 
-			{
-				Common::PrintSystemMsg("아이템 드랍을 실패했습니다.");
-			}
-
-		};
-		Common::PauseAndClearScreen(2000);
 	}
 	else
 	{
-		string strMonsterMsg = fMonsterInfo.strCharacterName + "은(는) " + to_string(iCalculatedDamage) + "의 데미지를 입었습니다.\n현재 체력: " + to_string(fMonsterInfo.iCurrentHealth);
+		string strMonsterMsg = fMonsterInfo.strCharacterName + "은(는) " + to_string(lastCalculatedDamage) + "의 데미지를 입었습니다.\n현재 체력: " + to_string(fMonsterInfo.iCurrentHealth);
 		Common::PrintSystemMsg(strMonsterMsg);
-		
 	}
-	
 }
+
+bool Monster::ProcessItemDrop(Player* playerTarget)
+{
+	if (dropItemNames.empty()) {
+		return false; 
+	}
+
+	srand(static_cast<unsigned int>(time(NULL)));
+	size_t randomIndex = rand() % dropItemNames.size();
+
+	string strRandomItemName = dropItemNames[randomIndex];
+
+	lastDropItem = ItemManager::GetInstance().CreateItem(strRandomItemName);
+
+	return (lastDropItem != nullptr);
+}
+
+
+void Monster::RenderItemDropResult(Item* droppedItem, bool isSuccessful, Player* attacker)
+{
+	if (!isSuccessful || droppedItem == nullptr)
+	{
+		Common::PrintSystemMsg("아이템 드랍을 실패했습니다.");
+		return;
+	}
+
+	Common::PrintSystemMsg("전리품을 획득했습니다!");
+	droppedItem->ShowItemInfo();
+
+	// 아이템 획득 선택 UI
+	Common::PrintSystemMsg("이 아이템을 등록하시겠습니까?\n-> 1. 새로운 아이템을 등록한다.  2. 기존의 아이템을 사용한다.");
+	char equipChoice = Common::GetCharInput();
+
+	Player* playerTarget = dynamic_cast<Player*>(attacker);
+	if (!playerTarget) return;
+
+	if (equipChoice == '1')
+	{
+		playerTarget->EquipItem(droppedItem);
+	}
+	else if (equipChoice == '2')
+	{
+		playerTarget->AddToInventory(droppedItem);
+		Common::PrintSystemMsg("아이템을 인벤토리에 보관했습니다.");
+	}
+	else
+	{
+		Common::PrintSystemMsg("잘못된 입력입니다. 아이템을 획득하지 못했습니다.");
+		return;
+	}
+
+	playerTarget->GainLoot(dropExperience, dropGold, droppedItem);
+}
+
+
 
 void Monster::Attack(BaseCharacter* target)
 {
 	if (target == nullptr) return;
 	
+	RenderAttackMessage();
+
+	UpdateAttack(target);
+	
+}
+
+void Monster::UpdateAttack(BaseCharacter* target)
+{
+	if (target != nullptr)
+	{
+		target->ApplyDamageFrom(*this);
+	}
+}
+
+
+void Monster::RenderAttackMessage()
+{
 	string strMonsterAttackMsg = fMonsterInfo.strCharacterName + "이(가) 당신을 공격합니다.";
 	Common::PrintSystemMsg(strMonsterAttackMsg);
 
 	Common::PauseAndClearScreen(3000);
-
-	target->ApplyDamageFrom(*this);
-	
 }
+
+
 
 void Monster::SetCurrentHealth(int32 health)
 {
 	fMonsterInfo.iCurrentHealth = health;
+	isDefeated = (health <= 0);
 }
 
-void Monster::ShowMonsterStatus() const
+void Monster::RenderMonsterStatus() const
 {
 	string strMonsterStatus = " [몬스터 도감] " + fMonsterInfo.strCharacterName + " (상세보기)\n"
 		+ "몬스터 레벨 : " + to_string(fMonsterInfo.iCurrentLevel) + "\n"
@@ -118,6 +177,7 @@ void Monster::ShowMonsterStatus() const
 	//cin.ignore(1024, '\n');
 	InputManager::GetInstance().GetLineInput();
 }
+
 
 Monster::~Monster()
 {

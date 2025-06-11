@@ -35,7 +35,13 @@ public:
 
     void Run();
 
+	
+
 private:
+	
+
+
+
 	//Main Process of Game
 	void InitializeGame();
 	void InitializeDungeon();
@@ -51,7 +57,6 @@ private:
 
 	void BattleInDungeonStage(const vector<Monster*>& monsters, DungeonStage* stage);
 	
-
 	void GameOverProcess();
 
 	

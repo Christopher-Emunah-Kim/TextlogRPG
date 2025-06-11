@@ -24,15 +24,15 @@ Player* Player::CreateCharacter(const string& characterName)
 	return new Player(fTempCharacterInfo);
 }
 
-void Player::ApplyDamageFrom(BaseCharacter& target)
+void Player::ApplyDamageFrom(BaseCharacter& attacker)
 {
-	const FCharacterInfo& fTargetCharacterInfo = target.GetCharacterInfo();
+	const FCharacterInfo& fTargetCharacterInfo = attacker.GetCharacterInfo();
 
 	int32 iCalculatedDamage = CaculateDamageFrom(fTargetCharacterInfo);
 
 	ApplyCaculatedDamage(iCalculatedDamage);
 
-	ProcessDamageResult(target, iCalculatedDamage);
+	ProcessDamageResult(attacker, iCalculatedDamage);
 
 }
 

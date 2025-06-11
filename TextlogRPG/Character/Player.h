@@ -34,7 +34,7 @@ private:
 
 public:
 	//Combat COmponent
-	virtual void ApplyDamageFrom(BaseCharacter& target) override;
+	virtual void ApplyDamageFrom(BaseCharacter& attacker) override;
 	void ProcessDamageResult(BaseCharacter& target, int32 iCalculatedDamage);
 	void ProcessPlayerDeath();
 	void DisplayDamageMessage(BaseCharacter& target, int32 iCalculatedDamage);
