@@ -26,23 +26,24 @@ void MonsterStatusComponent::SetOwner(BaseCharacter* owner)
     m_owner = dynamic_cast<Monster*>(owner);  
 }
 
-void MonsterStatusComponent::SetCurrentHealth(int32 health)
-{
-    if (m_owner)
-    {
-		const FMonsterInfo& monsterInfo = static_cast<const FMonsterInfo&>(m_owner->GetCharacterInfo());
+void MonsterStatusComponent::SetCurrentHealth(int32 health)  
+{  
+    if (m_owner)  
+    {  
+        FMonsterInfo& monsterInfo = static_cast<FMonsterInfo&>(m_owner->GetChracterInfoRef());
 
-		m_owner->SetCurrentHealth(health);
-        if (monsterInfo.iCurrentHealth <= 0)
-        {
-			m_owner->SetCurrentHealth(0);
-            m_isDefeated = true;
-        }
-        else
-        {
-            m_isDefeated = false;
-        }
-    }
+        monsterInfo.iCurrentHealth = health;  
+
+        if (monsterInfo.iCurrentHealth <= 0)  
+        {  
+            monsterInfo.iCurrentHealth = 0;  
+            m_isDefeated = true;  
+        }  
+        else  
+        {  
+            m_isDefeated = false;  
+        }  
+    }  
 }
 
 void MonsterStatusComponent::RenderMonsterStatus() const

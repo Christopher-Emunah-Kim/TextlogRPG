@@ -5,7 +5,7 @@
 #include "../../Core/ItemManager.h"
 
 MonsterDropComponent::MonsterDropComponent(Monster* owner)
-    : m_owner(owner), m_lastDropItem(nullptr)
+	: m_owner(owner), m_lastDropItem(nullptr), m_dropExperience(0), m_dropGold(0)
 {
 }
 
@@ -30,6 +30,12 @@ void MonsterDropComponent::SetOwner(BaseCharacter* owner)
 void MonsterDropComponent::InitializeDropItems(const vector<string>& itemNames)
 {
     m_dropItemNames = itemNames;
+}
+
+void MonsterDropComponent::SetDropValues(int32 experience, int32 gold)
+{
+	m_dropExperience = experience;
+	m_dropGold = gold;
 }
 
 bool MonsterDropComponent::ProcessItemDrop(Player* playerTarget)
@@ -84,23 +90,6 @@ void MonsterDropComponent::RenderItemDropResult(Item* droppedItem, bool isSucces
         return;
     }
 
-    playerTarget->GainLoot(m_owner->GetDropExperience(), m_owner->GetDropGold(), droppedItem);
+    playerTarget->GainLoot(m_dropExperience, m_dropGold, droppedItem);
 }
 
-int32 MonsterDropComponent::GetDropExperience() const
-{
-	if (m_owner)
-	{
-		return m_owner->GetDropExperience();
-	}
-    return 0;
-}
-
-int32 MonsterDropComponent::GetDropGold() const
-{
-	if (m_owner)
-	{
-		return m_owner->GetDropGold();
-	}
-	return 0;
-}

@@ -47,7 +47,7 @@ void MonsterCombatComponent::ApplyDamageFrom(BaseCharacter& attacker)
     // 데미지 결과 렌더링은 MonsterStatusComponent에서 처리
 	MonsterStatusComponent& statusComp = m_owner->GetMonsterStatusComponent();
     
-	statusComp.RenderDamageResult(m_lastCalculatedDamage);
+	RenderDamageResult(attacker, m_lastCalculatedDamage);
     
     Common::PauseAndClearScreen(2000);
 }
@@ -110,5 +110,19 @@ void MonsterCombatComponent::RenderAttackMessage(BaseCharacter* target)
 
 void MonsterCombatComponent::RenderDamageResult(BaseCharacter& attacker, int32 damage)
 {
-    // MonsterStatusComponent에서 처리
+	MonsterStatusComponent& statusComp = m_owner->GetMonsterStatusComponent();
+	string monsterName = m_owner->GetCharacterInfo().strCharacterName;
+	if (statusComp.IsDefeated())
+	{
+		string strMonsterDefeatMsg = monsterName + "은(는) " + to_string(damage) + "의 데미지를 입었습니다.";
+		Common::PrintSystemMsg(strMonsterDefeatMsg);
+
+		string strMonsterDefeatMesg = "몬스터 " + monsterName + "이(가) 쓰러졌습니다.";
+		Common::PrintSystemMsg(strMonsterDefeatMesg);
+	}
+	else
+	{
+		string strMonsterMsg = monsterName + "은(는) " + to_string(damage) + "의 데미지를 입었습니다.\n현재 체력: " + to_string(m_owner->GetCharacterInfo().iCurrentHealth);
+		Common::PrintSystemMsg(strMonsterMsg);
+	}
 }
