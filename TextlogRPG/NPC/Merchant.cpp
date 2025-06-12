@@ -340,14 +340,12 @@ void Merchant::Interact(Player* player)
 		{
 		//마을로 돌아가기
 		Common::PrintSystemMsg("상점을 떠나 길거리로 나갑니다.");
-		Common::PauseAndClearScreen();
 		}
 			break;
 
 		default:
 		{
 		Common::PrintErrorMsg("잘못된 선택입니다. 상점을 떠나 길거리로 나갑니다..");
-		Common::PauseAndClearScreen();
 		}
 			break;
 	}

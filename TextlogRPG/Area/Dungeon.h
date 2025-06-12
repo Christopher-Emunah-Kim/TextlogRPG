@@ -35,6 +35,7 @@ public:
 
 	virtual void Enter(Player* player) override;
 
+
     void AddMonster(Monster* monster);
 
     void RemoveMonster(Monster* monster);
