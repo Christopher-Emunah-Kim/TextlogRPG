@@ -5,6 +5,8 @@
 #include "../Item/EItemType.h"
 #include "../Core/InventoryManager.h"
 #include "../Core/EquipmentManager.h"
+#include "../Character/Component/PlayerEquipmentComponent.h"
+#include "../Character/Component/PlayerInventoryComponent.h"
 
 
 
@@ -27,25 +29,7 @@ public:
 	
 
 
-	void UpdateLoot(int32 gold, int32 experience);
-
-
-	void RenderLootResult(int32 experience, int32 gold, Item* item);
-
-
-	void UpdateGold(int32 earnGold);
-
-
-	void RenderGoldChange(int32 earnGold);
-
-
-	void RenderBonusStatusPrompt();
-
-
-	void UpdateBonusStatus(char statusChoice);
-
-
-	void RenderMiscItemAdded(Item* item);
+	
 
 private:
 	FPlayerInfo fPlayerInfo;
@@ -53,10 +37,8 @@ private:
 	CharacterStatus m_EquipmentStatus;
 	InventoryManager m_inventoryManager;
 	EquipmentManager m_EquipmentManager;
-
-private:
-	//BaseCharacter* m_lastAttacker = nullptr;
-	//int32 m_lastCalculatedDamage = 0;
+	PlayerEquipmentComponent m_equipmentComp;
+	PlayerInventoryComponent m_inventoryComp;
 
 
 public:
@@ -86,6 +68,8 @@ public:
 	void SetName(const string& name);
 	string GetName() const;
 	FPlayerInfo GetPlayerData() const;
+	PlayerEquipmentComponent GetEquipmentComponent() const { return m_equipmentComp; }
+	PlayerInventoryComponent GetInvetoryComponent() const { return m_inventoryComp; }
 
 public:
 	//Status Component
@@ -127,7 +111,13 @@ public:
 	void AddGold(int32 gold);
 	void AddExperience(int32 experience);
 	void ProcessLevelUp();
-
+	void UpdateLoot(int32 gold, int32 experience);
+	void RenderLootResult(int32 experience, int32 gold, Item* item);
+	void UpdateGold(int32 earnGold);
+	void RenderGoldChange(int32 earnGold);
+	void RenderBonusStatusPrompt();
+	void UpdateBonusStatus(char statusChoice);
+	void RenderMiscItemAdded(Item* item);
 	
 public:
 	//UI Comp

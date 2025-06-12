@@ -1,5 +1,6 @@
 ﻿#pragma once
-#include "../Util/Common.h"
+#include "../../Util/Common.h"
+#include "../CharacterInfo.h"
 
 class BaseCharacter;
 class Item;
@@ -24,6 +25,7 @@ public:
 //Combat Component Interface
 class ICombatComponent : public IComponent
 {
+
 public:
 	// Update Functions
 	virtual void Attack(BaseCharacter* target) = 0;
@@ -31,6 +33,7 @@ public:
 	virtual int32 CalculateDamageFrom(const FCharacterInfo& targetCharacterInfo) = 0;
 	virtual int32 UpdateDamage(BaseCharacter& attacker) = 0;
 	virtual void UpdateAttack(BaseCharacter* target) = 0;
+
 
 public:
 	// Render Functions
@@ -51,6 +54,7 @@ public:
 	virtual list<Item*> GetItemsByType(EItemType type) const = 0;
 	virtual const list<Item*>& GetAllItems() const = 0;
 
+public:
 	// Render Functions
 	virtual void RenderItemAdded(class Item* item) = 0;
 	virtual void RenderItemRemoved(class Item* item) = 0;
@@ -69,6 +73,7 @@ public:
 	virtual void HandleMiscItem(Item* item) = 0;
 	virtual const EquipmentManager& GetEquipmentManager() const = 0;
 
+public:
 	// Render Functions
 	virtual void RenderEquipMessage(Item* newItem) = 0;
 	virtual void RenderMiscItemAdded(Item* item) = 0;
@@ -88,6 +93,7 @@ public:
 	virtual void UpdateLevelDataPerLevel() = 0;
 	virtual void UpdateFinalStatus() = 0;
 
+public:
 	// Render Functions
 	virtual void RenderLevelUpResult() = 0;
 	virtual void RenderBonusStatusPrompt() = 0;
@@ -107,6 +113,7 @@ public:
 	virtual void UpdateLoot(int32 gold, int32 experience) = 0;
 	virtual void UpdateGold(int32 earnGold) = 0;
 
+public:
 	// Render Functions
 	virtual void RenderGoldChange(int32 earnGold) = 0;
 	virtual void RenderLootResult(int32 experience, int32 gold, Item* item) = 0;
