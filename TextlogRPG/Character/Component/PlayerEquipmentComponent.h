@@ -4,6 +4,7 @@
 #include "../CharacterStatus.h"
 
 class Player;
+class BaseCharacter;
 class Item;
 
 class PlayerEquipmentComponent : public IEquipmentComponent
@@ -21,7 +22,7 @@ public:
     
     virtual void Initialize() override;
     virtual void Update() override;
-    virtual void SetOwner(Player* owner) override;
+    virtual void SetOwner(BaseCharacter* owner) override;
     
 public:
 

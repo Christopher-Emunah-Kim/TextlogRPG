@@ -18,9 +18,9 @@ void PlayerStatusComponent::Update()
    
 }
 
-void PlayerStatusComponent::SetOwner(Player* owner)
+void PlayerStatusComponent::SetOwner(BaseCharacter* owner)
 {
-	m_owner = owner;
+	m_owner = dynamic_cast<Player*>(owner);
 }
 
 void PlayerStatusComponent::Heal(int32 healAmount)

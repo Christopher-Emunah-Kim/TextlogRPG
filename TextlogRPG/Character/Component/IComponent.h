@@ -17,7 +17,7 @@ public:
     
 	virtual void Update() = 0;
 
-    virtual void SetOwner(class Player* owner) = 0;
+    virtual void SetOwner(BaseCharacter* owner) = 0;
 };
 
 #pragma region Derived Component Interfaces

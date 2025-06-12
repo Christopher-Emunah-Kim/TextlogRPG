@@ -17,9 +17,9 @@ void PlayerInventoryComponent::Update()
     
 }
 
-void PlayerInventoryComponent::SetOwner(Player* owner)
+void PlayerInventoryComponent::SetOwner(BaseCharacter* owner)
 {
-	m_owner = owner;
+	m_owner = dynamic_cast<Player*>(owner);
 }
 
 void PlayerInventoryComponent::AddItem(Item* item)

@@ -15,9 +15,9 @@ void PlayerLootComponent::Update()
 {
 }
 
-void PlayerLootComponent::SetOwner(Player* owner)
+void PlayerLootComponent::SetOwner(BaseCharacter* owner)
 {
-	m_owner = owner;
+	m_owner = dynamic_cast<Player*>(owner);
 }
 
 void PlayerLootComponent::AddGold(int32 gold)

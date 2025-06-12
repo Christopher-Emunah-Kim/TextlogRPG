@@ -22,9 +22,9 @@ void PlayerCombatComponent::Update()
 
 }
 
-void PlayerCombatComponent::SetOwner(Player* owner)
+void PlayerCombatComponent::SetOwner(BaseCharacter* owner)
 {
-	m_owner = owner;
+	m_owner = dynamic_cast<Player*>(owner);
 }
 
 void PlayerCombatComponent::Attack(BaseCharacter* target)

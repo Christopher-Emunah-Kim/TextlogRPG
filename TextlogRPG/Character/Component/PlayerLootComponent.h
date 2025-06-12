@@ -2,6 +2,7 @@
 #include "IComponent.h"
 
 class Player;
+class BaseCharacter;
 
 class PlayerLootComponent : public ILootComponent
 {
@@ -16,7 +17,7 @@ public:
 
     virtual void Initialize() override;
     virtual void Update() override;
-    virtual void SetOwner(Player* owner) override;
+    virtual void SetOwner(BaseCharacter* owner) override;
     
 public:
     virtual void AddGold(int32 gold) override;

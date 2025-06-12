@@ -3,6 +3,7 @@
 
 
 class Player;
+class BaseCharacter;
 
 class PlayerUIComponent : public IUIComponent
 {
@@ -17,7 +18,7 @@ public:
 
     virtual void Initialize() override;
     virtual void Update() override;
-    virtual void SetOwner(Player* owner) override;
+    virtual void SetOwner(BaseCharacter* owner) override;
     
 public:
 

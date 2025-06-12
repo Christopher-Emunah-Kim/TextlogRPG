@@ -20,9 +20,9 @@ void PlayerEquipmentComponent::Update()
    
 }
 
-void PlayerEquipmentComponent::SetOwner(Player* owner)
+void PlayerEquipmentComponent::SetOwner(BaseCharacter* owner)
 {
-	m_owner = owner;
+	m_owner = dynamic_cast<Player*>(owner);
 }
 
 void PlayerEquipmentComponent::EquipItem(Item* item)

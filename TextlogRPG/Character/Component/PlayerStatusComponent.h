@@ -3,6 +3,7 @@
 #include "../CharacterStatus.h"
 
 class Player;
+class BaseCharacter;
 
 class PlayerStatusComponent : public IStatusComponent
 {
@@ -17,7 +18,7 @@ private:
 public:
     virtual void Initialize() override;
     virtual void Update() override;
-    virtual void SetOwner(Player* owner) override;
+    virtual void SetOwner(BaseCharacter* owner) override;
     
 
 public:

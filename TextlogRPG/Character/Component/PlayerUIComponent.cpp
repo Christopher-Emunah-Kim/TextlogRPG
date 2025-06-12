@@ -17,9 +17,9 @@ void PlayerUIComponent::Update()
 {
 }
 
-void PlayerUIComponent::SetOwner(Player* owner)
+void PlayerUIComponent::SetOwner(BaseCharacter* owner)
 {
-	m_owner = owner;
+	m_owner = dynamic_cast<Player*>(owner);
 }
 
 void PlayerUIComponent::RenderPlayerStatus() const
