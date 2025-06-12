@@ -1,4 +1,5 @@
 ﻿#include "PlayerEquipmentComponent.h"
+#include "PlayerStatusComponent.h"
 #include "../Player.h"
 #include "../../Item/Item.h"
 #include "../../Item/Weapon.h"
@@ -43,7 +44,12 @@ void PlayerEquipmentComponent::EquipItem(Item* item)
     UpdateEquipItem(previousItem, item);
     
     UpdateEquipmentStatus();
-	m_owner->UpdateFinalStatus();
+
+	//m_owner->UpdateFinalStatus();
+
+	PlayerStatusComponent statuscomp = m_owner->GetStatusComponent();
+
+	statuscomp.UpdateFinalStatus();
     
     //Render the results
     RenderEquipMessage(item);

@@ -69,7 +69,7 @@ void PlayerLootComponent::ProcessLevelUp()
     FPlayerInfo& playerInfo = const_cast<FPlayerInfo&>(m_owner->GetCharacterInfo());
     while (playerInfo.playerExperience >= playerInfo.playerMaxExperience)
     {
-        // 초과 경험치 이월
+		//experience carry-over delete
         playerInfo.playerExperience -= playerInfo.playerMaxExperience;
 		m_owner->CharacterLevelUp();
     }

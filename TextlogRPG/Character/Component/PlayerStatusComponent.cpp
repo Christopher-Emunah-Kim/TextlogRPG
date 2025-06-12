@@ -100,7 +100,8 @@ void PlayerStatusComponent::UpdateFinalStatus()
     // 장비 컴포넌트에서 장비 스탯 가져오기
 	FPlayerInfo& playerInfo = const_cast<FPlayerInfo&>(m_owner->GetCharacterInfo());
 
-	PlayerEquipmentComponent* equipComp = dynamic_cast<PlayerEquipmentComponent*>(&m_owner->GetEquipmentComponent());
+	const PlayerEquipmentComponent* equipComp = &m_owner->GetEquipmentComponent();
+
 	if (equipComp != nullptr)
 	{
 		CharacterStatus equipmentStatus = equipComp->GetEquipmentStatus();

@@ -15,7 +15,7 @@ int32 main()
 	wcout.imbue(locale());
 
 	//Game Start Settings
-	Player* player = Player::CreateCharacter("NONE");
+	Player* player = Player::CreateCharacter();
 	EGameState initialState = EGameState::TITLE;
 	Dungeon* dungeon = nullptr;
 

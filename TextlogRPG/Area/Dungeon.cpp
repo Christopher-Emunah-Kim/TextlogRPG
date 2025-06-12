@@ -133,17 +133,16 @@ EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)
 			break;
 			case '3':
 			{
-				// 도망 확률 계산 (예: 50% 확률)
-				if (rand() % 2 == 0)
+				if (rand() % 3 == 0)
+				{
+					Common::PrintSystemMsg("당신은 필사적으로 도망쳤지만, 몬스터가 뛰어올라 당신의 앞을 가로막습니다.\n몬스터가 당신을 공격합니다!");
+					Common::PauseAndClearScreen();
+				}
+				else
 				{
 					Common::PrintSystemMsg("몬스터가 당신을 쫓아왔지만, 당신은 무사히 던전 입구로 도망쳤습니다.");
 					Common::PauseAndClearScreen();
 					return EBattleResult::PLAYER_RUN;
-				}
-				else
-				{
-					Common::PrintSystemMsg("당신은 필사적으로 도망쳤지만, 몬스터가 뛰어올라 당신의 앞을 가로막습니다.");
-					Common::PauseAndClearScreen();
 				}
 			}
 			break;

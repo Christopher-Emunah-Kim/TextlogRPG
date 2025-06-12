@@ -21,7 +21,7 @@ void Merchant::SellItem(Player* player, const string& itemName)
 
 	int32 itemPrice = it->second;
 
-	if (player->GetPlayerData().playerGold < itemPrice)
+	if (player->GetCharacterInfo().playerGold < itemPrice)
 	{
 		Common::PrintErrorMsg("골드가 부족합니다. 아이템을 구매할 수 없습니다.");
 		Common::PauseAndClearScreen();

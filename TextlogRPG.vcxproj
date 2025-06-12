@@ -131,7 +131,11 @@
     <ClCompile Include="TextlogRPG\BattleSystem\MonsterPool.cpp" />
     <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
     <ClCompile Include="TextlogRPG\Character\Component\PlayerCombatComponent.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Component\PlayerEquipmentComponent.cpp" />
     <ClCompile Include="TextlogRPG\Character\Component\PlayerInventoryComponent.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Component\PlayerLootComponent.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Component\PlayerStatusComponent.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Component\PlayerUIComponent.cpp" />
     <ClCompile Include="TextlogRPG\Core\EquipmentManager.cpp" />
     <ClCompile Include="TextlogRPG\Core\EquipSlot.cpp" />
     <ClCompile Include="TextlogRPG\Core\InventoryManager.cpp" />
@@ -160,7 +164,11 @@
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
     <ClInclude Include="TextlogRPG\Character\Component\IComponent.h" />
     <ClInclude Include="TextlogRPG\Character\Component\PlayerCombatComponent.h" />
+    <ClInclude Include="TextlogRPG\Character\Component\PlayerEquipmentComponent.h" />
     <ClInclude Include="TextlogRPG\Character\Component\PlayerInventoryComponent.h" />
+    <ClInclude Include="TextlogRPG\Character\Component\PlayerLootComponent.h" />
+    <ClInclude Include="TextlogRPG\Character\Component\PlayerStatusComponent.h" />
+    <ClInclude Include="TextlogRPG\Character\Component\PlayerUIComponent.h" />
     <ClInclude Include="TextlogRPG\Core\EquipmentManager.h" />
     <ClInclude Include="TextlogRPG\Core\EquipSlot.h" />
     <ClInclude Include="TextlogRPG\Core\InventoryManager.h" />

@@ -34,7 +34,7 @@ GameManager::GameManager(EGameState initialState, Player* player, Dungeon* dunge
 
 	if (playerPtr == nullptr)
 	{
-		playerPtr = Player::CreateCharacter("DefaultPlayer");
+		playerPtr = Player::CreateCharacter();
 	}
 	else
 	{
@@ -220,14 +220,16 @@ void GameManager::RunProcessTitle()
 			break;
 		case '3':
 		{
-			if (!playerPtr) {
+			if (playerPtr==nullptr) 
+			{
 				Common::PrintErrorMsg("플레이어 정보가 없습니다.");
-				
-				;
 			}
-			Common::PauseAndClearScreen();
-			playerPtr->RenderPlayerStatus();
-			SetGameState(EGameState::TITLE);
+			else
+			{
+				Common::PauseAndClearScreen();
+				playerPtr->RenderPlayerStatus();
+				SetGameState(EGameState::TITLE);
+			}
 		}
 			break;
 		case '4': 
