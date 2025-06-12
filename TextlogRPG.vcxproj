@@ -130,6 +130,9 @@
     <ClCompile Include="TextlogRPG\Area\Village.cpp" />
     <ClCompile Include="TextlogRPG\BattleSystem\MonsterPool.cpp" />
     <ClCompile Include="TextlogRPG\Character\CharacterStatus.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Component\MonsterCombatComponent.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Component\MonsterDropComponent.cpp" />
+    <ClCompile Include="TextlogRPG\Character\Component\MonsterStatusComponent.cpp" />
     <ClCompile Include="TextlogRPG\Character\Component\PlayerCombatComponent.cpp" />
     <ClCompile Include="TextlogRPG\Character\Component\PlayerEquipmentComponent.cpp" />
     <ClCompile Include="TextlogRPG\Character\Component\PlayerInventoryComponent.cpp" />
@@ -163,6 +166,9 @@
     <ClInclude Include="TextlogRPG\Character\CharacterInfo.h" />
     <ClInclude Include="TextlogRPG\Character\CharacterStatus.h" />
     <ClInclude Include="TextlogRPG\Character\Component\IComponent.h" />
+    <ClInclude Include="TextlogRPG\Character\Component\MonsterCombatComponent.h" />
+    <ClInclude Include="TextlogRPG\Character\Component\MonsterDropComponent.h" />
+    <ClInclude Include="TextlogRPG\Character\Component\MonsterStatusComponent.h" />
     <ClInclude Include="TextlogRPG\Character\Component\PlayerCombatComponent.h" />
     <ClInclude Include="TextlogRPG\Character\Component\PlayerEquipmentComponent.h" />
     <ClInclude Include="TextlogRPG\Character\Component\PlayerInventoryComponent.h" />

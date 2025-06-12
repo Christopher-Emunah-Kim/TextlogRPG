@@ -101,7 +101,7 @@ void Monster::RenderItemDropResult(Item* droppedItem, bool isSuccessful, Player*
 	Common::PrintSystemMsg("전리품을 획득했습니다!");
 	droppedItem->ShowItemInfo();
 
-	// 아이템 획득 선택 UI
+
 	Common::PrintSystemMsg("이 아이템을 등록하시겠습니까?\n-> 1. 새로운 아이템을 등록한다.  2. 기존의 아이템을 사용한다.");
 	char equipChoice = Common::GetCharInput();
 
