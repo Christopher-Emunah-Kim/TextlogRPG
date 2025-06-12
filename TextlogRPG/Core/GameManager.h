@@ -46,8 +46,8 @@ private:
 
 	//TITLE
 	void RunProcessTitle();
-	void RenderTitlePrompt();
-	void UpdateTitleMenuChoice(char menuChoice);
+	//void RenderTitlePrompt();
+	//void UpdateTitleMenuChoice(char menuChoice);
 
 	//VILLAGE
 	void RunProcessVillage();
@@ -58,7 +58,7 @@ private:
 
 	//DUNGEON
 	void RunProcessDungeon();
-	void InitializeDungeon();
+	/*void InitializeDungeon();
 	void CreateDungeonStages();
 	void RenderDungeonMenu();
 	void UpdateDungeonBattleChoice();
@@ -66,6 +66,6 @@ private:
 	void UpdateDungeonChoice(char dungeonChoice);
 	void RenderDungwonWrongChoice();
 	void BattleInDungeonStage(const vector<Monster*>& monsters, DungeonStage* stage);
-	void RenderGameOverMsg();
+	void RenderGameOverMsg();*/
 
 };

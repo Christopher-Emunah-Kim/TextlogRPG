@@ -20,7 +20,6 @@
 #include "../Area/DungeonStage.h"
 #include "../Util/Dialogue.h"
 
-
 GameManager::GameManager(EGameState initialState, Player* player, Dungeon* dungeon)
 	: gameState(initialState), playerPtr(player), dungeonptr(dungeon)
 {
@@ -162,66 +161,75 @@ void GameManager::RequestPlayerName()
 
 void GameManager::RunProcessTitle() 
 {
-	RenderTitlePrompt();
+	Title* pTitleArea = dynamic_cast<Title*>(gameAreaMap[EGameState::TITLE]);
+
+	if (pTitleArea)
+	{
+		pTitleArea->Initialize(playerPtr);
+		EGameState nextState = pTitleArea->Process(playerPtr);
+		Common::PauseAndClearScreen();
+		SetGameState(nextState);
+	}
+	/*RenderTitlePrompt();
 
 	char menuChoice = Common::GetCharInput();
-	
+
 	UpdateTitleMenuChoice(menuChoice);
 
-	Common::PauseAndClearScreen();
+	Common::PauseAndClearScreen();*/
 }
 
 #pragma region Title Methods
-void GameManager::RenderTitlePrompt()
-{
-	Area* ptrTitleArea = gameAreaMap[EGameState::TITLE];
-	if (ptrTitleArea)
-	{
-		ptrTitleArea->Enter(playerPtr);
-	}
-}
-
-void GameManager::UpdateTitleMenuChoice(char menuChoice)
-{
-	switch (menuChoice)
-	{
-	case '1':
-	{
-		SetGameState(EGameState::VILLAGE);
-	}
-	break;
-	case '2':
-	{
-		SetGameState(EGameState::DUNGEON);
-	}
-	break;
-	case '3':
-	{
-		if (playerPtr == nullptr)
-		{
-			Common::PrintErrorMsg("플레이어 정보가 없습니다.");
-		}
-		else
-		{
-			Common::PauseAndClearScreen();
-			playerPtr->RenderPlayerStatus();
-			SetGameState(EGameState::TITLE);
-		}
-	}
-	break;
-	case '4':
-	{
-		SetGameState(EGameState::GAME_OVER);
-	}
-	break;
-
-	default:
-	{
-		Common::PrintErrorMsg("잘못된 입력입니다.");
-	}
-	break;
-	}
-}
+//void GameManager::RenderTitlePrompt()
+//{
+//	Area* ptrTitleArea = gameAreaMap[EGameState::TITLE];
+//	if (ptrTitleArea)
+//	{
+//		ptrTitleArea->Enter(playerPtr);
+//	}
+//}
+//
+//void GameManager::UpdateTitleMenuChoice(char menuChoice)
+//{
+//	switch (menuChoice)
+//	{
+//	case '1':
+//	{
+//		SetGameState(EGameState::VILLAGE);
+//	}
+//	break;
+//	case '2':
+//	{
+//		SetGameState(EGameState::DUNGEON);
+//	}
+//	break;
+//	case '3':
+//	{
+//		if (playerPtr == nullptr)
+//		{
+//			Common::PrintErrorMsg("플레이어 정보가 없습니다.");
+//		}
+//		else
+//		{
+//			Common::PauseAndClearScreen();
+//			playerPtr->RenderPlayerStatus();
+//			SetGameState(EGameState::TITLE);
+//		}
+//	}
+//	break;
+//	case '4':
+//	{
+//		SetGameState(EGameState::GAME_OVER);
+//	}
+//	break;
+//
+//	default:
+//	{
+//		Common::PrintErrorMsg("잘못된 입력입니다.");
+//	}
+//	break;
+//	}
+//}
 #pragma endregion
 
 void GameManager::RunProcessVillage()
@@ -338,7 +346,17 @@ void GameManager::RunProcessVillage()
 
 void GameManager::RunProcessDungeon()
 {
-	InitializeDungeon();
+	Dungeon* pDungeonArea = dynamic_cast<Dungeon*>(gameAreaMap[EGameState::DUNGEON]);
+	if (pDungeonArea)
+	{
+		pDungeonArea->Initialize(playerPtr);
+		EGameState nextState = pDungeonArea->Process(playerPtr);
+		Common::PauseAndClearScreen();
+		SetGameState(nextState);
+	}
+
+
+	/*InitializeDungeon();
 
 	RenderDungeonMenu();
 
@@ -346,242 +364,242 @@ void GameManager::RunProcessDungeon()
 
 	Common::PauseAndClearScreen();
 
-	UpdateDungeonChoice(dungeonChoice);
+	UpdateDungeonChoice(dungeonChoice);*/
 }
 
 
 #pragma region Dungeon methods
-void GameManager::InitializeDungeon()
-{
-	if (dungeonptr == nullptr)
-	{
-		CreateDungeonStages();
-	}
-	else
-	{
-		Common::PrintSystemMsg("당신을 위한 던전 스테이지가 준비되어 있습니다.");
-	}
-
-	if (playerPtr == nullptr)
-	{
-		Common::PrintErrorMsg("플레이어 정보가 없습니다. 던전 탐험을 시작할 수 없습니다.");
-		return;
-	}
-}
-
-void GameManager::CreateDungeonStages()
-{
-	//Generate Monster Lists(info)
-	//FCharacterInfo(stats, maxHp, hp, lvl, name), dropExperience(exp), dropGold(gold)
-	vector<FMonsterInfo> stage1 = {
-		FMonsterInfo(CharacterStatus::NewStatus(6, 3, 6), 18, 18, 2, "허약한 고블린", 20, 10),
-		FMonsterInfo(CharacterStatus::NewStatus(5, 4, 5), 20, 20, 2, "허약한 슬라임", 22, 12),
-		FMonsterInfo(CharacterStatus::NewStatus(7, 4, 7), 22, 22, 3, "허약한 스켈레톤", 28, 15),
-	};
-	vector<FMonsterInfo> stage2 = {
-		FMonsterInfo(CharacterStatus::NewStatus(12, 7, 10), 35, 35, 5, "허약한 오크", 40, 25),
-		FMonsterInfo(CharacterStatus::NewStatus(15, 8, 12), 40, 40, 6, "허약한 드래곤", 60, 40),
-		FMonsterInfo(CharacterStatus::NewStatus(16, 9, 11), 38, 38, 5, "강력한 고블린", 45, 30),
-		FMonsterInfo(CharacterStatus::NewStatus(15, 8, 10), 39, 39, 5, "강력한 슬라임", 45, 30),
-	};
-	vector<FMonsterInfo> stage3 = {
-		FMonsterInfo(CharacterStatus::NewStatus(22, 13, 15), 60, 60, 8, "강력한 스켈레톤", 80, 50),
-		FMonsterInfo(CharacterStatus::NewStatus(25, 15, 16), 70, 70, 9, "강력한 오크", 90, 60),
-		FMonsterInfo(CharacterStatus::NewStatus(28, 16, 18), 80, 80, 10, "완전 강력한 스켈레톤", 120, 80),
-		FMonsterInfo(CharacterStatus::NewStatus(32, 18, 20), 90, 90, 12, "완전 강력한 고블린", 150, 100),
-		FMonsterInfo(CharacterStatus::NewStatus(36, 20, 22), 100, 100, 13, "완전 강력한 슬라임", 180, 120),
-		FMonsterInfo(CharacterStatus::NewStatus(40, 22, 25), 110, 110, 15, "완전 강력한 드래곤", 250, 180),
-	};
-
-	vector<vector<FMonsterInfo>> dungeonStages = { stage1, stage2, stage3 };
-
-
-	//Generate new Dungeon
-	if (dungeonptr)
-	{
-		delete dungeonptr;
-		dungeonptr = nullptr;
-	}
-	dungeonptr = new Dungeon(dungeonStages);
-
-}
-
-void GameManager::RenderDungeonMenu()
-{
-	if (dungeonptr != nullptr)
-	{
-		dungeonptr->Enter(playerPtr);
-	}
-}
-
-void GameManager::UpdateDungeonBattleChoice()
-{
-	while (true)
-	{
-		DungeonStage* stage = dungeonptr->GetCurrentStage();
-		vector<Monster*> stageMonsterList = stage->GetMonsters();
-
-		if (stage == nullptr)
-		{
-			Common::PrintSystemMsg("유효한 던전 스테이지가 존재하지 않습니다.\n마을로 돌아갑니다.");
-			SetGameState(EGameState::VILLAGE);
-			return;
-		}
-
-		if (stageMonsterList.empty())
-		{
-			stage->EnterStage();
-			stageMonsterList = stage->GetMonsters();
-		}
-
-		while (true)
-		{
-			// Check the Monsters on stage all dead
-			bool allMonstersDead = true;
-			for (size_t i = 0; i < stageMonsterList.size(); ++i)
-			{
-				Monster* mon = stageMonsterList[i];
-				if (mon->GetCharacterInfo().iCurrentHealth > 0)
-				{
-					allMonstersDead = false;
-					break;
-				}
-			}
-
-			if (allMonstersDead)
-			{
-				if (dungeonptr->IsMoreStageLeft())
-				{
-					Common::PrintSystemMsg("다음 스테이지로 진입합니다");
-					Common::PauseAndClearScreen();
-					stage = dungeonptr->GetCurrentStage();
-					stage->EnterStage();
-					stageMonsterList = stage->GetMonsters();
-					continue;
-				}
-				else
-				{
-					Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다.\n마을로 돌아갑니다..");
-					Common::PauseAndClearScreen();
-					SetGameState(EGameState::VILLAGE);
-					return;
-				}
-			}
-
-
-			Common::PrintSystemMsg("정말 이 스테이지를 도전하시겠습니까?\n\n1. 멈출 수 없다. 앞으로 나아가자.\n\n2. 목숨은 소중하니까, 도망간다(마을로 복귀)");
-			char stageChoice = Common::GetCharInput();
-
-			Common::PauseAndClearScreen();
-
-			if (stageChoice == '2') 
-			{
-				Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
-				Common::PauseAndClearScreen();
-				SetGameState(EGameState::VILLAGE);
-				return;
-			}
-
-			// Battle with monster
-			BattleInDungeonStage(stageMonsterList, stage);
-
-			// exception_RUN/DEAD_quit the loop
-			if (GetGameState() == EGameState::VILLAGE || GetGameState() == EGameState::GAME_OVER)
-				return;
-		}
-
-	}
-}
-
-void GameManager::RenderDungeonRunChoice()
-{
-	Common::PrintSystemMsg("무모한 도전이 반드시 정답은 아닙니다.\n던전 탐험을 중단하고 마을로 돌아갑니다.");
-	Common::PauseAndClearScreen();
-}
-
-void GameManager::UpdateDungeonChoice(char dungeonChoice)
-{
-	switch (dungeonChoice)
-	{
-	case '1': // Choose Battle
-	{
-		UpdateDungeonBattleChoice();
-		break;
-	}
-	case '2': // Choose RUN
-	{
-		RenderDungeonRunChoice();
-		SetGameState(EGameState::VILLAGE);
-		break;
-	}
-	default:
-	{
-		RenderDungwonWrongChoice();
-		SetGameState(EGameState::DUNGEON);
-		break;
-	}
-	}
-}
-
-void GameManager::RenderDungwonWrongChoice()
-{
-	Common::PrintErrorMsg("잘못된 입력입니다.");
-	Common::PrintErrorMsg("던전에 재입장합니다..");
-	Common::PauseAndClearScreen();
-}
-
-void GameManager::BattleInDungeonStage(const vector<Monster*>& monsters, DungeonStage* stage)
-{
-	// 랜덤 시드 설정 (프로그램 전체에서 한 번만 호출하는 것이 더 좋음)
-	srand(static_cast<unsigned int>(time(NULL)));
-
-	while (true)
-	{
-		// 살아있는 몬스터만 추출
-		vector<Monster*> aliveMonsters;
-		for (size_t i = 0; i < monsters.size(); ++i)
-		{
-			Monster* mon = monsters[i];
-			if (mon->GetCharacterInfo().iCurrentHealth > 0)
-				aliveMonsters.push_back(mon);
-		}
-
-		// 모두 죽었으면 종료
-		if (aliveMonsters.empty())
-			break;
-
-		// 랜덤 인덱스 선택
-		size_t randomIndex = rand() % aliveMonsters.size();
-		Monster* randomMonster = aliveMonsters[randomIndex];
-
-		// 전투 시작
-		EBattleResult result = dungeonptr->EncounterMonster(playerPtr, randomMonster);
-
-		switch (result)
-		{
-		case EBattleResult::PLAYER_DEAD:
-			RenderGameOverMsg();
-			SetGameState(EGameState::GAME_OVER);
-			return;
-		case EBattleResult::PLAYER_RUN:
-			SetGameState(EGameState::VILLAGE);
-			return;
-		case EBattleResult::PLAYER_WIN:
-			stage->OnMonsterDefeat(randomMonster);
-			// 경험치, 골드 등 보상 지급 로직 추가 가능
-			break;
-		default:
-			Common::PrintErrorMsg("전투 중 알 수 없는 오류가 발생했습니다.");
-			return;
-		}
-	}
-
-}
-
-void GameManager::RenderGameOverMsg()
-{
-	Common::PrintSystemMsg("게임이 종료되었습니다.\n다시 시작하려면 게임을 재실행해주세요.");
-	Common::PauseAndClearScreen();
-}
+//void GameManager::InitializeDungeon()
+//{
+//	if (dungeonptr == nullptr)
+//	{
+//		CreateDungeonStages();
+//	}
+//	else
+//	{
+//		Common::PrintSystemMsg("당신을 위한 던전 스테이지가 준비되어 있습니다.");
+//	}
+//
+//	if (playerPtr == nullptr)
+//	{
+//		Common::PrintErrorMsg("플레이어 정보가 없습니다. 던전 탐험을 시작할 수 없습니다.");
+//		return;
+//	}
+//}
+//
+//void GameManager::CreateDungeonStages()
+//{
+//	//Generate Monster Lists(info)
+//	//FCharacterInfo(stats, maxHp, hp, lvl, name), dropExperience(exp), dropGold(gold)
+//	vector<FMonsterInfo> stage1 = {
+//		FMonsterInfo(CharacterStatus::NewStatus(6, 3, 6), 18, 18, 2, "허약한 고블린", 20, 10),
+//		FMonsterInfo(CharacterStatus::NewStatus(5, 4, 5), 20, 20, 2, "허약한 슬라임", 22, 12),
+//		FMonsterInfo(CharacterStatus::NewStatus(7, 4, 7), 22, 22, 3, "허약한 스켈레톤", 28, 15),
+//	};
+//	vector<FMonsterInfo> stage2 = {
+//		FMonsterInfo(CharacterStatus::NewStatus(12, 7, 10), 35, 35, 5, "허약한 오크", 40, 25),
+//		FMonsterInfo(CharacterStatus::NewStatus(15, 8, 12), 40, 40, 6, "허약한 드래곤", 60, 40),
+//		FMonsterInfo(CharacterStatus::NewStatus(16, 9, 11), 38, 38, 5, "강력한 고블린", 45, 30),
+//		FMonsterInfo(CharacterStatus::NewStatus(15, 8, 10), 39, 39, 5, "강력한 슬라임", 45, 30),
+//	};
+//	vector<FMonsterInfo> stage3 = {
+//		FMonsterInfo(CharacterStatus::NewStatus(22, 13, 15), 60, 60, 8, "강력한 스켈레톤", 80, 50),
+//		FMonsterInfo(CharacterStatus::NewStatus(25, 15, 16), 70, 70, 9, "강력한 오크", 90, 60),
+//		FMonsterInfo(CharacterStatus::NewStatus(28, 16, 18), 80, 80, 10, "완전 강력한 스켈레톤", 120, 80),
+//		FMonsterInfo(CharacterStatus::NewStatus(32, 18, 20), 90, 90, 12, "완전 강력한 고블린", 150, 100),
+//		FMonsterInfo(CharacterStatus::NewStatus(36, 20, 22), 100, 100, 13, "완전 강력한 슬라임", 180, 120),
+//		FMonsterInfo(CharacterStatus::NewStatus(40, 22, 25), 110, 110, 15, "완전 강력한 드래곤", 250, 180),
+//	};
+//
+//	vector<vector<FMonsterInfo>> dungeonStages = { stage1, stage2, stage3 };
+//
+//
+//	//Generate new Dungeon
+//	if (dungeonptr)
+//	{
+//		delete dungeonptr;
+//		dungeonptr = nullptr;
+//	}
+//	dungeonptr = new Dungeon(dungeonStages);
+//
+//}
+//
+//void GameManager::RenderDungeonMenu()
+//{
+//	if (dungeonptr != nullptr)
+//	{
+//		dungeonptr->Enter(playerPtr);
+//	}
+//}
+//
+//void GameManager::UpdateDungeonBattleChoice()
+//{
+//	while (true)
+//	{
+//		DungeonStage* stage = dungeonptr->GetCurrentStage();
+//		vector<Monster*> stageMonsterList = stage->GetMonsters();
+//
+//		if (stage == nullptr)
+//		{
+//			Common::PrintSystemMsg("유효한 던전 스테이지가 존재하지 않습니다.\n마을로 돌아갑니다.");
+//			SetGameState(EGameState::VILLAGE);
+//			return;
+//		}
+//
+//		if (stageMonsterList.empty())
+//		{
+//			stage->EnterStage();
+//			stageMonsterList = stage->GetMonsters();
+//		}
+//
+//		while (true)
+//		{
+//			// Check the Monsters on stage all dead
+//			bool allMonstersDead = true;
+//			for (size_t i = 0; i < stageMonsterList.size(); ++i)
+//			{
+//				Monster* mon = stageMonsterList[i];
+//				if (mon->GetCharacterInfo().iCurrentHealth > 0)
+//				{
+//					allMonstersDead = false;
+//					break;
+//				}
+//			}
+//
+//			if (allMonstersDead)
+//			{
+//				if (dungeonptr->IsMoreStageLeft())
+//				{
+//					Common::PrintSystemMsg("다음 스테이지로 진입합니다");
+//					Common::PauseAndClearScreen();
+//					stage = dungeonptr->GetCurrentStage();
+//					stage->EnterStage();
+//					stageMonsterList = stage->GetMonsters();
+//					continue;
+//				}
+//				else
+//				{
+//					Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다.\n마을로 돌아갑니다..");
+//					Common::PauseAndClearScreen();
+//					SetGameState(EGameState::VILLAGE);
+//					return;
+//				}
+//			}
+//
+//
+//			Common::PrintSystemMsg("정말 이 스테이지를 도전하시겠습니까?\n\n1. 멈출 수 없다. 앞으로 나아가자.\n\n2. 목숨은 소중하니까, 도망간다(마을로 복귀)");
+//			char stageChoice = Common::GetCharInput();
+//
+//			Common::PauseAndClearScreen();
+//
+//			if (stageChoice == '2') 
+//			{
+//				Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
+//				Common::PauseAndClearScreen();
+//				SetGameState(EGameState::VILLAGE);
+//				return;
+//			}
+//
+//			// Battle with monster
+//			BattleInDungeonStage(stageMonsterList, stage);
+//
+//			// exception_RUN/DEAD_quit the loop
+//			if (GetGameState() == EGameState::VILLAGE || GetGameState() == EGameState::GAME_OVER)
+//				return;
+//		}
+//
+//	}
+//}
+//
+//void GameManager::RenderDungeonRunChoice()
+//{
+//	Common::PrintSystemMsg("무모한 도전이 반드시 정답은 아닙니다.\n던전 탐험을 중단하고 마을로 돌아갑니다.");
+//	Common::PauseAndClearScreen();
+//}
+//
+//void GameManager::UpdateDungeonChoice(char dungeonChoice)
+//{
+//	switch (dungeonChoice)
+//	{
+//	case '1': // Choose Battle
+//	{
+//		UpdateDungeonBattleChoice();
+//		break;
+//	}
+//	case '2': // Choose RUN
+//	{
+//		RenderDungeonRunChoice();
+//		SetGameState(EGameState::VILLAGE);
+//		break;
+//	}
+//	default:
+//	{
+//		RenderDungwonWrongChoice();
+//		SetGameState(EGameState::DUNGEON);
+//		break;
+//	}
+//	}
+//}
+//
+//void GameManager::RenderDungwonWrongChoice()
+//{
+//	Common::PrintErrorMsg("잘못된 입력입니다.");
+//	Common::PrintErrorMsg("던전에 재입장합니다..");
+//	Common::PauseAndClearScreen();
+//}
+//
+//void GameManager::BattleInDungeonStage(const vector<Monster*>& monsters, DungeonStage* stage)
+//{
+//	// 랜덤 시드 설정 (프로그램 전체에서 한 번만 호출하는 것이 더 좋음)
+//	srand(static_cast<unsigned int>(time(NULL)));
+//
+//	while (true)
+//	{
+//		// 살아있는 몬스터만 추출
+//		vector<Monster*> aliveMonsters;
+//		for (size_t i = 0; i < monsters.size(); ++i)
+//		{
+//			Monster* mon = monsters[i];
+//			if (mon->GetCharacterInfo().iCurrentHealth > 0)
+//				aliveMonsters.push_back(mon);
+//		}
+//
+//		// 모두 죽었으면 종료
+//		if (aliveMonsters.empty())
+//			break;
+//
+//		// 랜덤 인덱스 선택
+//		size_t randomIndex = rand() % aliveMonsters.size();
+//		Monster* randomMonster = aliveMonsters[randomIndex];
+//
+//		// 전투 시작
+//		EBattleResult result = dungeonptr->EncounterMonster(playerPtr, randomMonster);
+//
+//		switch (result)
+//		{
+//		case EBattleResult::PLAYER_DEAD:
+//			RenderGameOverMsg();
+//			SetGameState(EGameState::GAME_OVER);
+//			return;
+//		case EBattleResult::PLAYER_RUN:
+//			SetGameState(EGameState::VILLAGE);
+//			return;
+//		case EBattleResult::PLAYER_WIN:
+//			stage->OnMonsterDefeat(randomMonster);
+//			// 경험치, 골드 등 보상 지급 로직 추가 가능
+//			break;
+//		default:
+//			Common::PrintErrorMsg("전투 중 알 수 없는 오류가 발생했습니다.");
+//			return;
+//		}
+//	}
+//
+//}
+//
+//void GameManager::RenderGameOverMsg()
+//{
+//	Common::PrintSystemMsg("게임이 종료되었습니다.\n다시 시작하려면 게임을 재실행해주세요.");
+//	Common::PauseAndClearScreen();
+//}
 
 #pragma endregion
