@@ -78,6 +78,12 @@
     <ClCompile Include="TextlogRPG\Core\EquipSlot.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="TextlogRPG\Character\Component\PlayerCombatComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TextlogRPG\Character\Component\PlayerInventoryComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h">
@@ -168,6 +174,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextlogRPG\Character\Component\IComponent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\Character\Component\PlayerCombatComponent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\Character\Component\PlayerInventoryComponent.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
