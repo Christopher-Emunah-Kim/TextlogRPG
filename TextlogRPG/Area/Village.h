@@ -12,7 +12,7 @@ class Village : public Area
 {
 public:
 	Village();
-	~Village();
+	virtual ~Village();
 
 private:
     vector<NonPlayerCharacter*> vecNpcCharacters;

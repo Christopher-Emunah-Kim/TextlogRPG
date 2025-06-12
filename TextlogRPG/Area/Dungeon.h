@@ -10,8 +10,8 @@ enum class EBattleResult : uint8
 	_ERROR
 };
 
-
 class Monster;
+enum class EGameState;
 
 class Dungeon : public Area 
 {
@@ -26,23 +26,30 @@ private:
 	int16 currentStageIndex;
 
 public:
-	
-	DungeonStage* GetCurrentStage() const;
-
-	bool IsMoreStageLeft();
-
     virtual string GetAreaName() const override { return "Dungeon"; }
-
 	virtual void Enter(Player* player) override;
+	
+public:
+	void Initialize(Player* player);
+	EGameState Process(Player* player);
+	void Clear();
 
-
-    void AddMonster(Monster* monster);
-
-    void RemoveMonster(Monster* monster);
-
-	vector<Monster*>& GetMonsterList();
-
+public:
     EBattleResult EncounterMonster(Player* player, Monster* monster);
 
-	
+	DungeonStage* GetCurrentStage() const;
+	bool IsMoreStageLeft();
+
+    void AddMonster(Monster* monster);
+    void RemoveMonster(Monster* monster);
+	vector<Monster*>& GetMonsterList();
+
+private:
+	void CreateDungeonStages();
+	EGameState HandleChoice(char dungeonChoice, Player* player);
+	EGameState ProcessBattleChoice(Player* player);
+	void RenderRunChoice();
+	void RenderWrongChoice();
+	EGameState BattleInStage(const vector<Monster*>& monsters, DungeonStage* stage, Player* player);
+	void RenderGameOverMsg();
 };
