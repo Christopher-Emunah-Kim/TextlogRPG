@@ -53,8 +53,6 @@ int32 Player::UpdateDamage(BaseCharacter& attacker)
 		fPlayerInfo.iCurrentHealth = 0; // maintain game-over state
 	}
 
-	//m_lastAttacker = &attacker; // Store the last info for reference
-	//m_lastCalculatedDamage = iCalculatedDamage;
 	return iCalculatedDamage;
 }
 
@@ -85,6 +83,8 @@ void Player::DisplayDamageMessage(BaseCharacter& attacker, int32 damage)
 	string strDamageText = attacker.GetCharacterInfo().strCharacterName + "에게 " + to_string(damage) + "의 데미지를 입었습니다.\n당신의 현재 체력 : " + to_string(fPlayerInfo.iCurrentHealth);
 	Common::PrintSystemMsg(strDamageText);
 }
+
+
 
 
 
