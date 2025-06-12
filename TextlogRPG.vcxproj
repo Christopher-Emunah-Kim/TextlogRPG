@@ -124,7 +124,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TextlogRPG\Area\Area.cpp" />
     <ClCompile Include="TextlogRPG\Area\Dungeon.cpp" />
     <ClCompile Include="TextlogRPG\Area\DungeonStage.cpp" />
     <ClCompile Include="TextlogRPG\Area\Title.cpp" />

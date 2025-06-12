@@ -105,9 +105,6 @@
     <ClCompile Include="TextlogRPG\Character\Component\MonsterDropComponent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TextlogRPG\Area\Area.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TextlogRPG\LevelData\LevelData.h">
