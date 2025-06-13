@@ -10,7 +10,17 @@ enum class EBattleResult : uint8
 	_ERROR
 };
 
+enum class EDungeonState : uint8
+{
+	ENTRANCE,
+	BATTLE_PROMPT,
+	IN_BATTLE,
+	STAGE_CLEARED,
+	LEAVING
+};
+
 class Monster;
+class Player;
 enum class EGameState;
 
 class Dungeon : public Area 
@@ -25,9 +35,23 @@ private:
 	vector<DungeonStage*> vecDungeonStages;
 	int16 currentStageIndex;
 
+	EDungeonState m_dungeonState = EDungeonState::ENTRANCE;
+	Player* m_player = nullptr;
+	Monster* m_currentMonster = nullptr;
+	DungeonStage* m_currentStage = nullptr;
+	bool m_bIsBattleInProgress = false;
+
+
 public:
     virtual string GetAreaName() const override { return "Dungeon"; }
 	virtual void Enter(Player* player) override;
+
+protected:
+	virtual void ProcessInput(Player* player) override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render() override;
+	virtual bool ShouldExit() override;
+	virtual EGameState GetNextState() override;
 	
 public:
 	void Initialize(Player* player);
@@ -52,4 +76,7 @@ private:
 	void RenderWrongChoice();
 	EGameState BattleInStage(const vector<Monster*>& monsters, DungeonStage* stage, Player* player);
 	void RenderGameOverMsg();
+	void InitiateBattle();
+	void ProcessBattleInput();
+
 };

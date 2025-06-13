@@ -23,10 +23,16 @@ Dungeon::Dungeon(const vector<vector<FMonsterInfo>>& stageMonsterInfo)
 
 Dungeon::~Dungeon()
 {
+	Clear();
+}
+
+
+void Dungeon::Clear()
+{
 	for (vector<DungeonStage*>::iterator it = vecDungeonStages.begin(); it != vecDungeonStages.end(); ++it)
 	{
 		DungeonStage* stage = *it;
-		if (stage) 
+		if (stage)
 		{
 			delete stage;
 		}
@@ -34,10 +40,10 @@ Dungeon::~Dungeon()
 	vecDungeonStages.clear();
 
 	// 몬스터 정리
-	for (vector<Monster*>::iterator it = vecDungeonMonsters.begin(); it != vecDungeonMonsters.end(); ++it )
+	for (vector<Monster*>::iterator it = vecDungeonMonsters.begin(); it != vecDungeonMonsters.end(); ++it)
 	{
 		Monster* monster = *it;
-		if (monster) 
+		if (monster)
 		{
 			delete monster;
 		}
@@ -46,14 +52,6 @@ Dungeon::~Dungeon()
 }
 
 
-DungeonStage* Dungeon::GetCurrentStage() const
-{
-	if (currentStageIndex < vecDungeonStages.size())
-	{
-		return vecDungeonStages[currentStageIndex];
-	}
-	return nullptr;
-}
 
 bool Dungeon::IsMoreStageLeft()
 {
@@ -67,21 +65,250 @@ bool Dungeon::IsMoreStageLeft()
 
 void Dungeon::Enter(Player* player)
 {
+	m_player = player;
+	m_dungeonState = EDungeonState::ENTRANCE;
+	m_bIsBattleInProgress = false;
+	m_currentMonster = nullptr;
+
+
 	if (player == nullptr)
 	{
 		Common::PrintErrorMsg("플레이어 정보가 없습니다. EnterDungeon을 중단합니다.");
 		return;
 	}
-
-	Common::PrintSystemMsg("던전 탐험을 시작합니다.");
-	Common::PrintSystemMsg("기억하십시오. 심연을 들여다볼수록,\n 당신 또한 심연에 물들 것입니다.");
-	Common::PauseAndClearScreen(2500);
-
-	Common::ShowOption("[System] 던전의 입구에 도착했습니다. 도전하시겠습니까?\n\n1. 인생은 모험이지!\n2. 아니 지금은 아닌것 같아.(마을로 돌아간다)");
+	
+	Render();
 }
+
+void Dungeon::ProcessInput(Player* player)
+{
+	switch (m_dungeonState)
+	{
+	case EDungeonState::ENTRANCE:
+	{
+		m_input = Common::GetCharInput();
+	}
+		break;
+	case EDungeonState::BATTLE_PROMPT:
+	{
+		m_input = Common::GetCharInput();
+	}
+		break;
+
+	case EDungeonState::IN_BATTLE:
+	{
+		if (!m_bIsBattleInProgress)
+		{
+			m_input = Common::GetCharInput();
+		}
+	}
+		break;
+
+	default:
+	{
+		//다른 상태들은 입력처리 없음.
+	}
+		break;
+	}
+}
+
+void Dungeon::Update(float deltaTime)
+{
+	m_accumulatedTime += deltaTime;
+
+	// 현재 상태에 따른 업데이트 로직
+	switch (m_dungeonState)
+	{
+	case EDungeonState::ENTRANCE:
+	{
+		if (m_input != 0)
+		{
+			switch (m_input)
+			{
+			case '1': // 던전 진입
+				m_dungeonState = EDungeonState::BATTLE_PROMPT;
+				Common::PauseAndClearScreen();
+				break;
+
+			case '2': // 마을로 돌아가기
+				RenderRunChoice();
+				m_nextState = EGameState::VILLAGE;
+				m_isRunning = false;
+				break;
+
+			default:
+				RenderWrongChoice();
+				break;
+			}
+			m_input = 0;
+		}
+	}
+		break;
+
+	case EDungeonState::BATTLE_PROMPT:
+	{
+		// 스테이지 초기화 및 몬스터 확인
+		if (m_currentStage == nullptr)
+		{
+			m_currentStage = GetCurrentStage();
+			if (m_currentStage == nullptr)
+			{
+				Common::PrintSystemMsg("유효한 던전 스테이지가 존재하지 않습니다.\n마을로 돌아갑니다.");
+				m_nextState = EGameState::VILLAGE;
+				m_isRunning = false;
+				return;
+			}
+		}
+
+		Common::PauseAndClearScreen();
+
+		// 몬스터 목록이 비어 있으면 스테이지 입장
+		if (m_currentStage->GetMonsters().empty())
+		{
+			m_currentStage->EnterStage();
+		}
+
+		// 입력에 따른 처리
+		if (m_input != 0)
+		{
+			switch (m_input)
+			{
+			case '1': // 전투 시작
+				m_dungeonState = EDungeonState::IN_BATTLE;
+				InitiateBattle();
+				break;
+
+			case '2': // 도망
+				Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
+				Common::PauseAndClearScreen();
+				m_nextState = EGameState::VILLAGE;
+				m_isRunning = false;
+				break;
+
+			default:
+				RenderWrongChoice();
+				break;
+			}
+			m_input = 0;
+		}
+	}
+		break;
+
+	case EDungeonState::IN_BATTLE:
+		// 전투 처리 로직
+		if (!m_bIsBattleInProgress)
+		{
+			if (m_input != 0)
+			{
+				ProcessBattleInput();
+				m_input = 0;
+			}
+
+			// 모든 몬스터가 죽었는지 확인
+			bool allMonstersDead = true;
+			vector<Monster*> stageMonsters = m_currentStage->GetMonsters();
+			for (auto& monster : stageMonsters)
+			{
+				if (monster->GetCharacterInfo().iCurrentHealth > 0)
+				{
+					allMonstersDead = false;
+					break;
+				}
+			}
+
+			if (allMonstersDead)
+			{
+				m_dungeonState = EDungeonState::STAGE_CLEARED;
+			}
+			else if (!m_bIsBattleInProgress)
+			{
+				InitiateBattle();
+			}
+		}
+		break;
+
+	case EDungeonState::STAGE_CLEARED:
+		// 스테이지 클리어 후 다음 스테이지로
+		if (IsMoreStageLeft())
+		{
+			Common::PrintSystemMsg("다음 스테이지로 진입합니다");
+			Common::PauseAndClearScreen();
+			m_currentStage = GetCurrentStage();
+			m_currentStage->EnterStage();
+			m_dungeonState = EDungeonState::BATTLE_PROMPT;
+		}
+		else
+		{
+			Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다.\n마을로 돌아갑니다..");
+			Common::PauseAndClearScreen();
+			m_nextState = EGameState::VILLAGE;
+			m_isRunning = false;
+		}
+		break;
+
+	case EDungeonState::LEAVING:
+		if (m_accumulatedTime > 1.0f)
+		{
+			m_nextState = EGameState::VILLAGE;
+			m_isRunning = false;
+		}
+		break;
+	}
+}
+
+void Dungeon::Render()
+{
+	// 상태에 따른 렌더링
+	switch (m_dungeonState)
+	{
+	case EDungeonState::ENTRANCE:
+	{
+		Common::PrintSystemMsg("던전 탐험을 시작합니다.");
+		Common::PrintSystemMsg("기억하십시오. 심연을 들여다볼수록,\n 당신 또한 심연에 물들 것입니다.");
+		Common::PauseAndClearScreen();
+
+		Common::ShowOption("[System] 던전의 입구에 도착했습니다. 도전하시겠습니까?\n\n1. 인생은 모험이지!\n2. 아니 지금은 아닌것 같아.(마을로 돌아간다)");
+	}
+		break;
+
+	case EDungeonState::BATTLE_PROMPT:
+	{
+		Common::PrintSystemMsg("정말 이 스테이지를 도전하시겠습니까?\n\n1. 멈출 수 없다. 앞으로 나아가자.\n\n2. 목숨은 소중하니까, 도망간다(마을로 복귀)");
+	}
+		break;
+
+	case EDungeonState::IN_BATTLE:
+		// 전투 UI는 EncounterMonster 내에서 처리..빼낼 수가 없다..
+		break;
+
+	case EDungeonState::STAGE_CLEARED:
+		// 스테이지 클리어 메시지는 Update 에서 처리
+		break;
+
+	case EDungeonState::LEAVING:
+		// 이미 처리되고있음.
+		break;
+	}
+
+
+	
+}
+
+bool Dungeon::ShouldExit()
+{
+	return !m_isRunning;
+}
+
+EGameState Dungeon::GetNextState()
+{
+	return m_nextState;
+}
+
 
 void Dungeon::Initialize(Player* player)
 {
+	m_player = player;
+
 	if (vecDungeonStages.empty())
 	{
 		CreateDungeonStages();
@@ -96,22 +323,36 @@ void Dungeon::Initialize(Player* player)
 		Common::PrintErrorMsg("플레이어 정보가 없습니다. 던전 탐험을 시작할 수 없습니다.");
 		return;
 	}
+
+
+	m_currentStage = GetCurrentStage();
+	if (m_currentStage)
+	{
+		m_currentStage->EnterStage();
+	}
+}
+
+DungeonStage* Dungeon::GetCurrentStage() const
+{
+	if (currentStageIndex < vecDungeonStages.size())
+	{
+		return vecDungeonStages[currentStageIndex];
+	}
+	return nullptr;
 }
 
 EGameState Dungeon::Process(Player* player)
 {
-	Enter(player);
+	/*Enter(player);
 
 	char dungeonChoice = Common::GetCharInput();
 	Common::PauseAndClearScreen();
 
-	return HandleChoice(dungeonChoice, player);
+	return HandleChoice(dungeonChoice, player);*/
+
+	return Run(player);
 }
 
-void Dungeon::Clear()
-{
-
-}
 
 void Dungeon::AddMonster(Monster* monster) 
 {
@@ -209,75 +450,8 @@ EGameState Dungeon::HandleChoice(char dungeonChoice, Player* player)
 
 EGameState Dungeon::ProcessBattleChoice(Player* player)
 {
-	while (true)
-	{
-		DungeonStage* stage = GetCurrentStage();
-		if (stage == nullptr)
-		{
-			Common::PrintSystemMsg("유효한 던전 스테이지가 존재하지 않습니다.\n마을로 돌아갑니다.");
-			return EGameState::VILLAGE;
-		}
+	return EGameState::DUNGEON;
 
-		vector<Monster*> stageMonsterList = stage->GetMonsters();
-		if (stageMonsterList.empty())
-		{
-			stage->EnterStage();
-			stageMonsterList = stage->GetMonsters();
-		}
-
-		while (true)
-		{
-			// 몬스터가 모두 죽었는지 확인
-			bool allMonstersDead = true;
-			for (size_t i = 0; i < stageMonsterList.size(); ++i)
-			{
-				Monster* mon = stageMonsterList[i];
-				if (mon->GetCharacterInfo().iCurrentHealth > 0)
-				{
-					allMonstersDead = false;
-					break;
-				}
-			}
-
-			if (allMonstersDead)
-			{
-				if (IsMoreStageLeft())
-				{
-					Common::PrintSystemMsg("다음 스테이지로 진입합니다");
-					Common::PauseAndClearScreen();
-					stage = GetCurrentStage();
-					stage->EnterStage();
-					stageMonsterList = stage->GetMonsters();
-					continue;
-				}
-				else
-				{
-					Common::PrintSystemMsg("모든 던전 스테이지를 클리어했습니다.\n마을로 돌아갑니다..");
-					Common::PauseAndClearScreen();
-					return EGameState::VILLAGE;
-				}
-			}
-
-			Common::PrintSystemMsg("정말 이 스테이지를 도전하시겠습니까?\n\n1. 멈출 수 없다. 앞으로 나아가자.\n\n2. 목숨은 소중하니까, 도망간다(마을로 복귀)");
-			char stageChoice = Common::GetCharInput();
-
-			Common::PauseAndClearScreen();
-
-			if (stageChoice == '2')
-			{
-				Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
-				Common::PauseAndClearScreen();
-				return EGameState::VILLAGE;
-			}
-
-			// 몬스터와 전투
-			EGameState battleResult = BattleInStage(stageMonsterList, stage, player);
-
-			// 전투 결과에 따라 처리
-			if (battleResult == EGameState::VILLAGE || battleResult == EGameState::GAME_OVER)
-				return battleResult;
-		}
-	}
 }
 
 void Dungeon::RenderRunChoice()
@@ -295,48 +469,6 @@ void Dungeon::RenderWrongChoice()
 
 EGameState Dungeon::BattleInStage(const vector<Monster*>& monsters, DungeonStage* stage, Player* player)
 {
-	// 랜덤 시드 설정
-	srand(static_cast<unsigned int>(time(NULL)));
-
-	while (true)
-	{
-		// 살아있는 몬스터만 필터링
-		vector<Monster*> aliveMonsters;
-		for (size_t i = 0; i < monsters.size(); ++i)
-		{
-			Monster* mon = monsters[i];
-			if (mon->GetCharacterInfo().iCurrentHealth > 0)
-				aliveMonsters.push_back(mon);
-		}
-
-		// 모든 몬스터가 죽었으면 종료
-		if (aliveMonsters.empty())
-			break;
-
-		// 랜덤 몬스터 선택
-		size_t randomIndex = rand() % aliveMonsters.size();
-		Monster* randomMonster = aliveMonsters[randomIndex];
-
-		// 전투 수행
-		EBattleResult result = EncounterMonster(player, randomMonster);
-
-		// 전투 결과 처리
-		switch (result)
-		{
-		case EBattleResult::PLAYER_DEAD:
-			RenderGameOverMsg();
-			return EGameState::GAME_OVER;
-		case EBattleResult::PLAYER_RUN:
-			return EGameState::VILLAGE;
-		case EBattleResult::PLAYER_WIN:
-			stage->OnMonsterDefeat(randomMonster);
-			break;
-
-		default:
-			Common::PrintErrorMsg("전투 중 알 수 없는 오류가 발생했습니다.");
-			return EGameState::VILLAGE;
-		}
-	}
 
 	return EGameState::DUNGEON; // 계속 던전 진행
 }
@@ -345,6 +477,132 @@ void Dungeon::RenderGameOverMsg()
 {
 	Common::PrintSystemMsg("게임이 종료되었습니다.\n다시 시작하려면 게임을 재실행해주세요.");
 	Common::PauseAndClearScreen();
+}
+
+void Dungeon::InitiateBattle()
+{
+	m_bIsBattleInProgress = true;
+
+	vector<Monster*> stageMonsters = m_currentStage->GetMonsters();
+	vector<Monster*> aliveMonsters;
+
+	// 살아있는 몬스터 필터링
+	for (size_t i = 0; i < stageMonsters.size(); ++i)
+	{
+		Monster* mon = stageMonsters[i];
+		if (mon->GetCharacterInfo().iCurrentHealth > 0)
+		{
+			aliveMonsters.push_back(mon);
+		}
+	}
+
+	if (aliveMonsters.empty())
+	{
+		m_dungeonState = EDungeonState::STAGE_CLEARED;
+		m_bIsBattleInProgress = false;
+		return;
+	}
+
+	// 랜덤 몬스터 선택
+	srand(static_cast<unsigned int>(time(NULL)));
+	size_t randomIndex = rand() % aliveMonsters.size();
+	m_currentMonster = aliveMonsters[randomIndex];
+
+	// 전투 시작
+	EBattleResult result = EncounterMonster(m_player, m_currentMonster);
+
+	// 전투 결과 처리
+	switch (result)
+	{
+	case EBattleResult::PLAYER_DEAD:
+	{
+		RenderGameOverMsg();
+		m_nextState = EGameState::GAME_OVER;
+		m_isRunning = false;
+	}
+		break;
+
+	case EBattleResult::PLAYER_RUN:
+	{
+		m_nextState = EGameState::VILLAGE;
+		m_isRunning = false;
+	}
+		break;
+
+	case EBattleResult::PLAYER_WIN:
+	{
+		m_currentStage->OnMonsterDefeat(m_currentMonster);
+
+		// 더 이상 몬스터가 없는지 확인
+		aliveMonsters.clear();
+		for (auto& mon : stageMonsters)
+		{
+			if (mon->GetCharacterInfo().iCurrentHealth > 0)
+			{
+				aliveMonsters.push_back(mon);
+			}
+		}
+
+		if (aliveMonsters.empty())
+		{
+			m_dungeonState = EDungeonState::STAGE_CLEARED;
+		}
+		else
+		{
+			// 다음 몬스터와의 전투 준비 메시지 표시
+			Common::PrintSystemMsg("다음 몬스터가 나타납니다! 준비하십시오.");
+			Common::PauseAndClearScreen(1000);
+
+			// 다음 전투 준비를 위한 UI 표시
+			Common::ShowOption("1. 다음 몬스터와 전투를 시작한다!!\n\n2. 내 상태가 어떤지 확인해보자\n\n3. 이대로는 위험하다. 도망가자..");
+		}
+	}
+		break;
+
+	default:
+	{
+		Common::PrintErrorMsg("전투 중 알 수 없는 오류가 발생했습니다.");
+		m_nextState = EGameState::VILLAGE;
+		m_isRunning = false;
+	}
+		break;
+	}
+
+	m_bIsBattleInProgress = false;
+}
+
+void Dungeon::ProcessBattleInput()
+{
+	switch (m_input)
+	{
+	case '1': // 공격
+		// 전투 로직은 EncounterMonster 내에서 처리
+		break;
+
+	case '2': // 상태 확인
+		m_player->RenderPlayerStatus();
+		break;
+
+	case '3': // 도망
+		if (rand() % 3 == 0)
+		{
+			Common::PrintSystemMsg("당신은 필사적으로 도망쳤지만, 몬스터가 뛰어올라 당신의 앞을 가로막습니다.\n몬스터가 당신을 공격합니다!");
+			Common::PauseAndClearScreen();
+		}
+		else
+		{
+			Common::PrintSystemMsg("몬스터가 당신을 쫓아왔지만, 당신은 무사히 던전 입구로 도망쳤습니다.");
+			Common::PauseAndClearScreen();
+			m_dungeonState = EDungeonState::LEAVING;
+		}
+		break;
+
+	default:
+	{
+		RenderWrongChoice();
+	}
+		break;
+	}
 }
 
 EBattleResult Dungeon::EncounterMonster(Player* player, Monster* monster)

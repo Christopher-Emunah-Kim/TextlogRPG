@@ -9,6 +9,8 @@ class InputManager
 private:
 	InputManager() = default;
 
+	bool m_hasInput = false;
+	char m_lastInput = 0;
 
 public:
 
@@ -18,5 +20,8 @@ public:
 
     string GetLineInput();
 
+	bool HasInput() const;
+	char GetNonBlockingCharInput();
+	void FlushInputBuffer();
     
 };

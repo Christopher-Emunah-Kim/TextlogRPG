@@ -33,7 +33,10 @@ constexpr __int16 DEFAULT_SLEEP_TIME = 1500;
 
 using namespace std;
 
-class Common {
+class Common 
+{
+
+
 public:
 	static string ToLower(const string& str) {
 		string lowerStr = str;

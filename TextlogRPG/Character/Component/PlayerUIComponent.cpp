@@ -24,9 +24,10 @@ void PlayerUIComponent::SetOwner(BaseCharacter* owner)
 
 void PlayerUIComponent::RenderPlayerStatus() const
 {
+	Common::PauseAndClearScreen(500);
     string statusString = BuildPlayerStatusString();
     Common::PrintSystemMsg(statusString);
-    Common::PauseAndClearScreen(3000);
+    Common::PauseAndClearScreen(2000);
 }
 
 string PlayerUIComponent::BuildPlayerStatusString() const
