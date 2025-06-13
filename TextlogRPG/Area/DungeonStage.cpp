@@ -42,7 +42,7 @@ vector<Monster*> DungeonStage::GetMonsters()
 	return vecStageMonsters;
 }
 
-bool DungeonStage::isCleared() const
+bool DungeonStage::IsCleared() const
 {
 	for (size_t i = 0; i < vecStageMonsters.size(); ++i)
 	{

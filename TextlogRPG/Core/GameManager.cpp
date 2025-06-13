@@ -23,45 +23,45 @@
 #include "../Util/Dialogue.h"
 
 GameManager::GameManager(EGameState initialState, Player* player, Dungeon* dungeon)
-	: gameState(initialState), playerPtr(player), dungeonptr(dungeon)
+	: m_gameState(initialState), m_playerPtr(player), m_dungeonptr(dungeon)
 {
 	//manage dynamic memory allocation for maps
-	gameAreaMap.insert(make_pair(EGameState::TITLE, new Title()));
-	gameAreaMap.insert(make_pair(EGameState::VILLAGE, new Village()));
-	gameAreaMap.insert(make_pair(EGameState::DUNGEON, new Dungeon()));
+	m_sceneAreaMap.insert(make_pair(EGameState::TITLE, new Title()));
+	m_sceneAreaMap.insert(make_pair(EGameState::VILLAGE, new Village()));
+	m_sceneAreaMap.insert(make_pair(EGameState::DUNGEON, new Dungeon()));
 	
 	//initialize items on game
 	ItemManager::GetInstance().InitializeItems();
 
-	if (playerPtr == nullptr)
+	if (m_playerPtr == nullptr)
 	{
-		playerPtr = Player::CreateCharacter();
+		m_playerPtr = Player::CreateCharacter();
 	}
 	else
 	{
-		playerPtr->SetName("DefaultPlayer");
+		m_playerPtr->SetName("DefaultPlayer");
 	}
 }
 
 GameManager::~GameManager()
 {
-	if (playerPtr) 
+	if (m_playerPtr) 
 	{
-		delete playerPtr;
-		playerPtr = nullptr; 
+		delete m_playerPtr;
+		m_playerPtr = nullptr; 
 	}
-	if (dungeonptr)
+	if (m_dungeonptr)
 	{
-		delete dungeonptr;
-		dungeonptr = nullptr;
+		delete m_dungeonptr;
+		m_dungeonptr = nullptr;
 	}
-	for (unordered_map<EGameState, Area*>::iterator i = gameAreaMap.begin(); i != gameAreaMap.end(); ++i)
+	for (unordered_map<EGameState, Area*>::iterator i = m_sceneAreaMap.begin(); i != m_sceneAreaMap.end(); ++i)
 	{
 		pair<EGameState, Area*> map = *i;
 		if (map.second)
 			delete map.second;
 	}
-	gameAreaMap.clear();
+	m_sceneAreaMap.clear();
 }
 
 
@@ -86,7 +86,7 @@ void GameManager::Run()
 		deltaTime = static_cast<float>(currentTime - lastFrameTime) / CLOCKS_PER_SEC;
 		lastFrameTime = currentTime;
 
-		switch (gameState)
+		switch (m_gameState)
 		{
 		case EGameState::TITLE:
 		{
@@ -111,9 +111,9 @@ void GameManager::Run()
 			break;
 		}
 
-		if (playerPtr)
+		if (m_playerPtr)
 		{
-			playerPtr->Update();
+			m_playerPtr->Update();
 		}
 
 		CurrentGameState = GetGameState();
@@ -191,20 +191,20 @@ void GameManager::RequestPlayerName()
 		break;
 	}
 	
-	playerPtr->SetName(inputName);
+	m_playerPtr->SetName(inputName);
 }
 #pragma endregion
 
 
 void GameManager::RunProcessTitle() 
 {
-	Title* pTitleArea = dynamic_cast<Title*>(gameAreaMap[EGameState::TITLE]);
+	Title* pTitleArea = dynamic_cast<Title*>(m_sceneAreaMap[EGameState::TITLE]);
 
 	if (pTitleArea)
 	{
-		pTitleArea->Initialize(playerPtr);
+		pTitleArea->Initialize(m_playerPtr);
 
-		EGameState nextState = pTitleArea->Run(playerPtr);
+		EGameState nextState = pTitleArea->Run(m_playerPtr);
 
 		SetGameState(nextState);
 	}
@@ -214,12 +214,12 @@ void GameManager::RunProcessTitle()
 
 void GameManager::RunProcessVillage()
 {
-	Village* pVilalgeArea = dynamic_cast<Village*>(gameAreaMap[EGameState::VILLAGE]);
+	Village* pVilalgeArea = dynamic_cast<Village*>(m_sceneAreaMap[EGameState::VILLAGE]);
 	if (pVilalgeArea)
 	{
-		pVilalgeArea->Initialize(playerPtr);
+		pVilalgeArea->Initialize(m_playerPtr);
 
-		EGameState nextState = pVilalgeArea->Run(playerPtr);
+		EGameState nextState = pVilalgeArea->Run(m_playerPtr);
 
 		SetGameState(nextState);
 	}
@@ -229,12 +229,12 @@ void GameManager::RunProcessVillage()
 
 void GameManager::RunProcessDungeon()
 {
-	Dungeon* pDungeonArea = dynamic_cast<Dungeon*>(gameAreaMap[EGameState::DUNGEON]);
+	Dungeon* pDungeonArea = dynamic_cast<Dungeon*>(m_sceneAreaMap[EGameState::DUNGEON]);
 	if (pDungeonArea)
 	{
-		pDungeonArea->Initialize(playerPtr);
+		pDungeonArea->Initialize(m_playerPtr);
 
-		EGameState nextState = pDungeonArea->Run(playerPtr);
+		EGameState nextState = pDungeonArea->Run(m_playerPtr);
 
 		Common::PauseAndClearScreen();
 
