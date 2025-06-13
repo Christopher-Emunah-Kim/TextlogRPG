@@ -27,8 +27,8 @@ public:
 private:
 	EGameState							m_gameState;
     Player*								m_playerPtr;
-	Dungeon*							m_dungeonptr;
 	unordered_map<EGameState, Area*>	m_sceneAreaMap;
+	//Dungeon*							m_dungeonptr;
 
 public:
     void				Run();

@@ -18,7 +18,16 @@ public:
     virtual void	SetOwner(BaseCharacter* owner) = 0;
 };
 
+
+
+
+
+
+
+
 #pragma region Derived Component Interfaces
+
+
 
 //Combat Component Interface
 class ICombatComponent : public IComponent
@@ -42,6 +51,11 @@ public:
 };
 
 
+
+
+
+
+
 //Inventory Component Interface
 class IInventoryComponent : public IComponent
 {
@@ -57,6 +71,12 @@ public:
 	virtual void				RenderItemAdded(class Item* item) = 0;
 	virtual void				RenderItemRemoved(class Item* item) = 0;
 };
+
+
+
+
+
+
 
 
 //Equipment Component Interface
@@ -78,6 +98,16 @@ public:
 };
 
 
+
+
+
+
+
+
+
+
+
+
 //Status Component Interface
 class IStatusComponent : public IComponent
 {
@@ -96,6 +126,13 @@ public:
 	virtual void	RenderLevelUpResult() = 0;
 	virtual void	RenderBonusStatusPrompt() = 0;
 };
+
+
+
+
+
+
+
 
 //Loot Component Interface
 class ILootComponent : public IComponent
@@ -116,6 +153,15 @@ public:
 	virtual void	RenderGoldChange(int32 earnGold) = 0;
 	virtual void	RenderLootResult(int32 experience, int32 gold, Item* item) = 0;
 };
+
+
+
+
+
+
+
+
+
 
 
 //UI Component Interface

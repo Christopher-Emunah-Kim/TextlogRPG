@@ -444,11 +444,11 @@ void Dungeon::CreateDungeonStages()
 }
 
 
-EGameState Dungeon::ProcessBattleChoice(Player* player)
-{
-	return EGameState::DUNGEON;
-
-}
+//EGameState Dungeon::ProcessBattleChoice(Player* player)
+//{
+//	return EGameState::DUNGEON;
+//
+//}
 
 void Dungeon::RenderRunChoice()
 {
@@ -463,11 +463,11 @@ void Dungeon::RenderWrongChoice()
 	Common::PauseAndClearScreen();
 }
 
-EGameState Dungeon::BattleInStage(const vector<Monster*>& monsters, DungeonStage* stage, Player* player)
-{
-
-	return EGameState::DUNGEON; // 계속 던전 진행
-}
+//EGameState Dungeon::BattleInStage(const vector<Monster*>& monsters, DungeonStage* stage, Player* player)
+//{
+//
+//	return EGameState::DUNGEON; // 계속 던전 진행
+//}
 
 void Dungeon::RenderGameOverMsg()
 {

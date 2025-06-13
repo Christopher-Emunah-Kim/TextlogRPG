@@ -21,8 +21,6 @@ int32 main()
 
 	GameManager gameManager(initialState, player, dungeon);
 	
-
-
 	gameManager.Run();
 
 	return 0;

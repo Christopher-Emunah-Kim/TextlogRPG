@@ -70,12 +70,12 @@ public:
 
 private:
 	void					CreateDungeonStages();
-	EGameState				ProcessBattleChoice(Player* player);
 	void					RenderRunChoice();
 	void					RenderWrongChoice();
-	EGameState				BattleInStage(const vector<Monster*>& monsters, DungeonStage* stage, Player* player);
 	void					RenderGameOverMsg();
 	void					InitiateBattle();
 	void					ProcessBattleInput();
+	//EGameState				ProcessBattleChoice(Player* player);
+	//EGameState				BattleInStage(const vector<Monster*>& monsters, DungeonStage* stage, Player* player);
 
 };
