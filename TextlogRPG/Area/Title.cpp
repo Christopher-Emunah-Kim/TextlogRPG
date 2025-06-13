@@ -65,12 +65,15 @@ void Title::Update(float deltaTime)
 		{
 			if (m_player != nullptr)
 			{
+				m_player->RenderPlayerStatus();
+				Common::PrintSystemMsg("메인 메뉴로 돌아가려면 아무 키나 누르세요.");
+				Common::GetLineInput();
+				Common::PauseAndClearScreen();
+				Render();
+				/*
 				m_shouldShowMenu = false;
 				m_shouldShowStatus = true;
-				Common::PauseAndClearScreen();
-				m_player->RenderPlayerStatus();
-
-				m_accumulatedTime = 0.0f;
+				m_accumulatedTime = 10.0f;*/
 			}
 			else
 			{

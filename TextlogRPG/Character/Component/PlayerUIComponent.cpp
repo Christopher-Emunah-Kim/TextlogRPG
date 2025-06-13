@@ -27,7 +27,6 @@ void PlayerUIComponent::RenderPlayerStatus() const
 	Common::PauseAndClearScreen(500);
     string statusString = BuildPlayerStatusString();
     Common::PrintSystemMsg(statusString);
-    Common::PauseAndClearScreen(2000);
 }
 
 string PlayerUIComponent::BuildPlayerStatusString() const
