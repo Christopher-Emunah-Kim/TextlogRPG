@@ -10,21 +10,21 @@ public:
     ~EquipSlot() = default;
 
 private:
-	EItemType m_SlotType;
-	Item* m_EquippedItem = nullptr;
+	EItemType	m_SlotType;
+	Item*		m_EquippedItem = nullptr;
 
 public:
 
     // equip/unequip
-    void Equip(Item* item);
-    void Unequip();
+    void				Equip(Item* item);
+    void				Unequip();
     
     // Check the equipped item
-    inline Item* GetEquippedItem() const { return m_EquippedItem; }
-    inline bool IsEquipped() const { return m_EquippedItem != nullptr; }
+    inline Item*		GetEquippedItem() const { return m_EquippedItem; }
+    inline bool			IsEquipped() const { return m_EquippedItem != nullptr; }
     
     // check the slot type
-    inline EItemType GetSlotType() const { return m_SlotType; }
+    inline EItemType	GetSlotType() const { return m_SlotType; }
 
 
 };

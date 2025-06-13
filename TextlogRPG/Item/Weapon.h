@@ -11,11 +11,11 @@ public:
 
 public:
 	//overrided functions
-	virtual Weapon* CloneItem() const override
+	virtual Weapon*		CloneItem() const override
 	{
 		return new Weapon(*this);
 	}
-	virtual void EquippedBy(Player* player) override;
+	virtual void		EquippedBy(Player* player) override;
 
 
 	

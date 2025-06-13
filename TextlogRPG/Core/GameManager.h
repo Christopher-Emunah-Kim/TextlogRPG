@@ -25,31 +25,31 @@ public:
 	~GameManager();
 
 private:
-	EGameState gameState;
-    Player* playerPtr;
-	Dungeon* dungeonptr;
-	unordered_map<EGameState, Area*> gameAreaMap;
+	EGameState							m_gameState;
+    Player*								m_playerPtr;
+	Dungeon*							m_dungeonptr;
+	unordered_map<EGameState, Area*>	m_sceneAreaMap;
 
 public:
-    void Run();
+    void				Run();
 	
 public:
-	inline void SetGameState(const EGameState& gs_in)	 { gameState = gs_in; }
-	inline EGameState GetGameState() const 	{ return gameState;	}
+	inline void			SetGameState(const EGameState& gs_in)	 { m_gameState = gs_in; }
+	inline EGameState	GetGameState() const 	{ return m_gameState;	}
 
 private:
 	//START GAME
-	void InitializeGame();
-	void RenderWelcomMsg();
-	void RequestPlayerName();
+	void				InitializeGame();
+	void				RenderWelcomMsg();
+	void				RequestPlayerName();
 
 	//TITLE
-	void RunProcessTitle();
+	void				RunProcessTitle();
 
 	//VILLAGE
-	void RunProcessVillage();
+	void				RunProcessVillage();
 
 	//DUNGEON
-	void RunProcessDungeon();
+	void				RunProcessDungeon();
 
 };

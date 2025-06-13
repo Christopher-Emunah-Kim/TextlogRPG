@@ -11,14 +11,14 @@ public:
 	}
 
 private:
-    unordered_map<string, int32> merchantSellingItemMap; //item, price
+    unordered_map<string, int32>	merchantSellingItemMap; //item, price
 
 public:
-    void AddItemForSale(const string& itemName, int32 price);
-    void SellItem(Player* player, const string& itemName);
-    void BuyItem(Player* player, const string& itemName);
+    void			AddItemForSale(const string& itemName, int32 price);
+    void			SellItem(Player* player, const string& itemName);
+    void			BuyItem(Player* player, const string& itemName);
 
-	list<Item*> GetSellableItems(const Player& player) const;
+	list<Item*>		GetSellableItems(const Player& player) const;
 
-    virtual void Interact(Player* player) override;
+    virtual void	Interact(Player* player) override;
 };

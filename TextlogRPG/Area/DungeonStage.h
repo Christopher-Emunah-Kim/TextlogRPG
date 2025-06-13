@@ -13,19 +13,17 @@ public:
 	~DungeonStage();
 
 private:
-	vector<FMonsterInfo> vecMonsterInfos;
-	vector<Monster*> vecStageMonsters;
-	MonsterPool* monsterPool;
+	vector<FMonsterInfo>	vecMonsterInfos;
+	vector<Monster*>		vecStageMonsters;
+	MonsterPool*			monsterPool;
 
 public:
 	
 	
-	void EnterStage();
-	void ExitStage();
-
-	vector<Monster*> GetMonsters();
-	bool isCleared() const;
-
-	void OnMonsterDefeat(Monster* monster);
+	void					EnterStage();
+	void					ExitStage();
+	vector<Monster*>		GetMonsters();
+	bool					IsCleared() const;
+	void					OnMonsterDefeat(Monster* monster);
 };
 

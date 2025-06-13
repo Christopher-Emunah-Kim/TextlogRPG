@@ -15,8 +15,8 @@ enum class ENpcType : uint8
 
 struct FNpcInfo
 {
-	ENpcType type = ENpcType::NONE;
-	string npcName = "Default NPC";
+	ENpcType	type = ENpcType::NONE;
+	string		npcName = "Default NPC";
 };
 
 
@@ -34,14 +34,14 @@ public:
 	virtual ~NonPlayerCharacter() = default;
 
 protected:
-	FNpcInfo npcInfo;
+	FNpcInfo	npcInfo;
 
 public:
 	
-    inline virtual string GetName() const { return npcInfo.npcName; }
-    inline virtual ENpcType GetType() const { return npcInfo.type; }
-    inline virtual void SetName(const string& name) { npcInfo.npcName = name; }
+    inline virtual string		GetName() const { return npcInfo.npcName; }
+    inline virtual ENpcType		GetType() const { return npcInfo.type; }
+    inline virtual void			SetName(const string& name) { npcInfo.npcName = name; }
 
     // Interaction Func Interface
-    virtual void Interact(Player* player) = 0;
+    virtual void				Interact(Player* player) = 0;
 };

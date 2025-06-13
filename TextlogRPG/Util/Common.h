@@ -38,7 +38,7 @@ class Common
 
 
 public:
-	static string ToLower(const string& str) {
+	/*static string ToLower(const string& str) {
 		string lowerStr = str;
 		transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), ::tolower);
 		return lowerStr;
@@ -47,7 +47,8 @@ public:
 		string upperStr = str;
 		transform(upperStr.begin(), upperStr.end(), upperStr.begin(), ::toupper);
 		return upperStr;
-	}
+	}*/
+
 	static void PrintErrorMsg(const string& errorMessage) {
 		cerr << "[Error] " << errorMessage << endl;
 	}
@@ -58,22 +59,23 @@ public:
 		cerr << "[Warning] " << warningMessage << endl;
 	}
 	static void PrintSystemMsg(const string& systemMessage) {
-		cout << "\n===========================================\n\n";
+		cout << "\n===========================================================\n\n";
 		cout << "[System] " << systemMessage;
-		cout << "\n\n===========================================\n" << endl;
+		cout << "\n\n===========================================================\n" << endl;
 	}
 	static void PrintLine() {
-		cout << "\n===========================================\n" <<endl;
+		cout << "\n===========================================================\n" <<endl;
 	}
-	static void PauseAndClearScreen(int32 milliseconds= DEFAULT_SLEEP_TIME) {
+	static void PauseAndClearScreen(int32 milliseconds = DEFAULT_SLEEP_TIME) 
+	{
 		Sleep(milliseconds);
 		system("cls");
 	}
 	static void ShowOption(const string& text)
 	{
-		cout << "\n===========================================\n\n";
+		cout << "\n===========================================================\n\n";
 		cout << text << "\n";
-		cout << "\n===========================================" << endl;
+		cout << "\n===========================================================" << endl;
 	}
 
 

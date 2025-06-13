@@ -15,25 +15,20 @@ public:
 	~EquipmentManager() = default;
 
 private:
-	//Weapon* pWeapon = nullptr;
-	//Armor* pArmor = nullptr;
-	//MiscItem* pMiscItem = nullptr;
-	unordered_map<EItemType, EquipSlot> m_EquipSlots;
+	unordered_map<EItemType, EquipSlot>		m_EquipSlots;
 
 
 public:
-	void Equip(Item* item);
+	void		Equip(Item* item);
 
-	void Unequip(EItemType type);
+	void		Unequip(EItemType type);
 
-	Weapon* GetWeapon() const;
+	Weapon*		GetWeapon() const;
 
-	Armor* GetArmor() const;
+	Armor*		GetArmor() const;
 
-	//MiscItem* GetMisc() const;
+	Item*		GetEquippedItem(EItemType slotType) const;
 
-	Item* GetEquippedItem(EItemType slotType) const;
-
-	bool HasEquippedItem(EItemType slotType) const;
+	bool		HasEquippedItem(EItemType slotType) const;
 
 };

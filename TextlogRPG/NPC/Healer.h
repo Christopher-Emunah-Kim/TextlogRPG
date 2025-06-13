@@ -11,14 +11,14 @@ public:
 	}
 
 private:
-    int32 healCost;
+    int32	healCost;
 
 public:
 	
-    int32 GetHealCost() const { return healCost; }
+    int32			GetHealCost() const { return healCost; }
 
-    void HealPlayer(Player* player, int32 cost);
+    void			HealPlayer(Player* player, int32 cost);
 
     // Interact with Player
-	virtual void Interact(Player* player) override;
+	virtual void	Interact(Player* player) override;
 };

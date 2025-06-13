@@ -12,17 +12,17 @@ public:
 	~MonsterPool();
 
 private:
-	unordered_map<string, vector<Monster*>> monsterPoolMap;
+	unordered_map<string, vector<Monster*>>		monsterPoolMap;
 
 public:
 	
 
-	void Initialize(const vector<FMonsterInfo>& monsterInfos, size_t countPerType);
+	void		Initialize(const vector<FMonsterInfo>& monsterInfos, size_t countPerType);
 
-	Monster* ActivateMonster(const string& name);
+	Monster*	ActivateMonster(const string& name);
 
-	void DeactivateMonster(Monster* monster);
+	void		DeactivateMonster(Monster* monster);
 
-	void ReviveMonster(Monster* monster);
+	void		ReviveMonster(Monster* monster);
 	
 };

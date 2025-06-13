@@ -26,19 +26,16 @@ private:
 	const int16 agility;  
 
 
-
 public:
 
-	static CharacterStatus NewStatus(int16 atk, int16 def, int16 agi);  
-
-	CharacterStatus AddStatus(const CharacterStatus& other) const;  
-
-	int32 CalculateDamage(const CharacterStatus& other) const;  
+	static CharacterStatus	NewStatus(int16 atk, int16 def, int16 agi);  
+	CharacterStatus			AddStatus(const CharacterStatus& other) const;  
+	int32					CalculateDamage(const CharacterStatus& other) const;  
 
 	//Get Status Info
-	int16 GetAttack() const { return attack; }
-	int16 GetDefense() const { return defense; }
-	int16 GetAgility() const { return agility; }
+	int16					GetAttack() const { return attack; }
+	int16					GetDefense() const { return defense; }
+	int16					GetAgility() const { return agility; }
 
 	//operator = overloading
 	CharacterStatus& operator=(const CharacterStatus& other)

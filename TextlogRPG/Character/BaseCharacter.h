@@ -22,8 +22,8 @@ public:
 public:
 	
 	//Pure virtual functions
-	virtual const FCharacterInfo& GetCharacterInfo() const = 0;
-	virtual void ApplyDamageFrom(BaseCharacter& attacker) = 0;
-	virtual void Attack(BaseCharacter* target) = 0;
+	virtual const FCharacterInfo&	GetCharacterInfo() const = 0;
+	virtual void					ApplyDamageFrom(BaseCharacter& attacker) = 0;
+	virtual void					Attack(BaseCharacter* target) = 0;
 
 };

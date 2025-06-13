@@ -14,12 +14,12 @@ constexpr __int16 DEFAULT_ITEM_AGILITY = 1;
 
 struct FItemInfo
 {
-	EItemType itemType = EItemType::NONE; 
-	int32 itemCost = DEFAULT_ITEM_COST;
-	int16 attack = DEFAULT_ITEM_ATTACK;
-	int16 defense = DEFAULT_ITEM_DEFENSE;
-	int16 agility = DEFAULT_ITEM_AGILITY;
-	string itemName = "UNKNOWN";
+	EItemType	itemType = EItemType::NONE; 
+	int32		itemCost = DEFAULT_ITEM_COST;
+	int16		attack = DEFAULT_ITEM_ATTACK;
+	int16		defense = DEFAULT_ITEM_DEFENSE;
+	int16		agility = DEFAULT_ITEM_AGILITY;
+	string		itemName = "UNKNOWN";
 
 };
 
@@ -68,7 +68,7 @@ public:
 	}
 
 	//Pure virtual functions
-	virtual Item* CloneItem() const = 0;
-	virtual void EquippedBy(Player* player) = 0;
+	virtual Item*	CloneItem() const = 0;
+	virtual void	EquippedBy(Player* player) = 0;
 
 };

@@ -9,19 +9,18 @@ class InputManager
 private:
 	InputManager() = default;
 
-	bool m_hasInput = false;
-	char m_lastInput = 0;
+private:
+	bool	m_hasInput = false;
+	char	m_lastInput = 0;
 
 public:
 
-    static InputManager& GetInstance();
+    static InputManager&	GetInstance();
 
-    char GetCharInput();
-
-    string GetLineInput();
-
-	bool HasInput() const;
-	char GetNonBlockingCharInput();
-	void FlushInputBuffer();
+    char	GetCharInput();
+    string	GetLineInput();
+	bool	HasInput() const;
+	char	GetNonBlockingCharInput();
+	void	FlushInputBuffer();
     
 };

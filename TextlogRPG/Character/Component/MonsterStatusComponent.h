@@ -12,34 +12,35 @@ public:
 
 
 private:
-	Monster* m_owner;
-	bool m_isDefeated;
+	Monster*	m_owner;
+	bool		m_isDefeated;
 
 
 public:
-    virtual void Initialize() override;
-    virtual void Update() override;
-    virtual void SetOwner(BaseCharacter* owner) override;
+    virtual void	Initialize() override;
+    virtual void	Update() override;
+    virtual void	SetOwner(BaseCharacter* owner) override;
 
 
 public:
-    void SetCurrentHealth(int32 health);
-    bool IsDefeated() const { return m_isDefeated; }
-    void RenderMonsterStatus() const;
-    void RenderDamageResult(int32 damage);
+    void			SetCurrentHealth(int32 health);
+    void			RenderMonsterStatus() const;
+    void			RenderDamageResult(int32 damage);
+
+    bool			IsDefeated() const { return m_isDefeated; }
 
 
     // Don't Use virtual functions
 #pragma region UNUSED FUNCS
-    virtual void ApplyHealing(int32 healAmount) override {}
-    virtual void CharacterLevelUp() override {}
-    virtual void ProcessBonusStatusSelection() override {}
-    virtual void ApplyStatusBonus(char, int16&, int16&, int16&) override {}
-    virtual void IncrementLevel() override {}
-    virtual void UpdateLevelDataPerLevel() override {}
-    virtual void UpdateFinalStatus() override {}
-    virtual void RenderLevelUpResult() override {}
-    virtual void RenderBonusStatusPrompt() override {}
+    virtual void	ApplyHealing(int32 healAmount) override {}
+    virtual void	CharacterLevelUp() override {}
+    virtual void	ProcessBonusStatusSelection() override {}
+    virtual void	ApplyStatusBonus(char, int16&, int16&, int16&) override {}
+    virtual void	IncrementLevel() override {}
+    virtual void	UpdateLevelDataPerLevel() override {}
+    virtual void	UpdateFinalStatus() override {}
+    virtual void	RenderLevelUpResult() override {}
+    virtual void	RenderBonusStatusPrompt() override {}
 #pragma endregion
 
 };

@@ -14,11 +14,11 @@ public:
 public:
 
 	//overrided function
-	virtual Armor* CloneItem() const override
+	virtual Armor*	CloneItem() const override
 	{
 		return new Armor(*this);
 	}
-	virtual void EquippedBy(Player* player) override;
+	virtual void	EquippedBy(Player* player) override;
 
 	
 };

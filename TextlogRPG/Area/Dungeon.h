@@ -31,51 +31,51 @@ public:
 	~Dungeon();
 
 private:
-    vector<Monster*> vecDungeonMonsters;
-	vector<DungeonStage*> vecDungeonStages;
-	int16 currentStageIndex;
+    vector<Monster*>		vecDungeonMonsters;
+	vector<DungeonStage*>	vecDungeonStages;
+	int16					currentStageIndex;
 
-	EDungeonState m_dungeonState = EDungeonState::ENTRANCE;
-	Player* m_player = nullptr;
-	Monster* m_currentMonster = nullptr;
-	DungeonStage* m_currentStage = nullptr;
-	bool m_bIsBattleInProgress = false;
+	EDungeonState			m_dungeonState = EDungeonState::ENTRANCE;
+	Player*					m_player = nullptr;
+	Monster*				m_currentMonster = nullptr;
+	DungeonStage*			m_currentStage = nullptr;
+	bool					m_bIsBattleInProgress = false;
 
 
 public:
-    virtual string GetAreaName() const override { return "Dungeon"; }
-	virtual void Enter(Player* player) override;
+    virtual string			GetAreaName() const override { return "Dungeon"; }
+	virtual void			Enter(Player* player) override;
 
 protected:
-	virtual void ProcessInput(Player* player) override;
-	virtual void Update(float deltaTime) override;
-	virtual void Render() override;
-	virtual bool ShouldExit() override;
-	virtual EGameState GetNextState() override;
+	virtual void			ProcessInput(Player* player) override;
+	virtual void			Update(float deltaTime) override;
+	virtual void			Render() override;
+	virtual bool			ShouldExit() override;
+	virtual EGameState		GetNextState() override;
 	
 public:
-	void Initialize(Player* player);
-	EGameState Process(Player* player);
-	void Clear();
+	void					Initialize(Player* player);
+	EGameState				Process(Player* player);
+	void					Clear();
 
 public:
-    EBattleResult EncounterMonster(Player* player, Monster* monster);
+    EBattleResult			EncounterMonster(Player* player, Monster* monster);
 
-	DungeonStage* GetCurrentStage() const;
-	bool IsMoreStageLeft();
+	DungeonStage*			GetCurrentStage() const;
+	bool					IsMoreStageLeft();
 
-    void AddMonster(Monster* monster);
-    void RemoveMonster(Monster* monster);
-	vector<Monster*>& GetMonsterList();
+    void					AddMonster(Monster* monster);
+    void					RemoveMonster(Monster* monster);
+	vector<Monster*>&		GetMonsterList();
 
 private:
-	void CreateDungeonStages();
-	EGameState ProcessBattleChoice(Player* player);
-	void RenderRunChoice();
-	void RenderWrongChoice();
-	EGameState BattleInStage(const vector<Monster*>& monsters, DungeonStage* stage, Player* player);
-	void RenderGameOverMsg();
-	void InitiateBattle();
-	void ProcessBattleInput();
+	void					CreateDungeonStages();
+	EGameState				ProcessBattleChoice(Player* player);
+	void					RenderRunChoice();
+	void					RenderWrongChoice();
+	EGameState				BattleInStage(const vector<Monster*>& monsters, DungeonStage* stage, Player* player);
+	void					RenderGameOverMsg();
+	void					InitiateBattle();
+	void					ProcessBattleInput();
 
 };
