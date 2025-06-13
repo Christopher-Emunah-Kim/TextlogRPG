@@ -426,27 +426,6 @@ void Dungeon::CreateDungeonStages()
 	}
 }
 
-//EGameState Dungeon::HandleChoice(char dungeonChoice, Player* player)
-//{
-//	switch (dungeonChoice)
-//	{
-//	case '1': 
-//	{
-//		return ProcessBattleChoice(player);
-//	}
-//	case '2':
-//	{
-//		RenderRunChoice();
-//		return EGameState::VILLAGE;
-//	}
-//
-//	default: 
-//	{
-//		RenderWrongChoice();
-//		return EGameState::DUNGEON;
-//	}
-//	}
-//}
 
 EGameState Dungeon::ProcessBattleChoice(Player* player)
 {
