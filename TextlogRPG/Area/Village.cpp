@@ -9,10 +9,11 @@
 #include "../Core/GameManager.h"
 
 Village::Village()
-	: healerNPC(nullptr), merchantNPC(nullptr)
+	: m_healerNPC(nullptr), m_merchantNPC(nullptr)
 {
 
 }
+
 
 Village::~Village()
 {
@@ -23,7 +24,109 @@ Village::~Village()
 
 void Village::Enter(Player* player)
 {
+	m_player = player;
+	m_villageState = EVillageState::MAIN_MENU;
+	m_isInteractingWithNPC = false;
+	m_currentNPC = nullptr;
+
 	RenderVillagePrompt();
+}
+
+
+void Village::ProcessInput(Player* player)
+{
+	if (m_villageState == EVillageState::MAIN_MENU && !m_isInteractingWithNPC)
+	{
+		m_input = Common::GetCharInput();
+	}
+}
+
+void Village::Update(float deltaTime)
+{
+	m_accumulatedTime += deltaTime;
+
+	if (m_input != 0 && m_villageState == EVillageState::MAIN_MENU)
+	{
+		switch (m_input)
+		{
+		case '1':
+		{
+			if (m_healerNPC)
+			{
+				m_isInteractingWithNPC = true;
+				m_currentNPC = m_healerNPC;
+				InteractWithNPC(m_player, m_healerNPC);
+				m_isInteractingWithNPC = false;
+			}
+		}
+			break;
+
+		case '2':
+		{
+			if (m_merchantNPC)
+			{
+				m_isInteractingWithNPC = true;
+				m_currentNPC = m_merchantNPC;
+				InteractWithNPC(m_player, m_merchantNPC);
+				m_isInteractingWithNPC = false;
+			}
+		}
+			break;
+
+		case '3':
+		{
+			Common::PrintSystemMsg("타이틀로 돌아갑니다.");
+			Common::PauseAndClearScreen();
+			m_nextState = EGameState::TITLE;
+			m_isRunning = false;
+			m_input = 0;
+			return;
+		}
+			break;
+
+		default:
+		{
+			Common::PrintErrorMsg("잘못된 입력입니다.");
+		}
+			break;
+		}
+
+		// 초기화
+		m_input = 0;
+	}
+
+	// clear after interaction
+	if (!m_isInteractingWithNPC && m_accumulatedTime > 0.5f)
+	{
+		if (m_villageState != EVillageState::MAIN_MENU)
+		{
+			m_villageState = EVillageState::MAIN_MENU;
+			Common::PauseAndClearScreen();
+			RenderVillagePrompt();
+		}
+		m_accumulatedTime = 0.0f;
+	}
+}
+
+void Village::Render()
+{
+	if (!m_isRunning)
+		return;
+
+	if (m_villageState == EVillageState::MAIN_MENU && !m_isInteractingWithNPC)
+	{
+		RenderVillagePrompt();
+	}
+}
+
+bool Village::ShouldExit()
+{
+	return !m_isRunning;
+}
+
+EGameState Village::GetNextState()
+{
+	return m_nextState;
 }
 
 void Village::RenderVillagePrompt()
@@ -35,62 +138,68 @@ void Village::RenderVillagePrompt()
 
 void Village::Initialize(Player* player)
 {
-	healerNPC = new Healer("성녀 마리아", DEFAULT_HEAL_COST);
-	merchantNPC = new Merchant("대장장이 빌");
-
-	AddNPC(healerNPC);
-	AddNPC(merchantNPC);
-
-	ItemManager& itemManager = ItemManager::GetInstance();
-	vector<string> items = itemManager.GetItemList();
-
-	for (size_t i = 0; i < items.size(); ++i)
+	if (m_healerNPC == nullptr)
 	{
-		const string& itemName = items[i];
-		Item* item = itemManager.GetItem(itemName);
-		if (item == nullptr)
-			continue;
+		m_healerNPC = new Healer("성녀 마리아", DEFAULT_HEAL_COST);
+		AddNPC(m_healerNPC);
+	}
 
-		EItemType itemType = item->GetItemInfo().itemType;
-		int32 itemPrice = item->GetItemInfo().itemCost;
+	if (m_merchantNPC == nullptr)
+	{
+		m_merchantNPC = new Merchant("대장장이 빌");
+		AddNPC(m_merchantNPC);
 
-		if (itemType == EItemType::WEAPON || itemType == EItemType::ARMOR || itemType == EItemType::MISC)
+		//Add Selling Items to Merchant
+		ItemManager& itemManager = ItemManager::GetInstance();
+		vector<string> items = itemManager.GetItemList();
+
+		for (size_t i = 0; i < items.size(); ++i)
 		{
-			merchantNPC->AddItemForSale(itemName, itemPrice);
+			const string& itemName = items[i];
+			Item* item = itemManager.GetItem(itemName);
+			if (item == nullptr)
+				continue;
+
+			EItemType itemType = item->GetItemInfo().itemType;
+			int32 itemPrice = item->GetItemInfo().itemCost;
+
+			if (itemType == EItemType::WEAPON || itemType == EItemType::ARMOR || itemType == EItemType::MISC)
+			{
+				m_merchantNPC->AddItemForSale(itemName, itemPrice);
+			}
 		}
 	}
 }
 
 EGameState Village::Process(Player* player)
 {
-	Enter(player);
+	/*Enter(player);
 
 	char villageChoice = Common::GetCharInput();
 
 	Common::PauseAndClearScreen();
 
-	return HandleChoice(villageChoice, player);
+	return HandleChoice(villageChoice, player);*/
+
+	return Run(player);
 }
 
 
 
 void Village::Clear()
 {
-	if (healerNPC != nullptr)
+	for (vector<NonPlayerCharacter*>::iterator it = vecNpcCharacters.begin(); it != vecNpcCharacters.end(); ++it)
 	{
-		RemoveNPC(healerNPC);
-		delete healerNPC;
-		healerNPC = nullptr;
+		NonPlayerCharacter* npc = *it;
+		if (npc)
+		{
+			delete npc;
+		}
 	}
-
-	if (merchantNPC != nullptr)
-	{
-		RemoveNPC(merchantNPC);
-		delete merchantNPC;
-		merchantNPC = nullptr;
-	}
-
 	vecNpcCharacters.clear();
+
+	m_healerNPC = nullptr;
+	m_merchantNPC = nullptr;
 }
 
 void Village::AddNPC(NonPlayerCharacter* npc) 
@@ -123,12 +232,12 @@ EGameState Village::HandleChoice(char villageChoice, Player* player)
 	{
 	case '1':
 	{
-		InteractWithNPC(player, healerNPC);
+		InteractWithNPC(player, m_healerNPC);
 		return EGameState::VILLAGE;
 	}break;
 	case '2':
 	{
-		InteractWithNPC(player, merchantNPC);
+		InteractWithNPC(player, m_merchantNPC);
 		return EGameState::VILLAGE;
 	}break;
 	case '3':
