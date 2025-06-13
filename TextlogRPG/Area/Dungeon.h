@@ -70,7 +70,7 @@ public:
 
 private:
 	void CreateDungeonStages();
-	EGameState HandleChoice(char dungeonChoice, Player* player);
+	//EGameState HandleChoice(char dungeonChoice, Player* player);
 	EGameState ProcessBattleChoice(Player* player);
 	void RenderRunChoice();
 	void RenderWrongChoice();

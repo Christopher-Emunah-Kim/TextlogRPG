@@ -106,6 +106,7 @@ void Title::Update(float deltaTime)
 		Common::PauseAndClearScreen(1000);
 		Render();
 	}
+
 }
 
 void Title::Render()
