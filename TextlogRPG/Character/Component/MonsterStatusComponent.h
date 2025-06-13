@@ -31,7 +31,7 @@ public:
 
     // Don't Use virtual functions
 #pragma region UNUSED FUNCS
-    virtual void Heal(int32 healAmount) override {}
+    virtual void ApplyHealing(int32 healAmount) override {}
     virtual void CharacterLevelUp() override {}
     virtual void ProcessBonusStatusSelection() override {}
     virtual void ApplyStatusBonus(char, int16&, int16&, int16&) override {}

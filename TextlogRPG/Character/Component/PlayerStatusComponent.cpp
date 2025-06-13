@@ -23,7 +23,7 @@ void PlayerStatusComponent::SetOwner(BaseCharacter* owner)
 	m_owner = dynamic_cast<Player*>(owner);
 }
 
-void PlayerStatusComponent::Heal(int32 healAmount)
+void PlayerStatusComponent::ApplyHealing(int32 healAmount)
 {
     if (healAmount <= 0)
         return;

@@ -8,6 +8,8 @@ class Merchant;
 class Item;
 enum class EGameState;
 
+constexpr __int32 DEFAULT_HEAL_COST = 15;
+
 class Village : public Area 
 {
 public:

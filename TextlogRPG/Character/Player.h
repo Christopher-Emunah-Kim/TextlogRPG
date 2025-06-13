@@ -38,12 +38,6 @@ public:
 private:
 	FPlayerInfo fPlayerInfo;
 
-	//CharacterStatus m_BaseStatus;
-	//CharacterStatus m_EquipmentStatus;
-
-	//InventoryManager m_inventoryManager;
-	//EquipmentManager m_EquipmentManager;
-
 	PlayerEquipmentComponent m_equipmentComp;
 	PlayerInventoryComponent m_inventoryComp;
 	PlayerCombatComponent	 m_combatComp;
@@ -59,13 +53,7 @@ public:
 
 
 public:
-	void Initialize(const FPlayerInfo& data);
-	void Update();
-
-	static Player* CreateCharacter();
-
-public:
-    inline const PlayerEquipmentComponent& GetEquipmentComponent() const { return m_equipmentComp; }
+	inline const PlayerEquipmentComponent& GetEquipmentComponent() const { return m_equipmentComp; }
 	inline const PlayerInventoryComponent& GetInvetoryComponent() const { return m_inventoryComp; }
 	inline const PlayerCombatComponent& GetCombatComponent() const { return m_combatComp; }
 	inline const PlayerLootComponent& GetLootComponent() const { return m_LootComp; }
@@ -75,6 +63,13 @@ public:
 
 	inline const EquipmentManager& GetEquipmentManager() const { return m_equipmentComp.GetEquipmentManager(); }
 
+private:
+	void Initialize(const FPlayerInfo& data);
+	
+public:
+	void Update();
+	static Player* CreateCharacter();
+
 
 public:
 	void SetName(const string& name);
@@ -82,7 +77,7 @@ public:
 
 public:
 	//Status Component Delegation
-	void Heal(int32 healAmount);
+	void ApplyHealing(int32 healAmount);
 	BaseCharacter& CharacterLevelUp(); 
 
 public:
@@ -98,6 +93,10 @@ public:
 	void LoseItem(Item* item);
 
 public:
+	//UI Component Delegation
+	void RenderPlayerStatus() const;
+
+public:
 	//Loot Component Delegation
 	void UseGold(int32 cost);
 	void EarnGold(int32 earnGold);
@@ -106,40 +105,6 @@ public:
 	void AddExperience(int32 experience);
 	void ProcessLevelUp();
 
-public:
-	//UI Component Delegation
-	void RenderPlayerStatus() const;
-
-	//void UpdateFinalStatus();
-	//void RenderLevelUpResult();
-	//void ProcessBonusStatusSelection();
-	//void ApplyStatusBonus(char statusChoice, int16& playerAtk, int16& playerDef, int16& playerAgi);
-	//void IncrementLevel();
-	//void UpdateLevelDataPerLevel();
-	//void RenderBonusStatusPrompt();
-	//void UpdateBonusStatus(char statusChoice);
-	//void RemoveFromInventory(Item* item);
-	//void UnequipItem(Item* item);
-	//void UpdateEquipmentStatus();
-	//void UpdateEquipItem(Item* previousItem, Item* newItem);
-	//void RenderEquipMessage(Item* newItem);
-	//void UpdateLoot(int32 gold, int32 experience);
-	//void RenderLootResult(int32 experience, int32 gold, Item* item);
-	//void UpdateGold(int32 earnGold);
-	//void RenderGoldChange(int32 earnGold);
-	//void RenderMiscItemAdded(Item* item);
-	/*string BuildPlayerStatusString() const;
-	string BuildInventoryString() const;
-	string BuildEquipInfoString() const;
-	string BuildStatsString() const;
-	string BuildBasicInfoString() const;*/
-	//void RenderDamageResult(BaseCharacter& attacker, int32 damage);
-	//void DisplayDeathMessage();
-	//void DisplayDamageMessage(BaseCharacter& attacker, int32 damage);
-	//int32 CalculateDamageFrom(const FCharacterInfo& fTargetCharacterInfo);
-	//int32 UpdateDamage(BaseCharacter& attacker);
-	//void UpdateAttack(BaseCharacter* target);
-	//void RenderAttackMessage(BaseCharacter* target);
 
 };
 

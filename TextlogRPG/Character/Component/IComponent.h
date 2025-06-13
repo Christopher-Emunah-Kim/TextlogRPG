@@ -85,7 +85,7 @@ class IStatusComponent : public IComponent
 {
 public:
 	// Update Functions
-	virtual void Heal(int32 healAmount) = 0;
+	virtual void ApplyHealing(int32 healAmount) = 0;
 	virtual void CharacterLevelUp() = 0;
 	virtual void ProcessBonusStatusSelection() = 0;
 	virtual void ApplyStatusBonus(char statusChoice, int16& playerAtk, int16& playerDef, int16& playerAgi) = 0;

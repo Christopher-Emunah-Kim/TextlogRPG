@@ -17,14 +17,7 @@ public:
 
 private:
 	FMonsterInfo fMonsterInfo;
-	/*int32 dropExperience;
-	int32 dropGold;*/
-	//vector<Item*> dropItems; // weapon, armor, misc items
-	//vector<string> dropItemNames;
-
-	//int32 lastCalculatedDamage;
-	//bool isDefeated;
-	//Item* lastDropItem;
+	
 
 private:
 	MonsterStatusComponent m_monsterStatusComp;
@@ -61,14 +54,5 @@ public:
 	
 
 
-	////Update
-	//void UpdateDamage(BaseCharacter& attacker);
-	//void UpdateAttack(BaseCharacter* target);
-	//bool ProcessItemDrop(Player* playerTarget);
-
-	//Render
-	//void RenderDamageResult();
-	//void RenderItemDropResult(Item* droppedItem, bool isSuccessful, Player* attacker);
-
-	//void RenderAttackMessage();
+	
 };

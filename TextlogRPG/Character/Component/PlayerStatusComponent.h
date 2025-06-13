@@ -22,7 +22,7 @@ public:
     
 
 public:
-    virtual void Heal(int32 healAmount) override;
+    virtual void ApplyHealing(int32 healAmount) override;
     virtual void CharacterLevelUp() override;
     virtual void ProcessBonusStatusSelection() override;
     virtual void ApplyStatusBonus(char statusChoice, int16& playerAtk, int16& playerDef, int16& playerAgi) override;

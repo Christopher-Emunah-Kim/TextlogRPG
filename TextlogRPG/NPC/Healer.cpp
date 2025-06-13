@@ -6,7 +6,7 @@ void Healer::HealPlayer(Player* player, int32 cost)
 	if (player->GetCharacterInfo().playerGold >= cost) 
 	{
 		int32 healAmount = player->GetCharacterInfo().iMaxHealth - player->GetCharacterInfo().iCurrentHealth;
-		player->Heal(healAmount);
+		player->ApplyHealing(healAmount);
 		player->UseGold(cost);
 
 		string strHealMsg = "[System] 힐러 " + npcInfo.npcName + "이(가) 치유를 시작합니다.\n" 
