@@ -89,17 +89,25 @@ void GameManager::Run()
 		switch (gameState)
 		{
 		case EGameState::TITLE:
+		{
 			RunProcessTitle();
+		}
 			break;
 		case EGameState::VILLAGE:
+		{
 			RunProcessVillage();
+		}
 			break;
 		case EGameState::DUNGEON:
+		{
 			RunProcessDungeon();
+		}
 			break;
 
 		default:
+		{
 			SetGameState(EGameState::GAME_OVER);
+		}
 			break;
 		}
 

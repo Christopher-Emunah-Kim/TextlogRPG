@@ -102,13 +102,20 @@ Item* PlayerEquipmentComponent::HandlePreviousEquipItem(Item* item)
     switch (item->GetItemInfo().itemType)
     {
     case EItemType::WEAPON:
+	{
         previousItem = m_equipmentManager.GetWeapon();
+	}
         break;
     case EItemType::ARMOR:
+	{
         previousItem = m_equipmentManager.GetArmor();
+	}
         break;
+
     default:
-        Common::PrintSystemMsg("기존 장비 정보가 없습니다. 새로운 장비를 장착합니다.");
+	{
+		Common::PrintSystemMsg("기존 장비 정보가 없습니다. 새로운 장비를 장착합니다.");
+	}
         break;
     }
 

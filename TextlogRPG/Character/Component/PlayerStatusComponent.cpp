@@ -65,14 +65,21 @@ void PlayerStatusComponent::ApplyStatusBonus(char statusChoice, int16& playerAtk
     switch (statusChoice)
     {
     case '1':
+	{
         playerAtk += LEVELUP_BONUS;
+	}
         break;
     case '2':
+	{
         playerDef += LEVELUP_BONUS;
+	}
         break;
     case '3':
+	{
         playerAgi += LEVELUP_BONUS;
+	}
         break;
+
     default:
         break;
     }

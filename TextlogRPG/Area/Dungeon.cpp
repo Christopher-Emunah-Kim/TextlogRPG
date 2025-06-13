@@ -174,19 +174,25 @@ void Dungeon::Update(float deltaTime)
 			switch (m_input)
 			{
 			case '1': // 전투 시작
+			{
 				m_dungeonState = EDungeonState::IN_BATTLE;
 				InitiateBattle();
+			}
 				break;
 
 			case '2': // 도망
+			{
 				Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
 				Common::PauseAndClearScreen();
 				m_nextState = EGameState::VILLAGE;
 				m_isRunning = false;
+			}
 				break;
 
 			default:
+			{
 				RenderWrongChoice();
+			}
 				break;
 			}
 			m_input = 0;
@@ -207,8 +213,9 @@ void Dungeon::Update(float deltaTime)
 			// 모든 몬스터가 죽었는지 확인
 			bool allMonstersDead = true;
 			vector<Monster*> stageMonsters = m_currentStage->GetMonsters();
-			for (auto& monster : stageMonsters)
+			for (size_t i = 0; i< stageMonsters.size(); ++i)
 			{
+				Monster* monster = stageMonsters[i];
 				if (monster->GetCharacterInfo().iCurrentHealth > 0)
 				{
 					allMonstersDead = false;
@@ -514,8 +521,9 @@ void Dungeon::InitiateBattle()
 
 		// 더 이상 몬스터가 없는지 확인
 		aliveMonsters.clear();
-		for (auto& mon : stageMonsters)
+		for (size_t i = 0; i <stageMonsters.size(); ++i)
 		{
+			Monster* mon = stageMonsters[i];
 			if (mon->GetCharacterInfo().iCurrentHealth > 0)
 			{
 				aliveMonsters.push_back(mon);
@@ -555,14 +563,19 @@ void Dungeon::ProcessBattleInput()
 	switch (m_input)
 	{
 	case '1': // 공격
+	{
 		// 전투 로직은 EncounterMonster 내에서 처리
+	}
 		break;
 
 	case '2': // 상태 확인
+	{
 		m_player->RenderPlayerStatus();
+	}
 		break;
 
 	case '3': // 도망
+	{
 		if (rand() % 3 == 0)
 		{
 			Common::PrintSystemMsg("당신은 필사적으로 도망쳤지만, 몬스터가 뛰어올라 당신의 앞을 가로막습니다.\n몬스터가 당신을 공격합니다!");
@@ -574,6 +587,7 @@ void Dungeon::ProcessBattleInput()
 			Common::PauseAndClearScreen();
 			m_dungeonState = EDungeonState::LEAVING;
 		}
+	}
 		break;
 
 	default:
