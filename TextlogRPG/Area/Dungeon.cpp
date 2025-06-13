@@ -126,18 +126,26 @@ void Dungeon::Update(float deltaTime)
 			switch (m_input)
 			{
 			case '1': // 던전 진입
+			{
 				m_dungeonState = EDungeonState::BATTLE_PROMPT;
 				Common::PauseAndClearScreen();
+			}
 				break;
 
 			case '2': // 마을로 돌아가기
+			{
 				RenderRunChoice();
+				m_dungeonState = EDungeonState::LEAVING;
 				m_nextState = EGameState::VILLAGE;
 				m_isRunning = false;
+				return;
+			}
 				break;
 
 			default:
+			{
 				RenderWrongChoice();
+			}
 				break;
 			}
 			m_input = 0;
@@ -184,6 +192,7 @@ void Dungeon::Update(float deltaTime)
 			{
 				Common::PrintSystemMsg("던전에서 도망쳤습니다. 마을로 돌아갑니다.");
 				Common::PauseAndClearScreen();
+				m_dungeonState = EDungeonState::LEAVING;
 				m_nextState = EGameState::VILLAGE;
 				m_isRunning = false;
 			}
@@ -201,6 +210,7 @@ void Dungeon::Update(float deltaTime)
 		break;
 
 	case EDungeonState::IN_BATTLE:
+	{
 		// 전투 처리 로직
 		if (!m_bIsBattleInProgress)
 		{
@@ -213,7 +223,7 @@ void Dungeon::Update(float deltaTime)
 			// 모든 몬스터가 죽었는지 확인
 			bool allMonstersDead = true;
 			vector<Monster*> stageMonsters = m_currentStage->GetMonsters();
-			for (size_t i = 0; i< stageMonsters.size(); ++i)
+			for (size_t i = 0; i < stageMonsters.size(); ++i)
 			{
 				Monster* monster = stageMonsters[i];
 				if (monster->GetCharacterInfo().iCurrentHealth > 0)
@@ -232,9 +242,11 @@ void Dungeon::Update(float deltaTime)
 				InitiateBattle();
 			}
 		}
+	}
 		break;
 
 	case EDungeonState::STAGE_CLEARED:
+	{
 		// 스테이지 클리어 후 다음 스테이지로
 		if (IsMoreStageLeft())
 		{
@@ -251,20 +263,26 @@ void Dungeon::Update(float deltaTime)
 			m_nextState = EGameState::VILLAGE;
 			m_isRunning = false;
 		}
+	}
 		break;
 
 	case EDungeonState::LEAVING:
+	{
 		if (m_accumulatedTime > 1.0f)
 		{
 			m_nextState = EGameState::VILLAGE;
 			m_isRunning = false;
 		}
+	}
 		break;
 	}
 }
 
 void Dungeon::Render()
 {
+	/*if (m_isRunning == false)
+			return;*/
+
 	// 상태에 따른 렌더링
 	switch (m_dungeonState)
 	{
