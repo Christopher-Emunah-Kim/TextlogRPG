@@ -1,4 +1,6 @@
 ﻿#include "GameManager.h"
+#include <ctime>
+
 #include "../Util/EGameState.h"
 #include "../Util/Common.h"
 
@@ -69,8 +71,21 @@ void GameManager::Run()
 
 	EGameState CurrentGameState = GetGameState();
 
+	//LOOP TIME CHECK
+	clock_t lastFrameTime = clock();
+	clock_t currentTime;
+	float deltaTime;
+
 	while (CurrentGameState != EGameState::GAME_OVER)
 	{
+		//Calculate deltaTime
+		//CLOCKS_PER_SEC : 초당 clock tick의 수 매크로
+		//clock() : 프로세서가 소비한 시간 반환 함수
+		//clock_t : clock ticks 자료형.
+		currentTime = clock();
+		deltaTime = static_cast<float>(currentTime - lastFrameTime) / CLOCKS_PER_SEC;
+		lastFrameTime = currentTime;
+
 		switch (gameState)
 		{
 		case EGameState::TITLE:
@@ -87,6 +102,13 @@ void GameManager::Run()
 			SetGameState(EGameState::GAME_OVER);
 			break;
 		}
+
+		if (playerPtr)
+		{
+			playerPtr->Update();
+		}
+
+		CurrentGameState = GetGameState();
 	}
 }
 
@@ -166,8 +188,8 @@ void GameManager::RunProcessTitle()
 	if (pTitleArea)
 	{
 		pTitleArea->Initialize(playerPtr);
-		EGameState nextState = pTitleArea->Process(playerPtr);
-		Common::PauseAndClearScreen();
+		EGameState nextState = pTitleArea->Run(playerPtr);
+		//Common::PauseAndClearScreen();
 		SetGameState(nextState);
 	}
 }
@@ -181,9 +203,9 @@ void GameManager::RunProcessVillage()
 	{
 		pVilalgeArea->Initialize(playerPtr);
 
-		EGameState nextState = pVilalgeArea->Process(playerPtr);
+		EGameState nextState = pVilalgeArea->Run(playerPtr);
 
-		Common::PauseAndClearScreen();
+		//Common::PauseAndClearScreen();
 
 		SetGameState(nextState);
 	}
@@ -197,7 +219,7 @@ void GameManager::RunProcessDungeon()
 	if (pDungeonArea)
 	{
 		pDungeonArea->Initialize(playerPtr);
-		EGameState nextState = pDungeonArea->Process(playerPtr);
+		EGameState nextState = pDungeonArea->Run(playerPtr);
 		Common::PauseAndClearScreen();
 		SetGameState(nextState);
 	}
