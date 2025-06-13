@@ -188,8 +188,9 @@ void GameManager::RunProcessTitle()
 	if (pTitleArea)
 	{
 		pTitleArea->Initialize(playerPtr);
+
 		EGameState nextState = pTitleArea->Run(playerPtr);
-		//Common::PauseAndClearScreen();
+
 		SetGameState(nextState);
 	}
 }
@@ -205,8 +206,6 @@ void GameManager::RunProcessVillage()
 
 		EGameState nextState = pVilalgeArea->Run(playerPtr);
 
-		//Common::PauseAndClearScreen();
-
 		SetGameState(nextState);
 	}
 }
@@ -219,8 +218,11 @@ void GameManager::RunProcessDungeon()
 	if (pDungeonArea)
 	{
 		pDungeonArea->Initialize(playerPtr);
+
 		EGameState nextState = pDungeonArea->Run(playerPtr);
+
 		Common::PauseAndClearScreen();
+
 		SetGameState(nextState);
 	}
 }

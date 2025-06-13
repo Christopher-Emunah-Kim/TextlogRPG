@@ -173,14 +173,6 @@ void Village::Initialize(Player* player)
 
 EGameState Village::Process(Player* player)
 {
-	/*Enter(player);
-
-	char villageChoice = Common::GetCharInput();
-
-	Common::PauseAndClearScreen();
-
-	return HandleChoice(villageChoice, player);*/
-
 	return Run(player);
 }
 
@@ -226,29 +218,3 @@ void Village::InteractWithNPC(Player* player, NonPlayerCharacter* npc)
 		npc->Interact(player);
 }
 
-EGameState Village::HandleChoice(char villageChoice, Player* player)
-{
-	switch (villageChoice)
-	{
-	case '1':
-	{
-		InteractWithNPC(player, m_healerNPC);
-		return EGameState::VILLAGE;
-	}break;
-	case '2':
-	{
-		InteractWithNPC(player, m_merchantNPC);
-		return EGameState::VILLAGE;
-	}break;
-	case '3':
-	{
-		return EGameState::TITLE;
-	}break;
-
-	default:
-	{
-		Common::PrintErrorMsg("잘못된 입력입니다.");
-		return EGameState::VILLAGE;
-	}
-	}
-}

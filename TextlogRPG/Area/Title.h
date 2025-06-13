@@ -30,7 +30,6 @@ protected:
 	virtual EGameState GetNextState() override;
 
 private:
-	EGameState HandleChoice(char menuChoice, Player* player);
 
 	void RenderPlayerGreeting(Player* player);
 

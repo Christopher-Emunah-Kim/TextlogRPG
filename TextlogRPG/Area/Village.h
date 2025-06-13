@@ -59,5 +59,4 @@ public:
     void InteractWithNPC(Player* player, NonPlayerCharacter* npc);
 	void RenderVillagePrompt();
 
-	EGameState HandleChoice(char villageChoice, Player* player);
 };
