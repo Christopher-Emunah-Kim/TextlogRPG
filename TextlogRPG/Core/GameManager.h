@@ -44,12 +44,12 @@ private:
 	void				RequestPlayerName();
 
 	//TITLE
-	void				RunProcessTitle();
+	void				RunProcessTitle(float deltaTime = 0.0f);
 
 	//VILLAGE
-	void				RunProcessVillage();
+	void				RunProcessVillage(float deltaTime = 0.0f);
 
 	//DUNGEON
-	void				RunProcessDungeon();
+	void				RunProcessDungeon(float deltaTime = 0.0f);
 
 };

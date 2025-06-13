@@ -17,7 +17,7 @@ protected:
 	float				m_accumulatedTime = 0.0f;
 
 public:
-	virtual				EGameState Run(Player* player);
+	virtual				EGameState Run(Player* player, float deltaTime = 0.0f);
 
 public:
     virtual string		GetAreaName() const = 0;

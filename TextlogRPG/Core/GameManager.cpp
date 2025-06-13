@@ -90,17 +90,17 @@ void GameManager::Run()
 		{
 		case EGameState::TITLE:
 		{
-			RunProcessTitle();
+			RunProcessTitle(deltaTime);
 		}
 			break;
 		case EGameState::VILLAGE:
 		{
-			RunProcessVillage();
+			RunProcessVillage(deltaTime);
 		}
 			break;
 		case EGameState::DUNGEON:
 		{
-			RunProcessDungeon();
+			RunProcessDungeon(deltaTime);
 		}
 			break;
 
@@ -196,7 +196,7 @@ void GameManager::RequestPlayerName()
 #pragma endregion
 
 
-void GameManager::RunProcessTitle() 
+void GameManager::RunProcessTitle(float deltaTime)
 {
 	Title* pTitleArea = dynamic_cast<Title*>(m_sceneAreaMap[EGameState::TITLE]);
 
@@ -212,7 +212,7 @@ void GameManager::RunProcessTitle()
 
 
 
-void GameManager::RunProcessVillage()
+void GameManager::RunProcessVillage(float deltaTime)
 {
 	Village* pVilalgeArea = dynamic_cast<Village*>(m_sceneAreaMap[EGameState::VILLAGE]);
 	if (pVilalgeArea)
@@ -227,7 +227,7 @@ void GameManager::RunProcessVillage()
 
 
 
-void GameManager::RunProcessDungeon()
+void GameManager::RunProcessDungeon(float deltaTime)
 {
 	Dungeon* pDungeonArea = dynamic_cast<Dungeon*>(m_sceneAreaMap[EGameState::DUNGEON]);
 	if (pDungeonArea)
