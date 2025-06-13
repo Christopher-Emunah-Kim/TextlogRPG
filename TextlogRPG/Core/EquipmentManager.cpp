@@ -18,20 +18,6 @@ void EquipmentManager::Equip(Item* item)
 	if (item == nullptr) 
 		return;
 
-	//switch (item->GetItemInfo().itemType)
-	//{
-	//case EItemType::WEAPON:
-	//	pWeapon = dynamic_cast<Weapon*>(item);
-	//	break;
-	//case EItemType::ARMOR:
-	//	pArmor = dynamic_cast<Armor*>(item);
-	//	break;
-	//case EItemType::MISC:
-	//	pMiscItem = dynamic_cast<MiscItem*>(item);
-	//	break;
-
-	//default: break;
-	//}
 
 	EItemType itemType = item->GetItemInfo().itemType;
 	
@@ -45,21 +31,6 @@ void EquipmentManager::Equip(Item* item)
 
 void EquipmentManager::Unequip(EItemType type)
 {
-	/*switch (type)
-	{
-	case EItemType::WEAPON:
-		pWeapon = nullptr;
-		break;
-	case EItemType::ARMOR:
-		pArmor = nullptr;
-		break;
-		case EItemType::MISC:
-			pMiscItem = nullptr;
-			break;
-
-	default: break;
-	}*/
-
 	unordered_map<EItemType, EquipSlot>::iterator it = m_EquipSlots.find(type);
 	if (it != m_EquipSlots.end())
 	{

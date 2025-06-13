@@ -297,8 +297,6 @@ void Dungeon::Render()
 		break;
 	}
 
-
-	
 }
 
 bool Dungeon::ShouldExit()
@@ -350,12 +348,6 @@ DungeonStage* Dungeon::GetCurrentStage() const
 
 EGameState Dungeon::Process(Player* player)
 {
-	/*Enter(player);
-
-	char dungeonChoice = Common::GetCharInput();
-	Common::PauseAndClearScreen();
-
-	return HandleChoice(dungeonChoice, player);*/
 
 	return Run(player);
 }
