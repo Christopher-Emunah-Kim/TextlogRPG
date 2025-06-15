@@ -124,9 +124,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TextlogRPG\Area\Area.cpp" />
+    <ClCompile Include="TextlogRPG\Area\BaseLevel.cpp" />
     <ClCompile Include="TextlogRPG\Area\Dungeon.cpp" />
     <ClCompile Include="TextlogRPG\Area\DungeonStage.cpp" />
+    <ClCompile Include="TextlogRPG\Area\LevelAreaManager.cpp" />
     <ClCompile Include="TextlogRPG\Area\Title.cpp" />
     <ClCompile Include="TextlogRPG\Area\Village.cpp" />
     <ClCompile Include="TextlogRPG\BattleSystem\MonsterPool.cpp" />
@@ -157,9 +158,10 @@
     <ClCompile Include="TextlogRPG\Core\InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TextlogRPG\Area\Area.h" />
+    <ClInclude Include="TextlogRPG\Area\BaseLevel.h" />
     <ClInclude Include="TextlogRPG\Area\Dungeon.h" />
     <ClInclude Include="TextlogRPG\Area\DungeonStage.h" />
+    <ClInclude Include="TextlogRPG\Area\LevelAreaManager.h" />
     <ClInclude Include="TextlogRPG\Area\Title.h" />
     <ClInclude Include="TextlogRPG\Area\Village.h" />
     <ClInclude Include="TextlogRPG\BattleSystem\MonsterPool.h" />
@@ -178,6 +180,7 @@
     <ClInclude Include="TextlogRPG\Character\Component\PlayerUIComponent.h" />
     <ClInclude Include="TextlogRPG\Core\EquipmentManager.h" />
     <ClInclude Include="TextlogRPG\Core\EquipSlot.h" />
+    <ClInclude Include="TextlogRPG\Core\IGameObject.h" />
     <ClInclude Include="TextlogRPG\Core\InventoryManager.h" />
     <ClInclude Include="TextlogRPG\Character\Monster.h" />
     <ClInclude Include="TextlogRPG\Util\EGameState.h" />

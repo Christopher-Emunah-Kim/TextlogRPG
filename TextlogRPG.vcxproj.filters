@@ -105,7 +105,10 @@
     <ClCompile Include="TextlogRPG\Character\Component\MonsterDropComponent.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TextlogRPG\Area\Area.cpp">
+    <ClCompile Include="TextlogRPG\Area\BaseLevel.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="TextlogRPG\Area\LevelAreaManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -152,7 +155,7 @@
     <ClInclude Include="TextlogRPG\NPC\Merchant.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="TextlogRPG\Area\Area.h">
+    <ClInclude Include="TextlogRPG\Area\BaseLevel.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextlogRPG\Area\Title.h">
@@ -225,6 +228,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="TextlogRPG\Character\Component\MonsterDropComponent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\Core\IGameObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="TextlogRPG\Area\LevelAreaManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

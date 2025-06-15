@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Area.h"
+#include "BaseLevel.h"
 #include "DungeonStage.h"
 
 enum class EBattleResult : uint8
@@ -23,7 +23,7 @@ class Monster;
 class Player;
 enum class EGameState;
 
-class Dungeon : public Area 
+class Dungeon : public BaseLevel 
 {
 public:
 	Dungeon();

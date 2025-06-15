@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Area.h"
+#include "BaseLevel.h"
 
 class NonPlayerCharacter;
 class Player;
@@ -19,7 +19,7 @@ enum class EVillageState
 
 
 
-class Village : public Area 
+class Village : public BaseLevel 
 {
 public:
 	Village();

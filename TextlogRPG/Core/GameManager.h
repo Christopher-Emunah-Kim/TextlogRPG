@@ -10,7 +10,7 @@ class Player;
 class Monster;
 class Healer;
 class Merchant;
-class Area;
+class BaseLevel;
 class Village;
 class Dungeon;
 class DungeonStage;
@@ -27,7 +27,7 @@ public:
 private:
 	EGameState							m_gameState;
     Player*								m_playerPtr;
-	unordered_map<EGameState, Area*>	m_sceneAreaMap;
+	unordered_map<EGameState, BaseLevel*>	m_sceneAreaMap;
 	//Dungeon*							m_dungeonptr;
 
 public:

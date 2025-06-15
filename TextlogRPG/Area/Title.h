@@ -1,9 +1,9 @@
 ﻿#pragma once
-#include "Area.h"
+#include "BaseLevel.h"
 
 enum class EGameState;
 
-class Title : public Area 
+class Title : public BaseLevel 
 {
 public:
 	Title();

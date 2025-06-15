@@ -1,7 +1,7 @@
-﻿#include "Area.h"
+﻿#include "BaseLevel.h"
 #include <time.h>
 
-EGameState Area::Run(Player* player, float deltaTime)
+EGameState BaseLevel::Run(Player* player, float deltaTime)
 {
 	Enter(player);
 

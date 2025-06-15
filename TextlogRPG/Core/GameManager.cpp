@@ -15,7 +15,7 @@
 #include "../Item/MiscItem.h"
 #include "../Core/ItemManager.h"
 
-#include "../Area/Area.h"
+#include "../Area/BaseLevel.h"
 #include "../Area/Title.h"
 #include "../Area/Village.h"
 #include "../Area/Dungeon.h"
@@ -23,7 +23,7 @@
 #include "../Util/Dialogue.h"
 
 GameManager::GameManager(EGameState initialState, Player* player, Dungeon* dungeon)
-	: m_gameState(initialState), m_playerPtr(player), m_dungeonptr(dungeon)
+	: m_gameState(initialState), m_playerPtr(player)
 {
 	//manage dynamic memory allocation for maps
 	m_sceneAreaMap.insert(make_pair(EGameState::TITLE, new Title()));
@@ -50,14 +50,14 @@ GameManager::~GameManager()
 		delete m_playerPtr;
 		m_playerPtr = nullptr; 
 	}
-	if (m_dungeonptr)
+	//if (m_dungeonptr)
+	//{
+	//	delete m_dungeonptr;
+	//	m_dungeonptr = nullptr;
+	//}
+	for (unordered_map<EGameState, BaseLevel*>::iterator i = m_sceneAreaMap.begin(); i != m_sceneAreaMap.end(); ++i)
 	{
-		delete m_dungeonptr;
-		m_dungeonptr = nullptr;
-	}
-	for (unordered_map<EGameState, Area*>::iterator i = m_sceneAreaMap.begin(); i != m_sceneAreaMap.end(); ++i)
-	{
-		pair<EGameState, Area*> map = *i;
+		pair<EGameState, BaseLevel*> map = *i;
 		if (map.second)
 			delete map.second;
 	}

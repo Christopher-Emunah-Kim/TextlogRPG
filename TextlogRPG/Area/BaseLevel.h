@@ -5,10 +5,10 @@
 class Player;
 enum class EGameState;
 
-class Area 
+class BaseLevel 
 {
 public:
-    virtual		~Area() = default;
+    virtual		~BaseLevel() = default;
 
 protected:
 	bool				m_isRunning = false;
